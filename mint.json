@@ -27,10 +27,6 @@
   },
   "tabs": [
     {
-      "name": "Introduction",
-      "url": "introduction"
-    },
-    {
       "name": "API Overview",
       "url": "api-overview"
     }
