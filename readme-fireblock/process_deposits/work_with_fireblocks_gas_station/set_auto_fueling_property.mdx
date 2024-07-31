@@ -1,0 +1,194 @@
+---
+  title: "Set Auto Fueling Property"
+  ---
+  
+  ## Introduction
+
+*   [Introduction](/docs/introduction)
+*   [What Is Fireblocks?](/docs/what-is-fireblocks)
+*   [Explore Use Cases](/docs/use-cases)
+    *   [Wallet-as-a-Service](/docs/wallet-as-a-service)
+    *   [Self-Custody Infrastructure](/docs/self-custody-infrastructure)
+    *   [Tokenization](/docs/tokenization)
+    *   [Treasury Management](/docs/treasury-management)
+*   [Fireblocks Key Features & Capabilities](/docs/capabilities)
+*   [Fireblocks Object Model](/docs/object-model)
+*   [Workspace Comparision](/docs/workspace-environments)
+*   [Data Privacy and Protection](/docs/data-privacy-and-protection)
+*   [Developer Center](/docs/developer-center)
+
+## Secure Your Workspace
+
+*   [Manage Users](/docs/manage-users)
+*   [Manage API Access](/docs/manage-api-keys)
+*   [Whitelist IPs for API Keys](/docs/whitelist-ips-for-api-keys)
+*   [Define Approval Quorums](/docs/define-approval-quorums)
+*   [Set Transaction Authorization Policy](/docs/set-transaction-authorization-policy)
+*   [Segregate Duties](/docs/segregate-duties)
+
+## Manage Wallets
+
+*   [Overview](/docs/overview)
+*   [Compare Workspace Types](/docs/get-to-know-fireblocks-workspaces)
+*   [Create Direct Custody Wallets](/docs/create-direct-custody-wallets)
+*   [Create Embedded Wallets](/docs/create-embedded-wallets)
+
+## Process Deposits
+
+*   [Control Deposit Confirmation Policy](/docs/define-confirmation-policy-maybe-move-from-here)
+*   [Manage Deposits at Scale](/docs/manage-deposits-at-scale)
+*   [Sweep Funds](/docs/sweep-funds)
+*   [Work with Fireblocks Gas Station](/docs/work-with-gas-station)
+    *   [Enable the Gas Station](/docs/enabling-the-gas-station-1)
+    *   [Set Auto Fueling Property](/docs/set-auto-fueling-property)
+    *   [Configure Gas Station Values](/docs/configure-gas-station-values)
+*   [Validate Balances](/docs/validate-balances)
+*   [Associate End Clients](/docs/associating-end-clients-with-transactions)
+
+## Process Withdrawals
+
+*   [Manage Destination Addresses](/docs/whitelist-addresses)
+*   [Estimate Transaction Fees](/docs/verify-fee-effeciency)
+*   [Manage Withdrawals at Scale](/docs/manage-withdrawals-at-scale)
+*   [Boost Transactions](/docs/boost-transactions-1)
+
+## Comply With Regulation
+
+*   [Define AML Policies](/docs/define-aml-policies)
+*   [Define Travel Rule Policies](/docs/define-travel-rule-policies)
+*   [Interact with TRUST](/docs/interact-with-trust)
+
+## Manage Treasury
+
+*   [Connect to the Fireblocks Network](/docs/connect-to-the-fireblocks-network)
+*   [Execute Smart Transfers](/docs/execute-smart-transfers)
+*   [Connect to Exchanges and FIAT Providers](/docs/connect-to-exchanges-and-fiat-providers)
+*   [Stake Assets](/docs/stake-assets)
+
+## MAnage Assets
+
+*   [Get Supported Assets](/docs/list-supported-assets-1)
+*   [Add Tokens](/docs/add-your-tokens-1)
+
+## Automate Flows
+
+*   [Configure Webhooks](/docs/configure-webhooks)
+*   [Deploy API Co-Signer](/docs/deploy-api-co-signer)
+*   [Create API Co-Signer Callback Handler](/docs/create-api-co-signer-callback-handler)
+
+## Manage Smart Contracts
+
+*   [Tokenize Assets](/docs/issue-new-tokens)
+*   [Interact With Smart Contracts](/docs/interact-with-smart-contracts)
+
+## Process Payments
+
+*   [Create Payouts](/docs/create-payouts)
+*   [Define Payment Flows](/docs/payment-flows-copy)
+
+## Design Business Continuity Plan
+
+*   [Configure Co-Signer in HA mode](/docs/configure-co-signer-in-ha-mode)
+*   [Perform DRS process](/docs/perform-drs-process)
+
+## Sign Offchain Messages
+
+*   [Sign RAW Messages](/docs/raw-signing)
+*   [Sign Typed Message](/docs/typed-message-signing-1)
+
+## Explore Integrations
+
+*   [Fireblocks Network Link for Exchanges](/docs/network-link-for-exchanges)
+*   ["Base" Testnet Support](/docs/base-goerli-testnet)
+*   [Wallet Link](/docs/web3-wallet-link)
+*   [Integrating third-party AML providers](/docs/integrating-third-party-aml-providers)
+*   [Off Exchange](/docs/off-exchange)
+
+# Set Auto Fueling Property
+
+[Suggest Edits](/edit/set-auto-fueling-property)
+
+# 
+
+Overview
+
+[](#overview)
+
+Vault account auto-fueling is always available for API users with the Gas Station enabled, and any vault account with the Gas Station badge in the Console participates in the Gas Station service.
+
+*   When an incoming token transaction to an auto-fueling vault account completes, Fireblocks automatically transfers the appropriate base asset from the Gas Station to the vault account. This is because the auto-fueled vault account must have a token with a non-zero balance on the relevant network where you are expecting an auto-fueling transaction.
+*   When an outgoing transaction from an auto-fueling vault account completes, Fireblocks checks the token and gas balance. The vault account is refueled if the token balance is above 0.00001 and the base asset is below the set threshold. Token transfers from this vault account to any destination will then have sufficient gas to cover transaction fees.
+
+  
+
+* * *
+
+  
+
+# 
+
+Enabling auto-fueling in the Console
+
+[](#enabling-auto-fueling-in-the-console)
+
+For new vault accounts, select **Auto-fuel with gas after an incoming transaction completes** when you create the account.
+
+For existing vault accounts, go to **My Funds** > **Accounts**, find the appropriate vault account, and then select **More Actions** (**...**) > **Enable Auto-Fueling** > **Enable**. The Gas Station badge appears next to the name of the vault account when you're done.
+
+# 
+
+Disabling auto-fueling in the Console
+
+[](#disabling-auto-fueling-in-the-console)
+
+In the Fireblocks Console, go to **My Funds** > **Accounts**, find the appropriate vault account, and then select **More Actions** (**...**) > **Disable Auto-Fueling** > **Disable**. The Gas Station badge is removed when you're done.
+
+  
+
+* * *
+
+  
+
+# 
+
+Enabling auto-fueling via the API
+
+[](#enabling-auto-fueling-via-the-api)
+
+For new vault accounts, call the [Create a new vault account endpoint](/reference/post_vault-accounts) and set the **autoFuel** field to **true**.
+
+For existing vault accounts:
+
+1.  Call the [List vault accounts (paginated) endpoint](/reference/get_vault-accounts-paged) to find the vault account's ID.
+2.  Call the [Turn auto-fueling on or off endpoint](/reference/post_vault-accounts-vaultaccountid-set-auto-fuel), enter the vault account's ID in the **vaultAccountId** field, and then set the **autoFuel** field to **true**.
+
+# 
+
+Disabling auto-fueling via the API
+
+[](#disabling-auto-fueling-via-the-api)
+
+1.  Call the [List vault accounts (paginated) endpoint](/reference/get_vault-accounts-paged) to find the ID of the vault account.
+2.  Call the [Turn auto-fueling on or off endpoint](/reference/post_vault-accounts-vaultaccountid-set-auto-fuel), enter the vault account's ID in the **vaultAccountId** field, and then set the **autoFuel** field to **false**.
+
+  
+<Info>
+
+## 📘
+
+Check the Gas Station [developer guide](/reference/enable-auto-fueling) for API code examples
+
+
+
+</Info>
+
+Updated 26 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Overview](#overview)
+    *   [Enabling auto-fueling in the Console](#enabling-auto-fueling-in-the-console)
+    *   [Disabling auto-fueling in the Console](#disabling-auto-fueling-in-the-console)
+    *   [Enabling auto-fueling via the API](#enabling-auto-fueling-via-the-api)
+    *   [Disabling auto-fueling via the API](#disabling-auto-fueling-via-the-api)

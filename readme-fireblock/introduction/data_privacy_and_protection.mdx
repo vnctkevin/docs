@@ -1,0 +1,28 @@
+---
+  title: "Data Privacy and Protection"
+  ---
+  
+  # Data Privacy and Protection
+
+[Suggest Edits](/edit/data-privacy-and-protection)
+
+Fireblocks does not store or process any client Personal Identifiable Information (PII). To achieve this, the customer is required to strictly use anonymized tokens, such as [Universally Unique Identifiers](https://en.wikipedia.org/wiki/Universally_unique_identifier) (UUID) to reflect client data. These anonymous tokens are mapped internally by the customer to actual client identifiers stored on the customer's end.
+
+Since the customer processes and manages its wallet infrastructure using the Fireblocks Console or Fireblocks API, these anonymous tokens should be used when using the Fireblocks REST API endpoints. The following table lists the relevant fields that allow persistent information to be stored in Fireblocks–for which the anonymous tokens should be used.
+
+| API Endpoint | Method | Parameter |
+| --- | --- | --- |
+| Vault | [Create a new vault account](/reference/post_vault-accounts?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1689975745254.1690549521283.277&__hssc=215458440.10.1690549521283&__hsfp=3179515899) | name |
+| Vault | [Create a new asset deposit address](/reference/createvaultaccountassetaddress) | description |
+| Vault | [Rename a vault account](/reference/put_vault-accounts-vaultaccountid?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1689975745254.1690549521283.277&__hssc=215458440.10.1690549521283&__hsfp=3179515899) | description |
+| Internal Wallet | [Create an internal wallet](/reference/post_internal-wallets?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1689975745254.1690549521283.277&__hssc=215458440.10.1690549521283&__hsfp=3179515899) | name |
+| Internal Wallet | [Set an AML/KYT customer reference ID for an internal wallet](/reference/post_internal-wallets-walletid-set-customer-ref-id?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1689975745254.1690549521283.277&__hssc=215458440.10.1690549521283&__hsfp=3179515899) | customerRefId |
+| External Wallet | [Create an external wallet](/reference/post_external-wallets?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1689975745254.1690549521283.277&__hssc=215458440.10.1690549521283&__hsfp=3179515899) | name |
+| External Wallet | [Set an AML customer reference ID for an external wallet](/reference/post_external-wallets-walletid-set-customer-ref-id?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1689975745254.1690549521283.277&__hssc=215458440.10.1690549521283&__hsfp=3179515899) | customerRefId |
+| Contracts | [Create a contract](/reference/post_contracts?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1689975745254.1690549521283.277&__hssc=215458440.10.1690549521283&__hsfp=3179515899) | name |
+| Transactions | [Create a new transaction](/reference/post_transactions?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1689975745254.1690549521283.277&__hssc=215458440.10.1690549521283&__hsfp=3179515899) | note |
+| Transactions | [Estimate a transaction fee](/reference/post_transactions-estimate-fee?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1689975745254.1690549521283.277&__hssc=215458440.10.1690549521283&__hsfp=3179515899) | note |
+
+Updated 26 days ago
+
+* * *

@@ -1,0 +1,84 @@
+---
+  title: "Define Approval Quorums"
+  ---
+  
+  # Define Approval Quorums
+
+[Suggest Edits](/edit/define-approval-quorums)
+
+# 
+
+Admin Quorum
+
+[](#admin-quorum)
+
+The Admin Quorum lists all users with Admin privileges (users assigned to either an Owner, Admin, or Non-Signing Admin role).
+
+The Admin Quorum threshold defines the number of Admins required to approve new workspace connections and changes. Any Admin can deny a request to reject it before the threshold is met. Requests have different expiration times depending on the action.
+
+Activities that require Admin Quorum approval include:
+
+*   Whitelisting addresses
+*   New Fireblocks Network connections
+*   New exchange accounts
+*   Other external destination addresses
+*   Adding new workspace users
+*   Changes to the Transaction Authorization Policy (TAP)
+*   Configuring approval groups
+*   Other workspace configuration changes
+
+<Info>
+
+## 📘
+
+Learn more about setting Admin Quorum in the [following guide](https://support.fireblocks.io/hc/en-us/articles/360017665119-Admin-Quorum)
+
+
+
+</Info>
+
+## 
+
+Admin Quorum API
+
+[](#admin-quorum-api)
+
+Check the Admin Quorum API reference [here](/reference/setadminquorumthreshold)
+
+* * *
+
+# 
+
+Approval Groups
+
+[](#approval-groups)
+
+Approval groups consist of users from a designated user group. They are designed to facilitate the approval of various workspace configuration changes within different workspace domains, such as security and compliance, user management, the Fireblocks Network, and external accounts.  
+These groups operate similarly to the Admin Quorum and can be used in its place for approving specific actions of your choice.
+
+<Info>
+
+## 📘
+
+Learn more about defining Approval Groups in the [following guide](https://support.fireblocks.io/hc/en-us/articles/11500062124188-Approval-groups)
+
+
+
+</Info>
+
+This feature allows you to designate a specific group of people to approve tasks, regardless of their roles or permissions. Approval groups provide the flexibility to segregate and delegate responsibilities, which is crucial for scaling and accelerating your business operations while maintaining security.
+
+Here are a few tips for setting up your approval groups:
+
+*   Approval groups are distinct from regular user groups and are not related to the Transaction Authorization Policy (TAP)
+*   While you can remove owner approval from certain actions, key changes in your workspace will still require owner involvement
+*   A threshold for the chosen group is required
+
+Updated 26 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Admin Quorum](#admin-quorum)
+        *   [Admin Quorum API](#admin-quorum-api)
+    *   [Approval Groups](#approval-groups)

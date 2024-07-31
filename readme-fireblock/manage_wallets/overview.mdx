@@ -1,0 +1,129 @@
+---
+  title: "Overview"
+  ---
+  
+  # Overview
+
+[Suggest Edits](/edit/overview)
+
+<Info>
+
+## 📘
+
+Unsure about which custody model is right for you?
+
+Read our “[Guide to Digital Asset Wallets and Service Providers](https://www.fireblocks.com/a-guide-to-digital-asset-wallets-and-service-providers)” for insights into evaluating digital asset wallet and service providers for your business
+
+</Info>
+
+# 
+
+Overview
+
+[](#overview)
+
+Fireblocks provides customers with an option to choose what custody model works best for their use case. In this guide we will outline the main technical and conceptual differences between Embedded Wallets and Direct Custody wallets.
+
+Following are the main differences between direct custody and Embedded Wallets wallets in Fireblocks.
+
+1.  Direct custody wallets use a 3-of-3 multi-party computation (MPC) signature scheme while Embedded Wallets wallets use a 2-of-2 signature scheme.
+2.  There is only one master key per workspace for direct custody wallets, while each Embedded Wallets wallet has its own master key.
+3.  UTXO-based assets, such as BTC, can have multiple deposit addresses per wallet per vault account for direct custody wallets. For Embedded Wallets wallets, one wallet can have multiple accounts while each account can hold only 1 BTC address.
+4.  The Fireblocks Network and exchange integrations are supported for direct custody wallets only.
+
+  
+
+* * *
+
+  
+
+# 
+
+Direct Custody Wallets
+
+[](#direct-custody-wallets)
+
+## 
+
+Structure
+
+[](#structure)
+
+![](https://files.readme.io/d76e1cc-Custodial_Wallets_1.png)
+
+*   The main section of the workspace is the Fireblocks Vault which holds all MPC wallets.
+*   Inside the Vault, an unlimited number of vault accounts can be created. This allows to segregate between distinct clients and various use cases.
+*   Each vault account can hold as many asset wallets as you need. However, you can only have one wallet per asset.
+*   In a vault account, asset wallets can accommodate numerous deposit addresses for UTXO-based assets, while account-based assets are assigned with a single address.
+
+  
+
+## 
+
+Secret key management and wallet derivation
+
+[](#secret-key-management-and-wallet-derivation)
+
+![](https://files.readme.io/01ed368-Secret_key_management_and_wallet_derivation_for_the_custodial_wallet_structure_.png)
+
+Each vault account is identified by its _vault account ID_. This identifier is used for derivation of the asset wallets in a specific vault account.
+
+Using one master key (split into three key shards) for the entire workspace, you can create an unlimited number of vault accounts. The vault account ID acts as the account value of the derivation path.
+
+Each asset within this specific Vault would be derived according to the following structure: m/purpose/coinType/account/change/index.
+
+*   **m**: master private key
+*   **purpose**: the derivation standard (BIP44 in our example)
+*   **coinType**: the unique identifier of an asset (0 for BTC, 60 for ETH, etc.)
+*   **account**: the vault account ID
+*   **change**: always 0
+*   **index**: the address index (always 0 except for UTXO based assets such as Bitcoin)
+
+  
+
+* * *
+
+  
+
+# 
+
+Embedded Wallets
+
+[](#embedded-wallets)
+
+## 
+
+Structure
+
+[](#structure-1)
+
+![](https://files.readme.io/c593861-Fireblocks_EW_structure.png)
+
+Fireblocks Embedded Wallets wallets can be used in parallel with direct custody wallets. One workspace can support both structures. However, Fireblocks strongly recommends splitting the direct custody and the Embedded Wallets parts of your business into two different workspaces due to some settings that are shared by both types of wallets in the same workspace.
+
+Fireblocks Embedded Wallets wallets use 2-of-2 MPC signature scheme. One key share is stored within an Intel SGX-enabled server managed by Fireblocks, and the second key share is stored on the end user's device.
+
+  
+
+## 
+
+Secret key management and wallet derivation
+
+[](#secret-key-management-and-wallet-derivation-1)
+
+![](https://files.readme.io/63e0ccb-Secret_key_management_and_wallet_derivation_for_the_Non_Custodial_Wallet_structure.png)
+
+The derivation for Embedded Wallets wallets is almost the exact same as the derivation for direct custody wallets. The main difference is that each Embedded Wallets wallet will have its own master key, which is split into two key shards. In a single Embedded Wallets wallet, you can create an unlimited number of accounts while each account can have only one supported asset per asset type.
+
+Updated 14 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Overview](#overview)
+    *   [Direct Custody Wallets](#direct-custody-wallets)
+        *   [Structure](#structure)
+        *   [Secret key management and wallet derivation](#secret-key-management-and-wallet-derivation)
+    *   [Embedded Wallets](#embedded-wallets)
+        *   [Structure](#structure-1)
+        *   [Secret key management and wallet derivation](#secret-key-management-and-wallet-derivation-1)

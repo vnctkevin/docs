@@ -1,0 +1,29 @@
+---
+  title: "Segregate Duties"
+  ---
+  
+  # Segregate Duties
+
+[Suggest Edits](/edit/segregate-duties)
+
+To ensure the security of your workspace operations, it is crucial to segregate duties and delegate responsibilities appropriately. The first and most important step is to distinguish between users handling critical managerial tasks and those managing regular operations.
+
+For the former, it is important to understand the permission level of an administrator and the influence they will have with any changes made to the workspace. Please review this [article](https://support.fireblocks.io/hc/en-us/articles/360012832959-User-roles) for more information.
+
+For day-to-day operations, consider three key roles in the transaction process when assigning responsibilities:
+
+*   Who will initiate transactions?
+*   Who will approve transactions?
+*   Who will sign off on transactions?
+
+Once you have defined these responsibilities, review the following use cases to help you segregate duties properly:
+
+**Manual Process:** Typically used for operations involving a large amount of assets. This involves 100% human intervention. A transaction will be initiated via the Fireblocks console UI, approved manually by certain people (user or group) on their mobile devices, and signed by either the same people or someone else. Note that approvers are not required to have an MPC key to approve transactions.
+
+**Semi-Automated Process:** Used for operations that are not large in value but still significant enough to require human verification. Transactions can be initiated by a person via the UI or an API user and signed by either one of them.
+
+**Fully Automated Process:** Commonly used for internal transactions (between Fireblocks VA) or withdrawals of small amounts. API users initiating transactions must have the relevant permissions. If the same user is linked with the API-cosigner machine, ensure they are assigned a signer permission role.
+
+Updated 23 days ago
+
+* * *

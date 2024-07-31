@@ -1,0 +1,182 @@
+---
+  title: "Wallet Link"
+  ---
+  
+  # Wallet Link
+
+[Suggest Edits](/edit/web3-wallet-link)
+
+# 
+
+About the Fireblocks Wallet Link
+
+[](#about-the-fireblocks-wallet-link)
+
+As the demand for Web3 accessibility and usage grows, more users want to use dApps directly to manage their NFTs, get rewards, and more. The Fireblocks Wallet Link allows your users to connect their Fireblocks wallet addresses directly to Web3 applications (dApps), without your users needing to use their own wallet or any other application. This enables you to offer your users one-stop shopping for anything related to crypto and Web3.
+
+# 
+
+Creating a Wallet Link connection
+
+[](#creating-a-wallet-link-connection)
+
+The Wallet Link currently supports [WalletConnect](https://walletconnect.com/) connections. WalletConnect is a well-established standard for connecting wallets and Web3 applications and is supported by all of the leading dApps today.
+
+When a user wants to connect to a dApp, they scan a QR code provided by WalletConnect inside the dApp. This QR code contains a URI that represents the connection session to be established between the dApp and the wallet. Passing this URI onto Fireblocks using the API allows the connection to be successful.
+
+To initiate a new connection, pass the URI as follows.
+
+JavaScript
+
+<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-javascript theme-light" data-lang="javascript" name="" tabindex="0">const examplePayload = {  
+	feeLevel: "MEDIUM", 
+	vaultAccountId: 0,   
+	uri: "wc:f61647f4-7f98-4cb7-95d2-1db8e58fb0bb@1?bridge=https%3A%2F%2Fv.bridge.walletconnect.org&amp;key=d145d64bda22f2be8fb23c251116b0cd8e3613f6971d193ff89b24e6735aaa6c" // The WalletConnect QR code  
+}
+
+const connectionResponse: CreateWeb3ConnectionResponse = await fireblocks.createWeb3Connection("WalletConnect", payload);
+</code></pre>
+
+<Info>
+
+## 📘
+
+For Web3 connections from a Non Custodial Wallet, please use the payload below:
+
+JavaScript
+
+<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-javascript theme-light" data-lang="javascript" name="" tabindex="0">  const examplePayload = {  
+    feeLevel: "MEDIUM", 
+    ncwId: "b8337f1d-bd61-4d6c-afc1-4c9d60aa2132",
+    ncwAccountId: 0, // or any other account in the NCW
+    uri: "wc:f61647f4-7f98-4cb7-95d2-1db8e58fb0bb@1?bridge=https%3A%2F%2Fv.bridge.walletconnect.org&amp;key=d145d64bda22f2be8fb23c251116b0cd8e3613f6971d193ff89b24e6735aaa6c" // The WalletConnect QR code  
+  }
+</code></pre>
+
+
+
+
+
+</Info>
+
+The response from Fireblocks includes the relevant data about the connection, such as connection ID, dApp URL, and so on.
+
+JavaScript
+
+<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-javascript theme-light" data-lang="javascript" name="" tabindex="0">connectionResponse === {  
+    id: "f3ca1e41-378e-4718-b8d3-51dddb3777d3",  
+    sessionMetadata: { // Provided by the dApp  
+        "appUrl": "https://www.someDapp.com",  
+        "appName": "SomeDapp",  
+        "appDescription": "SomeDapp is the best example dapp",  
+        "appIcon": "https://static.fireblocks.io/prod/wcs/dappIcon/abc123"  
+    }  
+}
+</code></pre>
+
+# 
+
+Approving a Web3 connection request
+
+[](#approving-a-web3-connection-request)
+
+You can approve or reject the Web3 connection request based on the data in the connection response.
+
+JavaScript
+
+<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-javascript theme-light" data-lang="javascript" name="" tabindex="0">const approve = true;  
+const result = await fireblocks.submitWeb3Connection("WalletConnect", connectionResponse.id, approve);
+</code></pre>
+
+<Info>
+
+## 📘
+
+Note
+
+If you want to limit your users to only some dApps, simply reject connection requests from any unapproved dApp.
+
+</Info>
+
+# 
+
+Listing connections
+
+[](#listing-connections)
+
+To list all your existing Web3 connections, run the following command:
+
+JavaScript
+
+<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-javascript theme-light" data-lang="javascript" name="" tabindex="0">const examplePayload = {  
+    pageCursor: "SomePageCursor" // undefined for first page,  
+    pageSize: 10,  
+    filter: {  
+        vaultAccountId: 0,  
+        connectionMethod: "API"  
+    },  
+    sort: "createdAt",  
+    order: "DESC"  
+}
+
+const response = await fireblocks.getWeb3Connections(examplePayload);
+
+response.paging === { next:  "NextPageCursor" }  
+const exampleSession: Session = response.data[0];
+
+exampleSession === {  
+    id: "f3ca1e41-378e-4718-b8d3-51dddb3777d3",  
+    userId: "abc-123-456-def",  
+    vaultAccountId: 0,  
+    chainIds: ["ETH"],  
+    feeLevel: "MEDIUM",  
+    creationDate: "2023-03-08T11:20:13.823Z",  
+    connectionType: "WalletConnect",  
+    connectionMethod:"API",  
+    sessionMetadata: {  
+        "appUrl": "https://www.someDapp.com",  
+        "appName": "SomeDapp",  
+        "appDescription": "SomeDapp is the best example dapp",  
+        "appIcon": "https://static.fireblocks.io/prod/wcs/dappIcon/abc123"  
+    }  
+}
+</code></pre>
+
+# 
+
+Removing a connection
+
+[](#removing-a-connection)
+
+To remove a connection, run the following command:
+
+JavaScript
+
+<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-javascript theme-light" data-lang="javascript" name="" tabindex="0">const result = await fireblocks.removeWeb3Connection("WalletConnect", exampleSession.id);
+</code></pre>
+
+# 
+
+Signing a dApp-originated transaction
+
+[](#signing-a-dapp-originated-transaction)
+
+Once connected to a dApp, the user can perform an action that will result in a signing operation by Fireblocks. This operation is created by the API user that created the Web3 connection and is subject to the [Transaction Authorization Policy (TAP)](https://support.fireblocks.io/hc/en-us/articles/4401998390546-TAP-for-DeFi-operations) like any other operation.
+
+In most cases, a transaction created by a dApp translates into a Contract Call transaction in Fireblocks. Some other operations that require signing on an [off-chain message](https://support.fireblocks.io/hc/en-us/articles/4413379762450-Off-chain-message-signing) will result in a Typed message in Fireblocks, such as signing a registration message when logging into OpenSea.
+
+Make sure to adjust your TAP rules accordingly. You can use the TAP as another layer of limitation by whitelisting the relevant contract addresses of any dApp you want to allow while preventing contract calls to any other contract to go through.
+
+When working with an [API Co-Signer machine](https://support.fireblocks.io/hc/en-us/articles/12006018592156-API-Co-Signer-Overview), you can use the Callback Handler to let the user approve the transaction on their device before it is signed and broadcasted.
+
+Updated 27 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [About the Fireblocks Wallet Link](#about-the-fireblocks-wallet-link)
+    *   [Creating a Wallet Link connection](#creating-a-wallet-link-connection)
+    *   [Approving a Web3 connection request](#approving-a-web3-connection-request)
+    *   [Listing connections](#listing-connections)
+    *   [Removing a connection](#removing-a-connection)
+    *   [Signing a dApp-originated transaction](#signing-a-dapp-originated-transaction)

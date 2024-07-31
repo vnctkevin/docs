@@ -1,0 +1,151 @@
+{
+  "navigation": [
+    {
+      "group": "INTRODUCTION",
+      "pages": [
+        "INTRODUCTION/Introduction",
+        "INTRODUCTION/What Is Fireblocks?",
+        {
+          "group": "INTRODUCTION/Explore Use Cases",
+          "pages": [
+            "INTRODUCTION/Explore Use Cases",
+            "INTRODUCTION/Explore Use Cases/Wallet-as-a-Service",
+            "INTRODUCTION/Explore Use Cases/Self-Custody Infrastructure",
+            "INTRODUCTION/Explore Use Cases/Tokenization",
+            "INTRODUCTION/Explore Use Cases/Treasury Management"
+          ]
+        },
+        "INTRODUCTION/Wallet-as-a-Service",
+        "INTRODUCTION/Self-Custody Infrastructure",
+        "INTRODUCTION/Tokenization",
+        "INTRODUCTION/Treasury Management",
+        "INTRODUCTION/Fireblocks Key Features & Capabilities",
+        "INTRODUCTION/Fireblocks Object Model",
+        "INTRODUCTION/Workspace Comparision",
+        "INTRODUCTION/Data Privacy and Protection",
+        "INTRODUCTION/Developer Center"
+      ]
+    },
+    {
+      "group": "SECURE YOUR WORKSPACE",
+      "pages": [
+        "SECURE YOUR WORKSPACE/Manage Users",
+        "SECURE YOUR WORKSPACE/Manage API Access",
+        "SECURE YOUR WORKSPACE/Whitelist IPs for API Keys",
+        "SECURE YOUR WORKSPACE/Define Approval Quorums",
+        "SECURE YOUR WORKSPACE/Set Transaction Authorization Policy",
+        "SECURE YOUR WORKSPACE/Segregate Duties"
+      ]
+    },
+    {
+      "group": "MANAGE WALLETS",
+      "pages": [
+        "MANAGE WALLETS/Overview",
+        "MANAGE WALLETS/Compare Workspace Types",
+        "MANAGE WALLETS/Create Direct Custody Wallets",
+        "MANAGE WALLETS/Create Embedded Wallets"
+      ]
+    },
+    {
+      "group": "PROCESS DEPOSITS",
+      "pages": [
+        "PROCESS DEPOSITS/Control Deposit Confirmation Policy",
+        "PROCESS DEPOSITS/Manage Deposits at Scale",
+        "PROCESS DEPOSITS/Sweep Funds",
+        {
+          "group": "PROCESS DEPOSITS/Work with Fireblocks Gas Station",
+          "pages": [
+            "PROCESS DEPOSITS/Work with Fireblocks Gas Station",
+            "PROCESS DEPOSITS/Work with Fireblocks Gas Station/Enable the Gas Station",
+            "PROCESS DEPOSITS/Work with Fireblocks Gas Station/Set Auto Fueling Property",
+            "PROCESS DEPOSITS/Work with Fireblocks Gas Station/Configure Gas Station Values"
+          ]
+        },
+        "PROCESS DEPOSITS/Enable the Gas Station",
+        "PROCESS DEPOSITS/Set Auto Fueling Property",
+        "PROCESS DEPOSITS/Configure Gas Station Values",
+        "PROCESS DEPOSITS/Validate Balances",
+        "PROCESS DEPOSITS/Associate End Clients"
+      ]
+    },
+    {
+      "group": "PROCESS WITHDRAWALS",
+      "pages": [
+        "PROCESS WITHDRAWALS/Manage Destination Addresses",
+        "PROCESS WITHDRAWALS/Estimate Transaction Fees",
+        "PROCESS WITHDRAWALS/Manage Withdrawals at Scale",
+        "PROCESS WITHDRAWALS/Boost Transactions"
+      ]
+    },
+    {
+      "group": "COMPLY WITH REGULATION",
+      "pages": [
+        "COMPLY WITH REGULATION/Define AML Policies",
+        "COMPLY WITH REGULATION/Define Travel Rule Policies",
+        "COMPLY WITH REGULATION/Interact with TRUST"
+      ]
+    },
+    {
+      "group": "MANAGE TREASURY",
+      "pages": [
+        "MANAGE TREASURY/Connect to the Fireblocks Network",
+        "MANAGE TREASURY/Execute Smart Transfers",
+        "MANAGE TREASURY/Connect to Exchanges and FIAT Providers",
+        "MANAGE TREASURY/Stake Assets"
+      ]
+    },
+    {
+      "group": "MANAGE ASSETS",
+      "pages": [
+        "MANAGE ASSETS/Get Supported Assets",
+        "MANAGE ASSETS/Add Tokens"
+      ]
+    },
+    {
+      "group": "AUTOMATE FLOWS",
+      "pages": [
+        "AUTOMATE FLOWS/Configure Webhooks",
+        "AUTOMATE FLOWS/Deploy API Co-Signer",
+        "AUTOMATE FLOWS/Create API Co-Signer Callback Handler"
+      ]
+    },
+    {
+      "group": "MANAGE SMART CONTRACTS",
+      "pages": [
+        "MANAGE SMART CONTRACTS/Tokenize Assets",
+        "MANAGE SMART CONTRACTS/Interact With Smart Contracts"
+      ]
+    },
+    {
+      "group": "PROCESS PAYMENTS",
+      "pages": [
+        "PROCESS PAYMENTS/Create Payouts",
+        "PROCESS PAYMENTS/Define Payment Flows"
+      ]
+    },
+    {
+      "group": "DESIGN BUSINESS CONTINUITY PLAN",
+      "pages": [
+        "DESIGN BUSINESS CONTINUITY PLAN/Configure Co-Signer in HA mode",
+        "DESIGN BUSINESS CONTINUITY PLAN/Perform DRS process"
+      ]
+    },
+    {
+      "group": "SIGN OFFCHAIN MESSAGES",
+      "pages": [
+        "SIGN OFFCHAIN MESSAGES/Sign RAW Messages",
+        "SIGN OFFCHAIN MESSAGES/Sign Typed Message"
+      ]
+    },
+    {
+      "group": "EXPLORE INTEGRATIONS",
+      "pages": [
+        "EXPLORE INTEGRATIONS/Fireblocks Network Link for Exchanges",
+        "EXPLORE INTEGRATIONS/\"Base\" Testnet Support",
+        "EXPLORE INTEGRATIONS/Wallet Link",
+        "EXPLORE INTEGRATIONS/Integrating third-party AML providers",
+        "EXPLORE INTEGRATIONS/Off Exchange"
+      ]
+    }
+  ]
+}

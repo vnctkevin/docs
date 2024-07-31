@@ -1,0 +1,118 @@
+---
+  title: "Fireblocks Object Model"
+  ---
+  
+  # Fireblocks Object Model
+
+[Suggest Edits](/edit/object-model)
+
+The Fireblocks platform can be viewed as consisting of the following components:
+
+![](https://files.readme.io/29869aa-FB_Object_Model_.jpg)
+
+### 
+
+Fireblocks Workspace
+
+[](#fireblocks-workspace)
+
+Each unique instance of Fireblocks is called a _workspace_.
+
+  
+
+### 
+
+Vault accounts
+
+[](#vault-accounts)
+
+A Vault account is an easy way to separate and maintain security boundaries across assets.
+
+Vault accounts store your asset wallets on the Fireblocks platform. Any user with the appropriate permissions can create a vault account since that is not a workspace action that requires approval.
+
+The Vault structure for your application you're building on top of Fireblocks can either be 'Segregated' or 'Omnibus'.
+
+#### 
+
+**Segregated**
+
+[](#segregated)
+
+With this vault structure, each user of your application is assigned individual vault accounts.
+
+*   For example, you may have vault accounts labeled as **User #1, User #2, User #3, etc...** each of which maps to a user of the application you are building on top of Fireblocks.
+
+#### 
+
+**Omnibus**
+
+[](#omnibus)
+
+With this vault structure, all users of your application are assigned one, or several, centralized vault accounts.
+
+*   For example, you may have a single vault account labeled as **Omnibus**, where all of your user's funds and assets are swept for a single withdrawal.
+
+  
+
+### 
+
+Vault wallets
+
+[](#vault-wallets)
+
+Vault wallets are used to manage internal deposit addresses. Each vault wallet contains at least one deposit address for its asset type.
+
+Each vault account can hold any number of assets supported by Fireblocks, including multiple deposit addresses for blockchains that support it, such as UTXO-based chains like BTC. Depending on the asset type, different wallets may support multiple address types or formats. Each vault wallet is assigned to a single digital asset supported by Fireblocks.
+
+Your workspace contains multiple assets from different blockchains. You can use one of the existing assets or add a new asset to your workspace and use it as an vault wallet.
+
+[Learn how to create vault accounts and vault wallets using the Fireblocks API.](/docs/create-direct-custody-wallets)
+
+  
+
+### 
+
+Exchange accounts
+
+[](#exchange-accounts)
+
+To transfer funds securely to/from exchanges, you'll need to integrate an exchange account by adding your API credentials for those exchanges.
+
+  
+
+### 
+
+Fiat accounts
+
+[](#fiat-accounts)
+
+To transfer fiat through one of our integrated fiat providers, you need to explicitly add your fiat provider's API credentials within your desired workspace fiat account.
+
+  
+
+### 
+
+Whitelisted wallets
+
+[](#whitelisted-wallets)
+
+Whitelisted wallets are an additional security measure to interact with various blockchain addresses. These can be named how you prefer and marked as either 'internal', 'external', or 'contract'.
+
+*   **Internal wallet** - a deposit address existing inside your organization.
+*   **External wallet** - a deposit address existing outside your organization.
+*   **Contract wallet** - a deposit address of an on-chain smart contract.
+    *   (Note: This only applies to smart contracts on EVM-compatible blockchains.)
+
+Updated 26 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Fireblocks Workspace](#fireblocks-workspace)
+    *   [Vault accounts](#vault-accounts)
+        *   [**Segregated**](#segregated)
+        *   [**Omnibus**](#omnibus)
+    *   [Vault wallets](#vault-wallets)
+    *   [Exchange accounts](#exchange-accounts)
+    *   [Fiat accounts](#fiat-accounts)
+    *   [Whitelisted wallets](#whitelisted-wallets)

@@ -1,0 +1,234 @@
+---
+  title: "Fireblocks Key Features & Capabilities"
+  ---
+  
+  # Fireblocks Key Features & Capabilities
+
+[Suggest Edits](/edit/capabilities)
+
+### 
+
+Hot, warm, and cold MPC-CMP wallets
+
+[](#hot-warm-and-cold-mpc-cmp-wallets)
+
+Fireblocks wallets can be hot, warm, or cold. What separates these types of wallets is where the third MPC key share is held, and how transaction approvals are conducted.
+
+*   With a **hot wallet**, the third MPC key share is held by an API user on an API co-signer, and transaction approvals can be automated.
+*   With a **warm wallet**, the third MPC key share is held on your internet-connected mobile device, and approvals occur on the Fireblocks mobile app.
+*   With a **cold wallet**, the third MPC key share is held on your air-gapped (offline) mobile device. Approvals for transactions require bi-directional QR code scanning.
+
+<Info>
+
+## 📘
+
+Workspace compatibility
+
+A Fireblocks workspace can be hot & warm, or cold wallet-only, but not both.
+
+</Info>
+
+### 
+
+Workspaces
+
+[](#workspaces)
+
+The **Fireblocks workspace** is a unique feature of the Fireblocks platform with a broad range of capabilities that allows you to manage your various accounts, digital assets, transactions, and more.
+
+Each workspace is a unique BIP32-HD wallet structure with unique security and transaction policies.
+
+[Learn more about different types of Fireblocks workspace environments.](/docs/workspace-environments)
+
+### 
+
+Role-based access control
+
+[](#role-based-access-control)
+
+Fireblocks has extensive role-based access control capabilities for various user roles. These access roles grant them permissions related to:
+
+*   Parts of the platform they can access
+*   Types of actions they can perform
+*   MPC key shares that they hold and can use to sign transactions
+
+These roles can range from admin-level users like 'Owner' of the workspace, to a read-only 'Viewer’. An API user can be assigned any user role (except 'Owner').
+
+[Learn more about each role's access and capabilities.](/docs/quickstart#creating-an-api-user)
+
+### 
+
+Admin Quorum
+
+[](#admin-quorum)
+
+The **Admin Quorum** is the minimum number of workspace admins required to approve sensitive workspace changes, such as adding or removing users, adding whitelisted addresses, or approving network connections. This is set via an Admin Quorum threshold.
+
+If an admin attempts to perform malicious actions, such as attempting to steal funds via a personal wallet, the multiple approvals required by the admin quorum prevent and mitigate damage. This would work the same for an admin that has their account compromised.
+
+[Learn more about adjusting your workspace's Admin Quorum threshold.](https://support.fireblocks.io/hc/en-us/articles/360017665119-Admin-Quorum)
+
+### 
+
+Accounts
+
+[](#accounts)
+
+**Accounts** compile all types of accounts that Fireblocks supports, including; vault accounts, exchange accounts, and fiat accounts.
+
+*   A**Vault account** is a unique on-chain wallet, with your private key secured by our MPC-CMP architecture, that enables you to securely store and transfer your digital assets.
+*   A **Exchange account** allows you to leverage your exchange's API credentials to securely transfer assets between exchanges and other Fireblocks accounts.
+*   A **Fiat account** enables you to transfer fiat to any other account within your Fireblocks workspace or network connections that support that specific fiat provider.
+
+### 
+
+Vaults
+
+[](#vaults)
+
+The Fireblocks Vault is your secure MPC-CMP solution for wallet and address management. The Vault allows you to create and manage multiple vault accounts, which contain your asset wallets.
+
+Depending on the asset type, you may or may not be able to have multiple deposit addresses or accounts within a single vault account.
+
+[Learn how to create vaults and wallets using the Fireblocks API.](/docs/create-direct-custody-wallets)
+
+### 
+
+Assets
+
+[](#assets)
+
+Asset wallets are used to manage internal deposit addresses for different asset types. Each asset wallet contains at least one deposit address for its asset type. Fireblocks supports over 1,200 assets and our asset support is continuously growing.
+
+[Learn how to return a list of supported assets using the Fireblocks API.](/docs/list-supported-assets-1)
+
+### 
+
+Transaction Authorization Policy (TAP)
+
+[](#transaction-authorization-policy-tap)
+
+The Transaction Authorization Policy (TAP) is a set of rules that set the limits and boundaries of the transactions in your Fireblocks workspace.
+
+With the TAP, you control who can move funds, how much can be transferred in a single transaction or a certain time period, and how transactions are authorized.
+
+TAP rules can be applied to virtually any parameter within a transaction, including smart contract-specific transactions such as deploying, upgrading, and performing ongoing operations.
+
+[Learn how to set up rules for your Transaction Authorization Policy (TAP).](/docs/set-transaction-authorization-policy)
+
+### 
+
+Transactions API
+
+[](#transactions-api)
+
+All transactions are routed through the [Create a new transaction](/reference/post_transactions) API call. Users can only issue transactions based on their access roles and the workspace’s TAP settings. This includes both console and API users.
+
+When issuing a transaction through this endpoint, the `OPERATION` parameter specifies what type of transaction this may be. It could be a generic transfer, a token mint or burn, a contract call, a typed message, or a raw message.
+
+[Learn how to build a transaction using the Fireblocks API.](/reference/create-transactions)
+
+### 
+
+Whitelisted addresses
+
+[](#whitelisted-addresses)
+
+**Whitelisted addresses** are deposit addresses that exist outside of your Fireblocks Vault. You can perform transactions from your workspace by whitelisting an address for any supported blockchain.
+
+Whitelisted addresses (also called "wallets") can be categorized as:
+
+*   **Internal wallet** - a deposit address existing inside your organization.
+*   **External wallet** - a deposit address existing outside your organization.
+*   **Contract wallet** - a deposit address of an on-chain smart contract.
+
+[Learn to whitelist new addresses for transactions and deposits.](/docs/whitelist-addresses)
+
+### 
+
+Fireblocks Network
+
+[](#fireblocks-network)
+
+The Fireblocks Network is a settlement workflow allowing you to quickly transfer with your network counterparties without the need to manually whitelist their addresses.
+
+Streamline settlement using the Fireblocks Network by automatically authenticating addresses with your network counterparties while automatically rotating secure addresses for supported assets. It also maps transactions to counterparties for accurate reporting.
+
+[Learn how to create and manage network connections using the Fireblocks API.](/docs/connect-to-the-fireblocks-network)
+
+### 
+
+Tokenization
+
+[](#tokenization)
+
+Deploy, manage, mint, and burn custom tokenized assets on-chain. Enforce governance and rules for who is able to perform sensitive operations such as minting new tokens.
+
+[Learn how to deploy, manage, mint, and burn tokenized assets using the Fireblocks API.](/docs/issue-new-tokens)
+
+### 
+
+Web3 / DeFi access
+
+[](#web3--defi-access)
+
+Fireblocks lets you securely connect to and operate seamlessly within the Web3 and DeFi ecosystem.
+
+*   Connect easily to Web3 dApps using our WalletConnect integration or browser extension.
+*   Interact directly and programmatically with smart contracts using our smart contract API.
+
+[Learn how to connect to Web3 dApps using our WalletConnect integration.](https://support.fireblocks.io/hc/en-us/articles/5403817784732-Connecting-to-Web3-using-WalletConnect)
+
+### 
+
+Securely develop and operate smart contracts
+
+[](#securely-develop-and-operate-smart-contracts)
+
+Securely develop, deploy, and operate your on-chain smart contracts using Fireblocks' industry-leading security layers.
+
+Provide granular role-based access control for managing which developer is allowed to deploy smart contracts, perform upgrades, or call sensitive smart contracts operations, such as pausing or updating contract data.
+
+[Learn how to deploy and operate smart contracts using the Fireblocks API.](/docs/interact-with-smart-contracts)
+
+### 
+
+Fireblocks Gas Station
+
+[](#fireblocks-gas-station)
+
+The _Fireblocks Gas Station_ service automates gas replenishment for token transaction fees on EVM-based networks such as Ethereum, BNB Chain, and others. This eliminates monitoring and manually transferring funds to these vault accounts to cover future transaction fees.
+
+[Learn how to set up your Gas Station using the Fireblocks API.](/docs/work-with-gas-station)
+
+### 
+
+Transaction screening (AML/KYT)
+
+[](#transaction-screening-amlkyt)
+
+_Transaction screening_ allows you to automate real-time monitoring of your crypto transactions in order to ensure compliance with Anti-Money Laundering/Counter Financing of Terrorism (AML/CFT) regulations, prevent interactions with sanctioned entities and identify customer behavior.
+
+[Learn more about our AML screening engine and the KYT capabilities of our Chainalysis and Elliptic integrations.](/docs/define-aml-policies)
+
+Updated 1 day ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Hot, warm, and cold MPC-CMP wallets](#hot-warm-and-cold-mpc-cmp-wallets)
+    *   [Workspaces](#workspaces)
+    *   [Role-based access control](#role-based-access-control)
+    *   [Admin Quorum](#admin-quorum)
+    *   [Accounts](#accounts)
+    *   [Vaults](#vaults)
+    *   [Assets](#assets)
+    *   [Transaction Authorization Policy (TAP)](#transaction-authorization-policy-tap)
+    *   [Transactions API](#transactions-api)
+    *   [Whitelisted addresses](#whitelisted-addresses)
+    *   [Fireblocks Network](#fireblocks-network)
+    *   [Tokenization](#tokenization)
+    *   [Web3 / DeFi access](#web3--defi-access)
+    *   [Securely develop and operate smart contracts](#securely-develop-and-operate-smart-contracts)
+    *   [Fireblocks Gas Station](#fireblocks-gas-station)
+    *   [Transaction screening (AML/KYT)](#transaction-screening-amlkyt)

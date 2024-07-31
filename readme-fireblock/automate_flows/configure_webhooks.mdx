@@ -1,0 +1,69 @@
+---
+  title: "Configure Webhooks"
+  ---
+  
+  # Configure Webhooks
+
+[Suggest Edits](/edit/configure-webhooks)
+
+<Info>
+
+## 📘
+
+This guide refers to the Developer Webhooks provided by Fireblocks. It should not be confused with Audit Log notifications, which serve a different purpose and can also be configured for delivery via webhooks.
+
+
+
+</Info>
+
+# 
+
+Overview
+
+[](#overview)
+
+Webhooks provide real-time notifications for events happening within your Fireblocks workspace, such as incoming and outgoing transactions, transaction status updates, and the addition of new vault accounts, contract wallets, internal wallets, or external wallets. By configuring webhooks, you can 'listen' for these events at your chosen URL, ensuring that all relevant event types are broadcasted to your designated endpoint.
+
+Using webhooks offers several benefits, particularly for event-driven development. They enable immediate awareness of critical events, allowing your systems to respond quickly and automatically to changes in your workspace. This real-time monitoring enhances operational efficiency, as it can trigger automated workflows, updates, or alerts based on the specific events received. Webhooks also facilitate seamless integration with your existing applications, enabling more dynamic and responsive interactions between your Fireblocks workspace and other platforms.
+
+When implementing webhooks, consider the reliability and scalability of the receiving endpoint. Ensure that your system can handle the volume of incoming events and process them efficiently.
+
+In a case of missed notifications, due to some issues that your server might experience, Fireblocks offers the following API endpoints for resending webhook notifications:
+
+*   [Resend failed webhooks](/reference/resendwebhooks) - Resends all failed webhook notifications
+*   [Resend webhooks for a transaction by ID](/reference/resendtransactionwebhooks) - Resends webhook notifications for a transaction by its unique identifier
+
+  
+
+## 
+
+IP Whitelisting
+
+[](#ip-whitelisting)
+
+Customer that wish to whitelist the IP addresses from which the Webhook notifications are going to be sent, can whitelist the following IPs:
+
+*   3.134.25.131
+*   3.23.47.185
+*   18.223.19.147
+*   3.141.88.232
+*   18.189.135.42
+
+  
+<Info>
+
+## 📘
+
+Learn more about Webhooks in the [Webhook Developer Guide here](/reference/verify-requests)
+
+
+
+</Info>
+
+Updated 6 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Overview](#overview)
+        *   [IP Whitelisting](#ip-whitelisting)

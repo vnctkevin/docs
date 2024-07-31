@@ -1,0 +1,150 @@
+---
+  title: "What Is Fireblocks?"
+  ---
+  
+  # What Is Fireblocks?
+
+[Suggest Edits](/edit/what-is-fireblocks)
+
+Fireblocks is a user-friendly platform that uses direct custody to build new blockchain-based products and manage your digital asset operations. Direct custody is a type of self-custody that seamlessly blends high performance, zero counterparty risk, and multiple layers of security. With Fireblocks, you're always the owner and controller of your assets.
+
+The Fireblocks direct custody model follows five core Custody & Risk Principles:
+
+1.  Provide an environment with zero counterparty risk.
+2.  Eliminate external and internal attack vectors.
+3.  Guarantee business continuity.
+4.  Ensure granular control and visibility of every transaction.
+5.  Deliver high-performance products and services with ease of use.
+
+[Learn more about Fireblocks’ Custody & Risk Principles.](https://www.fireblocks.com/principles/)
+
+The Fireblocks platform is comprised of three core components:
+
+### 
+
+Digital Asset Wallets
+
+[](#digital-asset-wallets)
+
+Secure, and scalable MPC-based wallets with robust key management to custody digital assets. The Fireblocks MPC-CMP protocol redefines private key security, never gathering a private key as one whole, eliminating risk. Fireblocks customers use our wallets for a range of operations, such as treasury, trading, cold storage, royalties, NFTs, smart contracts, and user wallets.
+
+### 
+
+Platform Governance
+
+[](#platform-governance)
+
+The Policy Engine automates governance policies for transaction rules and admin approvals. It enables you to configure a list of rules that dictate how transactions are handled and approved. A rule can set whether a transaction is blocked, approved, or requires additional signers using filters.
+
+Policy Engine rules for various destinations, such as internal wallets, network connections, exchanges, fiat providers, whitelisted addresses, and contract wallets.
+
+### 
+
+Treasury Management
+
+[](#treasury-management)
+
+Fireblocks' single platform centralizes wallet and address management to simplify crypto and NFT treasury operations. Wallets are organized into Vault accounts (segregated or omnibus) where you can set specific transaction policies to protect the movement of funds.
+
+The Fireblocks Network ensures transfers from Fireblocks wallets are simple and secure. The Network automatically authenticates deposit addresses to avoid manual deposit address entry and the need for test transfers.
+
+Over 30 exchanges and fiat providers are connected to the Fireblocks Network, enabling you to securely deposit and withdraw from their exchange accounts. Thousands of businesses are also connected to the Fireblocks Network for secure peer-to-peer transfers.
+
+# 
+
+Fireblocks Multi-layer Security
+
+[](#fireblocks-multi-layer-security)
+
+Fireblocks has created a multi-layer security matrix that layers MPC, secure enclaves, our signature Policy Engine, and an asset transfer network to provide the strongest software and hardware defense available against evolving attack vectors.
+
+Because we understand that no security technology alone is unbreakable, our approach to security protects all attack surfaces in a redundant structure to provide multiple fail-safes, in the event one security control fails.
+
+Our security structure provides a truly secure environment for storing, transferring, and issuing digital assets. This ensures that your assets are protected from cyberattacks, internal colluders, and human errors. As a result, Fireblocks serves as the foundation for 1,000s of digital asset businesses and has securely transferred over $3T in digital assets.
+
+## 
+
+Multi-Layer Security In-Depth
+
+[](#multi-layer-security-in-depth)
+
+### 
+
+Layer 1: MPC-CMP
+
+[](#layer-1-mpc-cmp)
+
+MPC (multi-party computation) is a cryptographic technology that stores secret information with each party, then solves a problem that requires the unshared, decentralized input of all these parties' secret information. Fireblocks uses MPC over other technologies such as Multisig because MPC is protocol agnostic, operationally flexible, and less costly as signing occurs off-chain.
+
+Fireblocks developed the MPC-CMP protocol that applies this concept to blockchain-based ECDSA and EdDSA signatures (used by all blockchains). The Fireblocks MPC-CMP protocol redefines private key security, never gathering a private key as one whole. MPC-CMP also requires fewer transaction rounds for signing (8x faster than standard MPC) and is available with cold storage signing where key shares are stored offline.
+
+Fireblocks distributes the cryptographic MPC shares across multiple tier-1 cloud environments to ensure an extra layer of security even if one of the physical data centers is compromised. You can also store MPC shares across on-prem data centers or configure a hybrid scenario.
+
+### 
+
+Layer 2: Secure Enclaves
+
+[](#layer-2-secure-enclaves)
+
+Fireblocks utilizes Intel SGX, a hardware-level enclave that isolates selected code and data within a system. It is designed to protect the cryptographic material, the cryptographic algorithm (MPC and ZKPs), and the execution of sensitive parts of the software from both insiders (such as rogue admins) and hackers.
+
+As the MPC key shares are stored in SGX, they cannot be extracted even if malware or a hacker has control over the server’s OS – as the memory space and the data in the SGX enclave are encrypted. We also utilize SGX to secure API keys. In the trusted execution environments (TEEs) where we store these exchange credentials, the information cannot be retrieved by hackers, inside colluders, or even Fireblocks employees.
+
+### 
+
+Layer 3: Policy Engine
+
+[](#layer-3-policy-engine)
+
+Fireblocks’ Policy Engine allows you to configure a list of rules that affect how transactions are handled and approved. A rule can set whether a transaction is blocked, approved, or requires additional signers using filters such as source, destination, asset, and amount.
+
+Fireblocks secures the Policy Engine itself using SGX and distributes policy verification across several MPC servers. Policy rules are signed by a quorum of admins and encrypted within SGX; the engine is implemented inside of the SGX enclave and the code cannot be modified. This prevents both hackers and even insiders from modifying the implemented rules or the logic of the policy engine.
+
+### 
+
+Layer 4: Fireblocks Network
+
+[](#layer-4-fireblocks-network)
+
+The Fireblocks Network is an institutional asset transfer network that completely mitigates the risks associated with deposit addresses by automating deposit address authentication and rotation. The Fireblocks Network entirely removes the need to copy and paste deposit addresses, then authenticate them using test transfers and whitelisting procedures.
+
+Without an authentication network, it’s possible for assets to be lost through deposit address spoofing or human errors (such as entering a deposit address for a counterparty that they’ve already rotated out).
+
+## 
+
+Additional Security Measures
+
+[](#additional-security-measures)
+
+### 
+
+Admin Quorum
+
+[](#admin-quorum)
+
+The Admin Quorum defines the minimum number of administrators required to approve connections and workspace changes. This includes whitelisting addresses, approving network connections, exchange accounts, external destination addresses, approving new users, and approving other workspace configuration changes. The admin quorum prevents insider attacks, such as an administrator trying to whitelist their personal wallet address to steal funds.
+
+### 
+
+Multi-factor Authentication
+
+[](#multi-factor-authentication)
+
+Two-factor authentication is required at a minimum for all Fireblocks users. Any authenticator app may be used such as apps from Google, Microsoft, LastPass, or Yubico.
+
+### 
+
+Logging
+
+[](#logging)
+
+All activity within the Fireblocks workspace, including administrative changes, and transactions are securely logged for auditing purposes. These logs can be viewed natively within the Fireblocks console, or exported to any log aggregation system, such as a SIEM.
+
+Updated 8 months ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Fireblocks Multi-layer Security](#fireblocks-multi-layer-security)
+        *   [Multi-Layer Security In-Depth](#multi-layer-security-in-depth)
+        *   [Additional Security Measures](#additional-security-measures)

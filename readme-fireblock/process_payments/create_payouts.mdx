@@ -1,0 +1,53 @@
+---
+  title: "Create Payouts"
+  ---
+  
+  # Create Payouts
+
+[Suggest Edits](/edit/create-payouts)
+
+# 
+
+Overview
+
+[](#overview)
+
+The Payout Service API allows you to create and execute payout instruction sets.
+
+A payout instruction set describes how to distribute payments from a payment account to multiple payee accounts.
+
+*   **Payment account**: Any valid Fireblocks-supported vault account, exchange account, or fiat account.
+*   **Payee account**: A valid address in Fireblocks for receiving funds. This can be a vault account, exchange account, whitelisted address, fiat account, or merchant account.
+
+The payout process can only be executed if the payment account has a sufficient balance for the entire payout instruction set. If the payout account doesn't have a sufficient balance, the payout remains in an Insufficient Balance state until the payment account has a sufficient balance to perform the payout instructions. Payouts in an Insufficient Balance state expire at midnight UTC and are moved to Failed status.
+
+A payout instruction set can only be executed once. Re-executing a payout instruction set results in an error.
+
+  
+![](https://files.readme.io/d3f16e9-swimlanes-0824f23d87b6476b8fce5eb945f197cd.png)  
+
+* * *
+
+  
+
+# 
+
+Payouts Flow
+
+[](#payouts-flow)
+
+When a user wants to send a payment to one or more of their merchants, they can use the Payout Service API to send the payout from their exchange account.
+
+The flow consists of 3 main steps:
+
+1.  [Creating a payout instruction set](/reference/executing-payouts#creating-a-payout-instruction-set)
+2.  [Executing a payout instruction set](/reference/executing-payouts#executing-a-payout-instruction-set)
+3.  [Monitoring Payouts](/reference/executing-payouts#executing-a-payout-instruction-set)
+
+Updated 26 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Overview](#overview)
+    *   [Payouts Flow](#payouts-flow)

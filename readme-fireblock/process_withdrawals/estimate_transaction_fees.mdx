@@ -1,0 +1,109 @@
+---
+  title: "Estimate Transaction Fees"
+  ---
+  
+  # Estimate Transaction Fees
+
+[Suggest Edits](/edit/verify-fee-effeciency)
+
+Fireblocks provides clients with two API endpoints to estimate transaction fees:
+
+1.  **Estimate Transaction Fee** - [Documentation](/reference/estimatetransactionfee)
+2.  **Estimate Network Fee** - [Documentation](/reference/estimatenetworkfee)
+
+  
+
+### 
+
+Estimate Transaction Fee
+
+[](#estimate-transaction-fee)
+
+The [`Estimate Transaction Fee` endpoint](/reference/estimatetransactionfee) is designed to simulate a real transaction and calculate its potential fee. This process considers factors such as the source and destination amounts, the number of inputs and outputs, and other relevant transaction details. Essentially, it mimics the actual transaction to determine what the fee would be if executed.
+
+When using this endpoint, clients should be aware that it follows the same rules as creating a transaction. This includes requiring the relevant vault wallet in the vault account, ensuring the estimated transaction's balance is in the wallet, and providing a valid destination.
+
+While many clients implement logic to estimate the transaction fee before each execution, it is crucial not to call this endpoint for every minor transaction change. For example, in EVM-based transactions, the gas limit for transferring the base asset or a specific token usually remains the same (barring sudden surges in network fees). The main variable is the current network fee, which can be obtained using the second endpoint.
+
+  
+
+### 
+
+Estimate Network Fee
+
+[](#estimate-network-fee)
+
+The [`Estimate Network Fee` endpoint](/reference/estimatenetworkfee) returns the current network fee for a specified network. This allows clients to calculate transaction fees or display the current network fee to their users. For instance, it provides the current gas price for ETH, which is part of the entire transaction fee formula, alongside the gas limit and other parameters.
+
+The network fee response is cached for 30 seconds on the Fireblocks side. Clients should consider this interval when using this endpoint, as querying it more frequently than every 30 seconds does not provide additional value and the fee level value would remain the same.
+
+  
+
+### 
+
+Fee Levels
+
+[](#fee-levels)
+
+Both endpoints return estimated fees or network fees in three levels: LOW, MEDIUM, and HIGH. Here’s how these are determined for different transaction types:
+
+  
+
+#### 
+
+EVM-Based Transactions
+
+[](#evm-based-transactions)
+
+To simplify the gas calculation for each transaction, Fireblocks offers preset fees for both the Console (slow, medium, and fast) and the API (low, medium, and high). These fee calculations are based on recent blocks and a certain percentile of the data collected.
+
+Fireblocks retrieves the latest block data every minute, inspecting the gas prices of recent blocks to determine the fee rate and automatically set the gas limit. In addition to verifying the latest data, Fireblocks also simulates the desired transactions to estimate the fee. The transaction parameters are sent to an API endpoint on the node, which returns an estimated transaction fee.
+
+  
+
+#### 
+
+UTXO-Based Transactions
+
+[](#utxo-based-transactions)
+
+*   **High**: Fees are based on the previous block’s fee.
+*   **Medium**: Fees are based on the average of the previous two blocks.
+*   **Low**: Fees are based on the average of the last four blocks.
+
+  
+
+Fireblocks' API endpoints for estimating transaction fees provide clients with robust tools to ensure they can accurately predict and manage transaction costs. By using these endpoints, clients can maintain efficient and cost-effective operations while offering transparency and predictability in transaction fees to their users. Whether you are dealing with EVM-based, UTXO-based transactions or any other type of blockchain, understanding and utilizing these endpoints can significantly enhance your transaction management strategy.
+
+  
+<Info>
+
+## 📘
+
+Learn more about Fees in Fireblocks:
+
+1.  [EVM Networks](https://support.fireblocks.io/hc/en-us/articles/10615179965596-EVM-fees-Overview)
+2.  [UTXO Based Assets](https://support.fireblocks.io/hc/en-us/articles/10616193193756-UTXO-fees-Overview)
+3.  [Unique Calculations](https://support.fireblocks.io/hc/en-us/articles/13995244288412-Solana-priority-fee)
+
+</Info>  
+<Info>
+
+## 📘
+
+Check out the [Fee Management Developer Guide](/reference/estimate-transaction-fee)
+
+
+
+</Info>
+
+Updated 26 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Estimate Transaction Fee](#estimate-transaction-fee)
+    *   [Estimate Network Fee](#estimate-network-fee)
+    *   [Fee Levels](#fee-levels)
+        *   [EVM-Based Transactions](#evm-based-transactions)
+        *   [UTXO-Based Transactions](#utxo-based-transactions)

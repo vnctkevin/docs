@@ -1,0 +1,91 @@
+---
+  title: "Integrating third-party AML providers"
+  ---
+  
+  # Integrating third-party AML providers
+
+[Suggest Edits](/edit/integrating-third-party-aml-providers)
+
+Fireblocks offers direct integrations with AML providers Chainalysis and Elliptic. If you prefer to use a different provider, we recommend setting up the following workflows for integrating third parties with your workspace.
+
+# 
+
+Outgoing transactions
+
+[](#outgoing-transactions)
+
+There are two methods for outgoing transactions.
+
+## 
+
+Method 1: Manual pre-screening
+
+[](#method-1-manual-pre-screening)
+
+You can manually send the transaction details to your AML provider before sending the transaction to the blockchain. In this scenario, one of your users initiates the transaction and sends the details to your AML provider for screening.
+
+After receiving the screening results from your provider, you can take the following actions:
+
+*   If the risk profile is high, you can reject the transaction and not send it to Fireblocks.
+*   If the risk profile is acceptable, you can accept the transaction and send it to Fireblocks. You can set up alerts to notify interested parties about the transaction.
+
+![](https://files.readme.io/b5bfbbc-Outgoing_1_1.png)
+
+## 
+
+Method 2: Automated screening using the Callback Handler
+
+[](#method-2-automated-screening-using-the-callback-handler)
+
+You can automate third-party AML screening for outgoing transactions using
+
+*   Fireblocks API: the endpoints used for initiating the transaction.
+*   API Co-Signer: a Fireblocks-provided component that automates transaction signing and must be installed on an Intel SGX-enabled server you provide.
+*   Callback Handler: an HTTPS server that receives the transaction details and automatically sends the details to your AML provider.
+
+You must also develop a custom logic that determines whether to accept or reject transactions based on the AML screening result.
+
+1.  You initiate a transaction using the Fireblocks API.
+2.  The transaction passes through your [Transaction Authorization Policy (TAP)](/docs/capabilities#transaction-authorization-policy-tap). If authorized, the transaction is sent to the co-signer gateway for signing.
+3.  The API Co-Signer (located in your secure environment) long-polls the co-signer gateway and fetches transaction details from the co-signer gateway.
+4.  The API Co-Signer sends a request to the Callback Handler with the transaction details.
+5.  The Callback Handler sends the transaction details to your third-party AML provider for screening.
+6.  The AML provider responds with the screening result.
+7.  According to your custom logic, the Callback Handler accepts or rejects the transaction based on the screening result.
+    *   If the risk profile is high, the Callback Handler responds to the API Co-Signer with Reject. The API Co-Signer does not sign the transaction, and the transaction is canceled.
+    *   If the risk profile is acceptable, the Callback Handler responds to the API Co-Signer with Accept. The API Co-Signer signs the transaction and sends it back to the co-signer gateway for broadcasting to the blockchain.
+
+<Info>
+
+## 📘
+
+Note
+
+The API Co-Signer expects a response within 30 seconds of sending the initial request. If the Callback Handler does not respond within 30 seconds, the transaction is not signed and is canceled.
+
+</Info>![](https://files.readme.io/f05d3e1-Outgoing_2.png)
+
+# 
+
+Incoming transactions
+
+[](#incoming-transactions)
+
+In order for third parties to screen your incoming transactions, you must manually send them the details. You can [configure a webhook](/docs/webhooks-notifications?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1695401325841.1695411767645.460&__hssc=215458440.9.1695411767645&__hsfp=1728074016) that notifies you when you receive transactions. These webhooks also contain the transaction's details. You can then send the transaction details to your AML provider for screening.
+
+After receiving the screening result from your provider, you can take the following actions:
+
+*   If the risk profile is high, you can [freeze](/reference/post_transactions-txid-freeze?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1695401325841.1695411767645.460&__hssc=215458440.9.1695411767645&__hsfp=1728074016) the transaction and mark the funds unspendable. These funds can be [unfrozen](/reference/post_transactions-txid-unfreeze?__hstc=215458440.b4ed1436a462ca1ef892c4215a414852.1681749190916.1695401325841.1695411767645.460&__hssc=215458440.9.1695411767645&__hsfp=1728074016) later by an Admin.
+*   If the risk profile is acceptable, you don't need to do anything since the funds are immediately spendable within your wallet. You can set up alerts to notify interested parties about the transaction.
+
+![](https://files.readme.io/9a7e35d-Incoming.png)
+
+Updated 6 months ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Outgoing transactions](#outgoing-transactions)
+        *   [Method 1: Manual pre-screening](#method-1-manual-pre-screening)
+        *   [Method 2: Automated screening using the Callback Handler](#method-2-automated-screening-using-the-callback-handler)
+    *   [Incoming transactions](#incoming-transactions)

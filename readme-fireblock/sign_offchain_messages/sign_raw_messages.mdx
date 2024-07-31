@@ -1,0 +1,111 @@
+---
+  title: "Sign RAW Messages"
+  ---
+  
+  # Sign RAW Messages
+
+[Suggest Edits](/edit/raw-signing)
+
+<Warning>
+
+## ❗️
+
+Warning
+
+Raw Signing is an insecure signing method and is not generally recommended.  
+Bad actors can trick someone into signing a valid transaction message and use it to steal funds.
+
+For this reason, Raw Signing is a premium feature that requires an additional purchase and is not available in workspaces by default.
+
+If you're interested in this feature and want to see if your use case is eligible for it, please contact your Customer Success Manager.
+
+Fireblocks Sandbox workspaces have Raw Signing enabled by default to allow for testing purposes.
+
+</Warning>
+
+# 
+
+Overview
+
+[](#overview)
+
+Raw Signing is a powerful feature within Fireblocks.  
+As the Web3 world continues to rapidly evolve, Fireblocks provides the option to support additional chains and actions by signing an arbitrary message using the Fireblocks infrastructure.
+
+Our WalletConnect integration and the Fireblocks Chrome Extension sometimes use Raw Signing to sign transactions initiated by dApps. You will need to add TAP rules for these dApp-initiated raw transactions to go through.
+
+  
+<Info>
+
+## 📘
+
+Check out the Raw Signing Developer Guide [here](/reference/structuring-the-api-call-1)
+
+
+
+</Info>
+
+* * *
+
+  
+
+# 
+
+What are the use cases for Raw Message Signing?
+
+[](#what-are-the-use-cases-for-raw-message-signing)
+
+Typically Raw Message Signing is used in the following scenarios:
+
+*   When you want to sign a transaction on a blockchain that Fireblocks doesn’t currently support
+*   When you want to perform an operation that we don’t currently support on a blockchain that we do support (e.g., staking on a lesser-known blockchain)
+*   When you want to use cryptography to prove and validate messages that are not supported by [Typed Message Signing](/docs/typed-message-signing-1) (e.g., Proof of Assets, Proof of Addresses)
+*   When someone sends funds to your address over a blockchain that we don’t currently support, and you want to recover the funds
+
+  
+
+* * *
+
+  
+
+# 
+
+Enabling Raw Signing
+
+[](#enabling-raw-signing)
+
+By default, Raw signing is not available in production workspaces. Contact your Customer Success Manager to enable Raw Signing.  
+If Raw Signing is disabled in your workspace and you attempt to create a raw transaction, it will fail and show the **BLOCKED\_BY\_POLICY** substatus.
+
+  
+
+* * *
+
+  
+
+# 
+
+TAP rules for Raw Signing
+
+[](#tap-rules-for-raw-signing)
+
+The Transaction Authorization Policy (TAP) rejects all raw transactions by default. After enabling the Raw Signing feature in your production workspace, you must add TAP rules that allow users to initiate, approve, and sign raw transactions from specific vault accounts.
+
+You can also use your TAP rules to limit the range of derivation paths, vault accounts, and assets available for raw transactions. Unless explicitly defined otherwise in the rule, the rule matches with all derivation paths. When creating the rule, select Groups and accounts as your source and enter Any vault. Then you can enter a derivation path.
+
+The derivation path used in signing can be passed along with the signing request in one of two ways:
+
+*   **Explicitly:** By passing the signing algorithm and the full derivation path
+*   **Implicitly:** By passing the vault account ID, the asset ID, and (optionally) the change and the address index
+
+These properties together comprise a full BIP44-like derivation path. Typically this approach is used to create custom transactions on supported protocols.
+
+Updated 26 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Overview](#overview)
+    *   [What are the use cases for Raw Message Signing?](#what-are-the-use-cases-for-raw-message-signing)
+    *   [Enabling Raw Signing](#enabling-raw-signing)
+    *   [TAP rules for Raw Signing](#tap-rules-for-raw-signing)

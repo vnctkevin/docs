@@ -1,0 +1,182 @@
+---
+  title: "Create Direct Custody Wallets"
+  ---
+  
+  # Create Direct Custody Wallets
+
+[Suggest Edits](/edit/create-direct-custody-wallets)
+
+# 
+
+Overview
+
+[](#overview)
+
+In general, the Fireblocks platform consists of workspaces, vault accounts, vault wallets, and deposit addresses.
+
+This diagram shows the overall account structure in Fireblocks and the underlying wallet structure.
+
+![](https://files.readme.io/de5e145-mceclip0.png)
+
+At the top level, your various Fireblocks workspaces are contained within the logical group called the Customer Domain. These workspaces may be hot workspaces, which contain hot wallets, or cold workspaces, which contain cold wallets.
+
+In your Fireblocks workspace, you can create and manage multiple vault accounts, which contain your vault wallets.
+
+<Info>
+
+## 📘
+
+Currently, each vault account can only contain a single vault wallet for each asset type.
+
+
+
+</Info>
+
+For each vault wallet, there are one or more deposit addresses. For UTXO-based assets, such as Bitcoin, a single vault wallet may generate one or more deposit addresses. For account-based assets, there are two options:
+
+*   Account-based assets without tag/memo support, such as ETH, can only generate one deposit address.
+*   Account-based assets with tag/memo support, such as XRP, can generate one or more deposit addresses. Each deposit address has the same on-chain address. However, they differ by their tag/memo.
+
+  
+![](https://files.readme.io/1003eba-mceclip0_1.png)  
+  
+
+* * *
+
+  
+
+# 
+
+Types of Vault Structures
+
+[](#types-of-vault-structures)
+
+Fireblocks recommends structuring your vault accounts using one of two methods: omnibus or segregated. The diagram below describes the advantages and disadvantages of each structure.
+
+![](https://files.readme.io/da10aee-mceclip1.png)  
+
+## 
+
+Omnibus structure
+
+[](#omnibus-structure)
+
+The omnibus structure consists of a central vault account, deposits vault account for UTXO and Tag/Memo based assets and vault accounts for each end-client for account based assets.
+
+Funds are deposited into the individual vault accounts or to the deposits vault account, depending on the asset type, and then swept to the central vault account, where the funds can be invested.
+
+### 
+
+Address creation flows
+
+[](#address-creation-flows)
+
+For extended documentation, see [Best Practices for Structuring Your Fireblocks Vault](https://support.fireblocks.io/hc/en-us/articles/5253421857564-Fireblocks-Vault-structure-best-practices) .
+
+Some notes on information presented in the above Help Center article:
+
+*   Omnibus and segregated account structures are independent of whether you have a hot or cold workspace. Both account structures can be implemented in either workspace type.
+*   Workspaces can contain both an omnibus and segregated account models. There is no limitation for a workspace to contain one specific account model.
+
+Below are some diagrams representing different flows for both Omnibus and Segregated account structures:
+
+  
+
+#### 
+
+Omnibus address creation (UTXO)
+
+[](#omnibus-address-creation-utxo)
+
+![](https://files.readme.io/7cf2aee-mceclip4.png)
+
+*   The end user, Alice, asks to deposit a UTXO asset, such as Bitcoin (BTC).
+*   The customer’s front-end application creates a new deposit address in the Omnibus vault account.
+*   This deposit address is assigned to Alice and mapped accordingly within the customer’s private ledger.
+*   Alice receives a notification from the front-end system with her assigned deposit address, where she can start depositing funds.
+
+  
+
+#### 
+
+Omnibus address creation (account-based with tag/memo support)
+
+[](#omnibus-address-creation-account-based-with-tagmemo-support)
+
+![](https://files.readme.io/e64b2d0-mceclip5.png)
+
+*   The end user, Alice, asks to deposit an account-based asset that supports tag/memo fields, such as Ripple (XRP).
+*   The customer’s front-end application creates a new deposit address in the Omnibus vault account.
+*   This deposit address is assigned to Alice and mapped accordingly within the customer’s private ledger.
+*   Alice receives a notification from the front-end system with her assigned deposit address, where she can start depositing funds.
+
+  
+
+#### 
+
+Omnibus Address Creation (account-based)
+
+[](#omnibus-address-creation-account-based)
+
+![](https://files.readme.io/1ee8808-mceclip6.png)
+
+*   The end user, Alice, asks to deposit an account-based asset, such as Ethereum (ETH).
+*   The customer’s front-end application creates a new intermediate vault account and an vault wallet with a deposit address within it.
+*   This deposit address is assigned to Alice and mapped accordingly within the customer’s private ledger.
+*   Once mapped and credited, Alice receives a notification from the front-end system with her assigned deposit address, where she can start depositing funds.  
+    Deposit Flows  
+    The diagrams below show the deposit flow for both asset types within the Omnibus account structure.
+
+  
+
+## 
+
+Segregated structure
+
+[](#segregated-structure)
+
+The segregated structure consists of individual vault accounts for each end client. Funds are stored in and invested from these individual accounts.
+
+### 
+
+Address creation flows
+
+[](#address-creation-flows-1)
+
+There’s no difference between UTXO and account-based assets when dealing with the segregated account structure. For both, the process is as follows:
+
+![](https://files.readme.io/8ce1c5b-mceclip10.png)
+
+*   The end user, Alice, asks to deposit some assets.
+*   The customer’s front-end application creates a new vault account if it does not exist or reuses an existing vault account dedicated to Alice. Then the vault wallet is created with a deposit address within the vault account.
+*   Alice receives a notification from the front-end system with her assigned deposit address, where she can start depositing funds.
+
+  
+
+* * *
+
+# 
+
+Hiding Vault Accounts
+
+[](#hiding-vault-accounts)
+
+When creating intermediate vault accounts for your end users, customers may accumulate a significant number of vault accounts in their workspace. These numbers can range from several tens of thousands to millions. Although there is no technical limitation on the number of vault accounts that can be created, having all of these accounts visible in the Fireblocks Web Console can lead to a poor user experience. This includes being overwhelmed by too many vault accounts in the console, which can also result in slow loading times. Additionally, any transaction created from or to one of these vault accounts will appear in the Active Transaction panel. This can create a lengthy and unwieldy list of transaction notifications in scenarios with numerous deposits to these vaults.
+
+Both of these issues impact console performance and user experience. To mitigate this, and because all intermediate vault accounts are managed via API only, these accounts should be hidden from the console. There are two options to hide vault accounts from the console, both available through the Fireblocks API:
+
+*   Hide the vault account from the console upon creation by passing the optional `hiddenOnUI` parameter when using the [Create Vault Account API endpoint](/reference/createvaultaccount).
+*   Hide an existing vault account that was not set with the `hiddenOnUi` parameter by using the [Hide a Vault Account in the Console API endpoint](/reference/hidevaultaccount).
+
+Please note that all transactions, both incoming and outgoing, as well as the balances of the hidden vault accounts, are still accessible via the API.
+
+Updated 26 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Overview](#overview)
+    *   [Types of Vault Structures](#types-of-vault-structures)
+        *   [Omnibus structure](#omnibus-structure)
+        *   [Segregated structure](#segregated-structure)
+    *   [Hiding Vault Accounts](#hiding-vault-accounts)

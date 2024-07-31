@@ -1,0 +1,43 @@
+---
+  title: "Manage Users"
+  ---
+  
+  # Manage Users
+
+[Suggest Edits](/edit/manage-users)
+
+Fireblocks users can be added either via the web console or via the API:
+
+*   For adding users via the console please refer to [this guide](https://support.fireblocks.io/hc/en-us/articles/360012832959-User-roles)
+*   For adding users via the API please refer to the following [API endpoints](/reference/createconsoleuser) Generally, there are different user roles that can be assigned to a specific user, please see the user role table below:
+
+First, we need to understand the user permissions. Each user role contains other capabilities in addition to transaction permissions.
+
+| API Key Type | Role | Transaction Permissions | Environment |
+| --- | --- | --- | --- |
+| **Admin** | Signing | Can sign transactions. | Production |
+| **Non-Signing Admin** | Non-Signing | Can't sign transactions. | Production + Sandbox |
+| **Signer** | Signing | Can sign transactions. | Production |
+| **Approver** | Non-Signing | Can't sign transactions. | Production |
+| **Editor** | Non-Signing | Can't sign transactions. | Production + Sandbox |
+| **Viewer** | View-Only | Can only view transaction history. | Production + Sandbox |
+| **NCW\_ADMIN** | Non-Signing | Can only manage Non Custodial Wallets. | Production + Sandbox |
+| **NCW\_SIGNER** | Signing | Can only sign transaction from Non Custodial Wallets. | Production + Sandbox |
+
+  
+
+Defining users in your workspace may seem straightforward, but it requires careful alignment with the supported roles.
+
+Whether your goal is maximum security or optimal work efficiency, the right approach depends on your specific business use cases.
+
+Before getting started, familiarize yourself with [user groups](https://support.fireblocks.io/hc/en-us/articles/7249202090396-User-group-management-and-best-practices) and [approval groups](https://support.fireblocks.io/hc/en-us/articles/11500062124188-Approval-groups) . These two features are crucial for defining user roles and actions in your Fireblocks workspace and can significantly enhance your operational efficiency and security.
+
+*   Segregate users into two categories: those responsible for managerial decisions and changes, and those handling day-to-day operations. Differentiating between users who can make changes in the workspace and those who can only initiate or sign transactions will enhance security. For more details, refer to [this guide](/docs/segregate-duties) .
+*   Always consider the admin quorum approval. The more approvals required for a workspace change, the longer and more complex the implementation process will be.
+*   Start by defining groups and their tasks. Based on these tasks, identify the roles that match and add individual users accordingly. Managing your operations with the correct setup of groups will enhance the performance of regular operations and facilitate general workspace changes.
+
+Follow the general best practices when choosing users and roles as outlined [here](https://support.fireblocks.io/hc/en-us/articles/5254222799900-Best-practices-for-choosing-user-roles) .
+
+Updated 21 days ago
+
+* * *

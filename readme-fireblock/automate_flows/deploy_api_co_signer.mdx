@@ -1,0 +1,156 @@
+---
+  title: "Deploy API Co-Signer"
+  ---
+  
+  # Deploy API Co-Signer
+
+[Suggest Edits](/edit/deploy-api-co-signer)
+
+In addition to the manual transactions signing and approval process using Mobile device, Fireblocks provides you with automated signing and approval by leveraging your API Co-Signer. If your workspace expects to handle a high volume of transactions, frequent activity, or 24-hour customer access, this is an ideal solution for you.
+
+The API Co-Signer is a component that holds an MPC key share of your Fireblocks Vault and a Configuration Change Key:
+
+*   **MPC key share:** Used to sign transactions initiated via the API.
+*   **Configuration Change Key:** Used to approve new wallets in your workspace. Configuration changes require an API user with the [Admin user role](https://support.fireblocks.io/hc/en-us/articles/360012832959-User-roles).
+
+Additionally, you can configure the API Co-Signer with a Co-Signer Callback Handler. The Callback Handler is a predefined HTTPS server that receives requests from the API Co-Signer and returns an action. The Callback Handler typically integrates user-facing apps with a Fireblocks workspace or includes market signals in the transaction approval process.
+
+  
+<Info>
+
+## 📘
+
+Visit our Help Center to learn more about [installing and maintaining the API Co-Signer](https://support.fireblocks.io/hc/en-us/articles/11976323578780-SGX-API-Co-Signer-Prerequisites).
+
+
+
+</Info>  
+
+The process of generating and signing a Fireblocks transaction using the Fireblocks REST API, the API Co-Signer, and the optional callback handler is as follows:
+
+*   A new transaction is initiated using the Fireblocks API and then generated on our backend.
+*   The transaction passes through your Transaction Authorization Policy (TAP) and continues to the next step if authorized. Learn more about the [TAP](/docs/set-transaction-authorization-policy) .
+*   The API Co-Signer hosted in your secure environment long-polls our SaaS for transactions to sign. If a transaction is available, we immediately respond with the transaction details.
+*   Long Polling refers to the method of communication between your API Co-Signer and our server. The API Co-Signer has a long polling interval of 30 seconds. This interval is hardcoded and cannot be adjusted.
+*   If the callback handler is set up, the API Co-Signer sends it a secure approval request.
+    *   The request will fail If the callback handler does not respond within 30 seconds.
+    *   Once the callback handler responds, the transaction continues to the next step if the response is “approved.”
+*   The API Co-Signer and all our SaaS MPC key shares are engaged to complete the transaction signing process.
+
+* * *
+
+# 
+
+Available API Co-Signer Types
+
+[](#available-api-co-signer-types)
+
+We offer a variety of API Co-Signer deployment options in a cloud environment or on-premise, and leverage Intel SGX and AWS Nitro enclave technologies to protect your key shares. You can learn more about the deployment options by referring to one of the articles below:
+
+*   [Deploying an SGX API Co-Signer in Azure](https://support.fireblocks.io/hc/en-us/articles/10996227455132-Configuring-an-Azure-Confidential-Compute-VM-server-for-the-API-Co-Signer)
+*   [Deploying an SGX API Co-Signer in IBM Cloud](https://support.fireblocks.io/hc/en-us/articles/10996829061532-Configuring-an-IBM-Cloud-server-for-the-API-Co-Signer)
+*   [Deploying an SGX API Co-Signer in Alibaba](https://support.fireblocks.io/hc/en-us/articles/11005661660956-Configuring-an-Alibaba-Security-enhanced-server-for-the-API-co-signer)
+*   [Deploying an SGX API Co-Signer on-prem](https://support.fireblocks.io/hc/en-us/articles/11005275193756-Configuring-an-On-Prem-server-for-the-API-Co-Signer)
+*   [Deploying a Nitro API Co-Signer in AWS](https://support.fireblocks.io/hc/en-us/articles/10707064797980-AWS-Nitro-API-Co-Signer-Setup)
+
+  
+
+* * *
+
+# 
+
+Fireblocks Communal API Co-Signer
+
+[](#fireblocks-communal-api-co-signer)
+
+  
+<Info>
+
+## 📘
+
+Please Note:
+
+1.  Sandbox workspaces are automatically connected to the Communal API Co-Signer.
+2.  Customers using Production Testnet workspaces can configure their API keys to pair with the Communal API Co-Signer as described in this [guide](https://support.fireblocks.io/hc/en-us/articles/4625706934300-Fireblocks-Communal-API-Co-Signer).
+
+</Info>  
+
+The Fireblocks Communal API Co-Signer is used to prepare a Fireblocks workspace for full automation and API development. Deploying a new cloud or on-premise instance often takes time to request and approve within a company. Therefore, Fireblocks speeds up development time for customers by providing the Communal API Co-Signer, which can be used before a proprietary cloud environment or on-premise server is configured.
+
+Once you begin testing and verifying your automation workflow, set up your self-hosted API co-signer server to replace the Communal API Co-Signer as soon as it's available.
+
+The Communal API Co-Signer service is only available for testnet workspaces. An API Co-Signer holds an MPC key share for any workspace it is configured with, granting the owner of the API Co-Signer server partial custodial rights. Fireblocks can not take any custodial responsibility for Mainnet workspaces due to legal regulations.
+
+  
+
+* * *
+
+  
+
+# 
+
+API Co-Signer Security Checklist
+
+[](#api-co-signer-security-checklist)
+
+*   Use a clean hardened machine for the callback handler with access limited to authorized personnel. Also, note that no outbound connections are allowed, and the inbound connection is allowed only from the API Co-Signer machine on port 443.
+*   Use the Callback Handler to log all approval requests.
+*   Consider using the Callback Handler to implement your additional programmatic protection logic against malicious withdrawals.
+*   Harden the API Co-Signer machine. Find detailed instructions in the SGX API Co-Signer setup guide.
+*   Create Transaction Authorization Policy rules that don't let API users initiate transfers above a specific amount threshold, within a specific timeframe, and without additional manual approval. These rules should apply globally for all withdrawals and withdrawals from a specific external user wallet.
+*   Fireblocks advises against disabling Linux UEFI secure boot on your API Co-Signer virtual machine, as this goes beyond the security risks introduced by not validating kernel code. We recommend working around any issues you have instead. Using TrendMicro Deep Security agent on Ubuntu 20.04 is one option for secure boot support.
+
+  
+
+* * *
+
+# 
+
+Logging and monitoring
+
+[](#logging-and-monitoring)
+
+By default, the API Co-Signer uses the docker logging container. However, for better monitoring, the logs can be streamed to an external log delivery service, such as ELK, Splunk, or Datadog.
+
+The API Co-Signer generates two different types of logs for troubleshooting and auditing:
+
+*   run.log is an automatically generated log containing all of your API Co-Signer setup and configuration history. After you run the setup, add-user, or callback-update commands, the API Co-Signer server automatically sends a copy of this log to Fireblocks Support.
+*   customer\_cosigner.log contains workspace operation data, such as the workspace's transaction approving and signing history and new connection approvals. These log files are separated into 10 files limited to 4.1MB each. They are automatically overwritten in chronological order.
+
+## 
+
+Log structure
+
+[](#log-structure)
+
+Your API Co-Signer logs are structured using the following Regular Expression (RegEx):
+
+Log Structure
+
+<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-css theme-light" data-lang="css" name="Log Structure" tabindex="0">${AppName}:${Line} ${LogLevel} ${dd/MM/yyyy} ${HH:mm:ss,fff} ${ClassName} ::${MethodName} - ${LogMessage}
+</code></pre>
+
+These logs are collected by the docker container’s `STDOUT` stream and written into a log file on the container’s host machine at the location specified below. These log files are rotated with a max file size of 4MB for each log file.
+
+Log Files
+
+<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-css theme-light" data-lang="css" name="Log Files" tabindex="0">/databases/cosigner/log/customer_cosigner.log  
+/databases/cosigner/log/customer_cosigner.log.1  
+/databases/cosigner/log/customer_cosigner.log.2  
+...
+</code></pre>
+
+**Note:**
+
+The API Co-Signer is Docker-based and uses the Docker JSON file driver for logging. By default, the driver uses a standard logging output but can be configured to support other logging mechanisms. Learn more from the official Docker documentation.
+
+Updated 26 days ago
+
+* * *
+
+*   [Table of Contents](#)
+*   *   [Available API Co-Signer Types](#available-api-co-signer-types)
+    *   [Fireblocks Communal API Co-Signer](#fireblocks-communal-api-co-signer)
+    *   [API Co-Signer Security Checklist](#api-co-signer-security-checklist)
+    *   [Logging and monitoring](#logging-and-monitoring)
+        *   [Log structure](#log-structure)
