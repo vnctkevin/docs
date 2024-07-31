@@ -10,21 +10,13 @@ Blockchain confirmations are crucial for maintaining the security and integrity 
 
 Whether you aim to speed up transaction flow by reducing the number of confirmations or enhance security by increasing them, follow the recommendations below for an effective setup.
 
-### 
-
-Reduce the Number of Confirmations When:
-
-[](#reduce-the-number-of-confirmations-when)
+### [Reduce the Number of Confirmations When:](#reduce-the-number-of-confirmations-when)
 
 Receiving transfers from well-known sources.
 
 A low number of blockchain confirmations should only be set for transactions coming from well-known and trusted sources. This is advisable when the origin of the transaction is your connected exchange account, a trusted counterparty, or even a transaction between two vault accounts within your workspace.
 
-### 
-
-Increase the Number of Confirmations When:
-
-[](#increase-the-number-of-confirmations-when)
+### [Increase the Number of Confirmations When:](#increase-the-number-of-confirmations-when)
 
 Receiving transfers from unknown sources.
 
@@ -33,40 +25,23 @@ A low number of blockchain confirmations should NOT be set for transactions arri
 * * *
 
   
-
-# 
-
-Fireblocks Deposit Control and Confirmation Policy
-
-[](#fireblocks-deposit-control-and-confirmation-policy)
+# [Fireblocks Deposit Control and Confirmation Policy](#fireblocks-deposit-control-and-confirmation-policy)
 
 The Deposit Control and Confirmation Policy lets you specify how many blockchain network confirmations are required for incoming and outgoing transactions to clear so their funds can be credited to a wallet.
 
 After the transaction clears, its deposit amount is accounted for in the wallet’s currently available balance. Additionally, for UTXO-based blockchain networks, the transaction's outputs become immediately spendable.
 
-## 
-
-Default Confirmation Policy
-
-[](#default-confirmation-policy)
+## [Default Confirmation Policy](#default-confirmation-policy)
 
 Each workspace in Fireblocks has a default configuration policy that specifies the number of confirmations required for each blockchain to complete transactions and make the funds available in the wallet.
 
 To learn about the default values for each supported blockchain, read the following [article](https://support.fireblocks.io/hc/en-us/articles/10883496786204-Default-Deposit-Control-and-Confirmation-Policy)
 
-## 
-
-Custom Deposit Control and Confirmation Policy
-
-[](#custom-deposit-control-and-confirmation-policy)
+## [Custom Deposit Control and Confirmation Policy](#custom-deposit-control-and-confirmation-policy)
 
 You can define your own confirmation policy based on your organization’s business needs. Learn more about the Custom Confirmation Policy in the following [article](https://support.fireblocks.io/hc/en-us/articles/10883650908572-Build-a-custom-Deposit-Control-and-Confirmation-Policy).
 
-# 
-
-Dynamically Overriding the Required Number of Confirmations
-
-[](#dynamically-overriding-the-required-number-of-confirmations)
+# [Dynamically Overriding the Required Number of Confirmations](#dynamically-overriding-the-required-number-of-confirmations)
 
 Fireblocks allows you to manually/dynamically confirm transactions and override your workspace's confirmation policy for specific transactions.  
 This immediately updates the transaction status to Completed in your Fireblocks workspace.

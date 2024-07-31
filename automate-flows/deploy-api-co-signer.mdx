@@ -39,11 +39,7 @@ The process of generating and signing a Fireblocks transaction using the Fireblo
 
 * * *
 
-# 
-
-Available API Co-Signer Types
-
-[](#available-api-co-signer-types)
+# [Available API Co-Signer Types](#available-api-co-signer-types)
 
 We offer a variety of API Co-Signer deployment options in a cloud environment or on-premise, and leverage Intel SGX and AWS Nitro enclave technologies to protect your key shares. You can learn more about the deployment options by referring to one of the articles below:
 
@@ -57,12 +53,7 @@ We offer a variety of API Co-Signer deployment options in a cloud environment or
 
 * * *
 
-# 
-
-Fireblocks Communal API Co-Signer
-
-[](#fireblocks-communal-api-co-signer)
-
+# [Fireblocks Communal API Co-Signer](#fireblocks-communal-api-co-signer)
   
 <Info>
 
@@ -86,12 +77,7 @@ The Communal API Co-Signer service is only available for testnet workspaces. An 
 * * *
 
   
-
-# 
-
-API Co-Signer Security Checklist
-
-[](#api-co-signer-security-checklist)
+# [API Co-Signer Security Checklist](#api-co-signer-security-checklist)
 
 *   Use a clean hardened machine for the callback handler with access limited to authorized personnel. Also, note that no outbound connections are allowed, and the inbound connection is allowed only from the API Co-Signer machine on port 443.
 *   Use the Callback Handler to log all approval requests.
@@ -104,11 +90,7 @@ API Co-Signer Security Checklist
 
 * * *
 
-# 
-
-Logging and monitoring
-
-[](#logging-and-monitoring)
+# [Logging and monitoring](#logging-and-monitoring)
 
 By default, the API Co-Signer uses the docker logging container. However, for better monitoring, the logs can be streamed to an external log delivery service, such as ELK, Splunk, or Datadog.
 
@@ -117,11 +99,7 @@ The API Co-Signer generates two different types of logs for troubleshooting and 
 *   run.log is an automatically generated log containing all of your API Co-Signer setup and configuration history. After you run the setup, add-user, or callback-update commands, the API Co-Signer server automatically sends a copy of this log to Fireblocks Support.
 *   customer\_cosigner.log contains workspace operation data, such as the workspace's transaction approving and signing history and new connection approvals. These log files are separated into 10 files limited to 4.1MB each. They are automatically overwritten in chronological order.
 
-## 
-
-Log structure
-
-[](#log-structure)
+## [Log structure](#log-structure)
 
 Your API Co-Signer logs are structured using the following Regular Expression (RegEx):
 

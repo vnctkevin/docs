@@ -6,11 +6,7 @@ title: "Set Auto Fueling Property"
 
 [Suggest Edits](/edit/set-auto-fueling-property)
 
-# 
-
-Overview
-
-[](#overview)
+# [Overview](#overview)
 
 Vault account auto-fueling is always available for API users with the Gas Station enabled, and any vault account with the Gas Station badge in the Console participates in the Gas Station service.
 
@@ -22,22 +18,13 @@ Vault account auto-fueling is always available for API users with the Gas Statio
 * * *
 
   
-
-# 
-
-Enabling auto-fueling in the Console
-
-[](#enabling-auto-fueling-in-the-console)
+# [Enabling auto-fueling in the Console](#enabling-auto-fueling-in-the-console)
 
 For new vault accounts, select **Auto-fuel with gas after an incoming transaction completes** when you create the account.
 
 For existing vault accounts, go to **My Funds** > **Accounts**, find the appropriate vault account, and then select **More Actions** (**...**) > **Enable Auto-Fueling** > **Enable**. The Gas Station badge appears next to the name of the vault account when you're done.
 
-# 
-
-Disabling auto-fueling in the Console
-
-[](#disabling-auto-fueling-in-the-console)
+# [Disabling auto-fueling in the Console](#disabling-auto-fueling-in-the-console)
 
 In the Fireblocks Console, go to **My Funds** > **Accounts**, find the appropriate vault account, and then select **More Actions** (**...**) > **Disable Auto-Fueling** > **Disable**. The Gas Station badge is removed when you're done.
 
@@ -46,12 +33,7 @@ In the Fireblocks Console, go to **My Funds** > **Accounts**, find the appropria
 * * *
 
   
-
-# 
-
-Enabling auto-fueling via the API
-
-[](#enabling-auto-fueling-via-the-api)
+# [Enabling auto-fueling via the API](#enabling-auto-fueling-via-the-api)
 
 For new vault accounts, call the [Create a new vault account endpoint](/reference/post_vault-accounts) and set the **autoFuel** field to **true**.
 
@@ -60,11 +42,7 @@ For existing vault accounts:
 1.  Call the [List vault accounts (paginated) endpoint](/reference/get_vault-accounts-paged) to find the vault account's ID.
 2.  Call the [Turn auto-fueling on or off endpoint](/reference/post_vault-accounts-vaultaccountid-set-auto-fuel), enter the vault account's ID in the **vaultAccountId** field, and then set the **autoFuel** field to **true**.
 
-# 
-
-Disabling auto-fueling via the API
-
-[](#disabling-auto-fueling-via-the-api)
+# [Disabling auto-fueling via the API](#disabling-auto-fueling-via-the-api)
 
 1.  Call the [List vault accounts (paginated) endpoint](/reference/get_vault-accounts-paged) to find the ID of the vault account.
 2.  Call the [Turn auto-fueling on or off endpoint](/reference/post_vault-accounts-vaultaccountid-set-auto-fuel), enter the vault account's ID in the **vaultAccountId** field, and then set the **autoFuel** field to **false**.

@@ -6,11 +6,7 @@ title: "Manage Withdrawals At Scale"
 
 [Suggest Edits](/edit/manage-withdrawals-at-scale)
 
-# 
-
-Overview
-
-[](#overview)
+# [Overview](#overview)
 
 When users deposit money into your Fireblocks wallets, they expect to access and withdraw their funds easily whenever they need them. Imagine needing your money but being unable to access it quickly - that’s the frustration you need to avoid. In any retail facing crypto business, the withdrawal process is one of the most critical and active functions. Users rely on it to move their funds swiftly and securely, whether they're making a purchase, sending money to a friend, or transferring assets to another account.
 
@@ -23,34 +19,16 @@ Crafting a withdrawal process that prioritizes speed, security, and user friendl
 * * *
 
   
-
-# 
-
-Automate the Withdrawal Flow
-
-[](#automate-the-withdrawal-flow)
-
-### 
-
-Setup
-
-[](#setup)
+# [Automate the Withdrawal Flow](#automate-the-withdrawal-flow)
+### [Setup](#setup)
 
 Automation is essential for ensuring a smooth and uninterrupted 24/7 withdrawal service in a crypto business. Relying on manual signing of transactions is not a scalable solution and introduces significant security risks. To address these challenges, implementing an automated [Fireblocks Co-Signer](/docs/deploy-api-co-signer) component is necessary. This approach guarantees continuous operation and enhances the overall security of the withdrawal process.
 
-### 
-
-Highly Available Setup
-
-[](#highly-available-setup)
+### [Highly Available Setup](#highly-available-setup)
 
 One of the best practices for automation involves setting up a highly available system. This means implementing the Co-Signer in an active/active mode, which are systems that can take over from one another without downtime, ensuring that there is always a failover capability in place. Read more about [Fireblocks Co-Signer High Avaialbility setup](https://dash.readme.com/project/fireblocks/v1/docs/configure-co-signer-in-ha-mode) .
 
-### 
-
-Co-Signer Logging and Monitoring
-
-[](#co-signer-logging-and-monitoring)
+### [Co-Signer Logging and Monitoring](#co-signer-logging-and-monitoring)
 
 Comprehensive monitoring and alert systems are also vital for maintaining a secure and reliable automated signing process. Setting up these systems allows you to track the status of transactions in real time and detect any anomalies that might indicate potential issues. Alerts should be configured to notify relevant personnel immediately in the event of stuck transactions or suspicious activities, enabling prompt intervention and resolution.
 
@@ -61,22 +39,13 @@ Learn more about the [Co-Signer logging mechanism](/docs/deploy-api-co-signer#lo
 * * *
 
   
-
-# 
-
-Implementing Multiple Withdrawal Wallets
-
-[](#implementing-multiple-withdrawal-wallets)
+# [Implementing Multiple Withdrawal Wallets](#implementing-multiple-withdrawal-wallets)
 
 Using multiple withdrawal vault account can alleviate the impact of stuck transactions and enable higher throughput. This approach involves distributing user withdrawal requests across several withdrawal vault accounts, reducing the risk of transaction queues.
 
 The withdrawal requests should be executed from these withdrawal vault accounts in a “round robin” mechanism, which simply means a circular execution between these wallets.
 
-## 
-
-Advantages
-
-[](#advantages)
+## [Advantages](#advantages)
 
 *   **Mitigates Impact of Stuck Transactions:** By spreading transactions across multiple wallets, the impact of a single stuck transaction is minimized.
 *   **Enhances Transaction Throughput:** Multiple wallets can process transactions simultaneously, increasing overall throughput.
@@ -98,11 +67,7 @@ The number of withdrawal vault account required depends on your transaction volu
 
 * * *
 
-# 
-
-UTXO Based Assets Transaction Batching
-
-[](#utxo-based-assets-transaction-batching)
+# [UTXO Based Assets Transaction Batching](#utxo-based-assets-transaction-batching)
 
 The flexibility of the UTXO model allows you to control transaction inputs and outputs to minimize fees. For example, a transaction with one input and multiple outputs is more cost-effective than multiple transactions with single inputs and outputs. This is because a single transaction will have a single set of metadata, reducing the overall transaction size compared to the total size of multiple transactions.
 
@@ -122,11 +87,7 @@ Check out the Developer Guide for creating a UTXO transaction with multiple dest
 
 * * *
 
-# 
-
-Working with One Time Addresses
-
-[](#working-with-one-time-addresses)
+# [Working with One Time Addresses](#working-with-one-time-addresses)
 
 By default, any outgoing transaction in Fireblocks can only be made to a whitelisted address approved by the Workspace's Admin Approval Quorum. For businesses looking to scale their withdrawal flows and eliminate manual processes, whitelisting addresses can become inconvenient and cumbersome.
 
@@ -138,11 +99,7 @@ Learn more about OTA and its security aspects in the following [guide](link-to-d
 
 * * *
 
-# 
-
-Idempotent Transactions
-
-[](#idempotent-transactions)
+# [Idempotent Transactions](#idempotent-transactions)
 
 In the context of RESTful APIs, idempotency refers to the property of an operation whereby multiple identical requests have the same effect as a single request. This means that making the same API call multiple times should not result in different outcomes. Idempotency is crucial for ensuring the reliability and consistency of operations, particularly in scenarios where network issues or client-side errors might lead to repeated requests.
 
@@ -150,11 +107,7 @@ Common issue with Non-Idempotent transactions is duplicate transactions - multip
 
 To mitigate this issue, Fireblocks provides a mechanism to ensure idempotency for transaction creation using the `externalTxId` parameter.
 
-## 
-
-What is `externalTxId`?
-
-[](#what-is-externaltxid)
+## [What is externalTxId?](#what-is-externaltxid)
 
 The externalTxId parameter is a unique identifier provided by the client when creating a transaction via the Fireblocks API. This parameter ensures that repeated requests with the same externalTxId will not result in multiple transactions. Instead, the API will recognize the duplicate request and handle it appropriately, maintaining idempotency. This is particularly useful if you don’t receive a response or if an API call isn’t completed successfully.
 

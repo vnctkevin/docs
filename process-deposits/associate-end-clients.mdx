@@ -6,27 +6,14 @@ title: "Associate End Clients"
 
 [Suggest Edits](/edit/associating-end-clients-with-transactions)
 
-# 
-
-Overview
-
-[](#overview)
+# [Overview](#overview)
 
 You may want to or be required to add end-client identification information to vault accounts and wallets. Depending on the purpose, you can use different endpoints and parameters to do this.
 
 * * *
 
-# 
-
-Internal or auditing identification purposes
-
-[](#internal-or-auditing-identification-purposes)
-
-## 
-
-Vault accounts
-
-[](#vault-accounts)
+# [Internal or auditing identification purposes](#internal-or-auditing-identification-purposes)
+## [Vault accounts](#vault-accounts)
 
 When an end client owns (or will own) all the wallets and addresses inside a vault account, call one of the following endpoints:
 
@@ -43,13 +30,7 @@ Please make sure to not pass any PII data!
 
 
 
-</Warning>
-
-## 
-
-Wallets
-
-[](#wallets)
+</Warning>## [Wallets](#wallets)
 
 When an end client owns (or will own) only one or only a few wallets inside a vault account containing many other wallets, call one of the following endpoints:
 
@@ -66,13 +47,7 @@ Note
 
 Wallets cannot be renamed, so you must create new wallets for existing end client wallets.
 
-</Info>
-
-## 
-
-Deposit Addresses
-
-[](#deposit-addresses)
+</Info>## [Deposit Addresses](#deposit-addresses)
 
 When an end client owns (or will own) only one or only a few deposit addresses inside a wallet containing many other addresses, call one of the following endpoints:
 
@@ -83,12 +58,7 @@ Then, use the `description` parameter to enter their identification information 
 
 * * *
 
-# 
-
-AML/CFT identification purposes
-
-[](#amlcft-identification-purposes)
-
+# [AML/CFT identification purposes](#amlcft-identification-purposes)
 <Warning>
 
 ## ❗️
@@ -97,13 +67,7 @@ Warning
 
 The `customerRefId` parameter should be used _only_ for this purpose, as AML providers use it to associate the owner of funds with transactions.
 
-</Warning>
-
-## 
-
-Vault accounts
-
-[](#vault-accounts-1)
+</Warning>## [Vault accounts](#vault-accounts-1)
 
 When an end client owns (or will own) all the wallets and addresses inside a vault account, call one of the following endpoints:
 
@@ -112,11 +76,7 @@ When an end client owns (or will own) all the wallets and addresses inside a vau
 
 Then, use the `customerRefId` parameter to enter their identification information (e.g., "Customer\_12345\_Vault"). This propagates the vault account's name, the wallet address, the asset name, and the end client’s information to every transaction that uses that vault account.
 
-## 
-
-Wallets
-
-[](#wallets-1)
+## [Wallets](#wallets-1)
 
 When an end client owns (or will own) only one or only a few wallets inside a vault account containing many other wallets, call one of the following endpoints:
 
@@ -127,11 +87,7 @@ When an end client owns (or will own) only one or only a few wallets inside a va
 
 Then, use the `customerRefId` parameter to enter their identification information (e.g., "Customer\_12345\_Wallet"). This propagates the name of the vault account containing the wallet, the wallet address, the asset name, and the end client’s information to every transaction that uses that wallet.
 
-## 
-
-Deposit Addresses
-
-[](#deposit-addresses-1)
+## [Deposit Addresses](#deposit-addresses-1)
 
 When an end client owns (or will own) only one or only a few deposit addresses inside a wallet containing many other addresses, call one of the following endpoints:
 

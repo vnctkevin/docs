@@ -6,11 +6,7 @@ title: "Manage Deposits At Scale"
 
 [Suggest Edits](/edit/manage-deposits-at-scale)
 
-# 
-
-Overview
-
-[](#overview)
+# [Overview](#overview)
 
 One of the most important processes for a business is the ability to handle deposits made by clients. To facilitate this, each client needs their own wallet for the asset they want to deposit.
 
@@ -33,12 +29,7 @@ In this guide, we will outline the recommended workflows for Fireblocks clients 
 * * *
 
   
-
-# 
-
-Setup the Wallet Structure
-
-[](#setup-the-wallet-structure)
+# [Setup the Wallet Structure](#setup-the-wallet-structure)
 
 The wallet structure, or as we call it in Fireblocks, the vault structure, that you set up will directly impact the capabilities, efficiency, and operational load of your business. Fireblocks recommends one of the following two setups, depending on the type of your operation:
 
@@ -58,12 +49,7 @@ Learn more about the Fireblocks [Vault Structure types](/docs/create-direct-cust
 * * *
 
   
-
-# 
-
-Get Notifications for Incoming Transactions
-
-[](#get-notifications-for-incoming-transactions)
+# [Get Notifications for Incoming Transactions](#get-notifications-for-incoming-transactions)
 
 To receive notifications about incoming transactions to your Fireblocks wallets, we recommend using the Webhook service.
 
@@ -82,12 +68,7 @@ Learn more about the Fireblocks [Webhook service](/docs/configure-webhooks)
 * * *
 
   
-
-# 
-
-Process UTXO and Tag/Memo Based Assets Deposits
-
-[](#process-utxo-and-tagmemo-based-assets-deposits)
+# [Process UTXO and Tag/Memo Based Assets Deposits](#process-utxo-and-tagmemo-based-assets-deposits)
 
 Customers who find the Omnibus structure suitable for their business needs and work with UTXO-based assets will notice that all such assets (e.g., BTC, BCH, LTC, DOGE, ADA) are deposited into a single "Deposit" vault account. Each user has their own deposit address identified by the `description` parameter.
 
@@ -101,12 +82,7 @@ Processing these funds is straightforward in terms of address generation and man
 To overcome the mentioned in the above, customer should implement a UTXO consolidation logic as described in the following section.
 
   
-
-## 
-
-UTXO Consolidation
-
-[](#utxo-consolidation)
+## [UTXO Consolidation](#utxo-consolidation)
 
 UTXO-based transactions in Fireblocks have a limit of 250 inputs (UTXOs) per transaction. Additionally, there must be a logic to select the inputs for a transaction, which Fireblocks implements as follows:
 
@@ -137,12 +113,7 @@ Check out the UTXO Consolidation [Developer Guide](/reference/consolidate-utxos)
 * * *
 
   
-
-# 
-
-Process Account Based Asset Deposits
-
-[](#process-account-based-asset-deposits)
+# [Process Account Based Asset Deposits](#process-account-based-asset-deposits)
 
 Customers who want to generate a unique address for each of their end-users need to create a new intermediary vault account for each user and then the required vault wallet within this newly generated vault account. This is necessary because account-based assets do not support the generation of multiple addresses under the same wallet.
 
@@ -175,12 +146,7 @@ Learn more about the Fireblocks [Gas Station](/docs/work-with-gas-station)
 * * *
 
   
-
-# 
-
-Create Deposit Addresses Best Practices
-
-[](#create-deposit-addresses-best-practices)
+# [Create Deposit Addresses Best Practices](#create-deposit-addresses-best-practices)
 
 Customers serving hundreds of thousands or even millions of users will eventually need to create a corresponding number of deposit addresses within a single vault account (for UTXO deposits) and/or intermediate vault accounts (for Account Based assets) in their workspace. A basic implementation is to create a new deposit address or vault account for the end-user whenever the user registers for the service or requests a deposit address for a specific coin.
 
@@ -201,12 +167,7 @@ To associate the pre-generated address with the end-user, during the assigning p
 
 * * *
 
-# 
-
-Validate Balances
-
-[](#validate-balances)
-
+# [Validate Balances](#validate-balances)
   
 
 Fireblocks allows you to receive notifications about incoming transactions to your Fireblocks vault accounts. A common setup for Fireblocks customers is to subscribe to the webhook service and get notified whenever a new deposit is made into a vault account. When an event for an incoming transaction is triggered, followed by an event confirming the deposit's completion, the typical setup on the customer's end will automatically update the internal ledger and adjust the balance of the user associated with the deposited vault account.
@@ -225,11 +186,7 @@ Learn more about the best practices for validating balances and performing recon
 
 * * *
 
-# 
-
-Maintain an Internal Ledger
-
-[](#maintain-an-internal-ledger)
+# [Maintain an Internal Ledger](#maintain-an-internal-ledger)
 
 An internal ledger is a fundamental component to consider when building a retail-facing solution. Essentially, it records incoming transfers and balances for your users.
 

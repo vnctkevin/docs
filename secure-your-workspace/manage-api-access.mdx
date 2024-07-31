@@ -12,12 +12,7 @@ Fireblocks API Keys can be created via the web console or the API:
 *   For adding additional API keys please refer to the following [API endpoint](/reference/createapiuser)
 
   
-
-# 
-
-API Authentication
-
-[](#api-authentication)
+# [API Authentication](#api-authentication)
 
 Fireblocks API involves a secure authentication process that should be followed both when creating the API key and when calling Fireblocks API with the created key.
 
@@ -46,20 +41,11 @@ Learn more about the required API Authentication [here](/reference/signing-a-req
 * * *
 
   
-
-# 
-
-API Keys Management Best Practices
-
-[](#api-keys-management-best-practices)
+# [API Keys Management Best Practices](#api-keys-management-best-practices)
 
 Your API credentials and accounts are a prime target for hackers. It is important to understand and implement our best practices for working securely with the Fireblocks APIs.
 
-### 
-
-Role-based access control
-
-[](#role-based-access-control)
+### [Role-based access control](#role-based-access-control)
 
 *   When adding API users, ensure that the API user's role is provisioned in accordance with the [least privilege principle](https://www.cisa.gov/uscert/bsi/articles/knowledge/principles/least-privilege). Fireblocks supports many different roles for role-based access control, and an API user can be any one of these.
 *   Create as many API users as needed to separate duties and create security boundaries.
@@ -75,13 +61,7 @@ It is best to have 2 separate API users for different functions, such as:
 1.  A 'Viewer' role that performs read-only operations.
 2.  A 'Signer' role with transaction signing capabilities.
 
-</Tip>
-
-### 
-
-Create Transaction Authorization Policy rules for API users
-
-[](#create-transaction-authorization-policy-rules-for-api-users)
+</Tip>### [Create Transaction Authorization Policy rules for API users](#create-transaction-authorization-policy-rules-for-api-users)
 
 API Users with transaction initiation and signing capabilities are able to execute transactions like any other Fireblocks Console user.
 
@@ -95,13 +75,7 @@ Best Practice
 
 It is best to create TAP rules that limit API users to transact from a specific account and only up to a certain amount. This requires additional approvals or blocks the transaction, preventing users from trying to exceed the pre-defined amount or from transacting from an unauthorized vault account.
 
-</Tip>
-
-### 
-
-Whitelisting IP addresses for API requests
-
-[](#whitelisting-ip-addresses-for-api-requests)
+</Tip>### [Whitelisting IP addresses for API requests](#whitelisting-ip-addresses-for-api-requests)
 
 Each API user type on your workspace can whitelist specific IP addresses to only allow API calls from the provided address(es). If there aren't any whitelisted IP addresses for a user, API requests are possible from any IP address.
 
@@ -125,13 +99,7 @@ It is best practice to explicitly whitelist the only IPs that you expect to be c
 
 [Submit a request to Fireblocks Support to enable / disable this feature.](https://support.fireblocks.io/hc/en-us/requests/new)
 
-</Tip>
-
-### 
-
-Generating & storing RSA 4096 private keys
-
-[](#generating--storing-rsa-4096-private-keys)
+</Tip>### [Generating & storing RSA 4096 private keys](#generating--storing-rsa-4096-private-keys)
 
 Each API user requires a corresponding public/private key pair used to sign requests. It is _imperative_ that you keep your Fireblocks Secret Key (`fireblocks_secret.key`) safe and secure.
 
@@ -141,11 +109,7 @@ Ways to keep your public/private key pair secure:
 2.  Generate the CSR file and corresponding public/private key pair in an offline (air-gapped) environment for added security.
 3.  Ensure that your `fireblocks_secret.key` is stored securely in a hardened environment with advanced security controls such as multi-factor authentication and endpoint protection agents.
 
-### 
-
-Do not embed API keys directly in code or your API code source tree
-
-[](#do-not-embed-api-keys-directly-in-code-or-your-api-code-source-tree)
+### [Do not embed API keys directly in code or your API code source tree](#do-not-embed-api-keys-directly-in-code-or-your-api-code-source-tree)
 
 API keys embedded in code can be accidentally exposed to the public.
 

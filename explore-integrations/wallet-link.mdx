@@ -6,19 +6,11 @@ title: "Wallet Link"
 
 [Suggest Edits](/edit/web3-wallet-link)
 
-# 
-
-About the Fireblocks Wallet Link
-
-[](#about-the-fireblocks-wallet-link)
+# [About the Fireblocks Wallet Link](#about-the-fireblocks-wallet-link)
 
 As the demand for Web3 accessibility and usage grows, more users want to use dApps directly to manage their NFTs, get rewards, and more. The Fireblocks Wallet Link allows your users to connect their Fireblocks wallet addresses directly to Web3 applications (dApps), without your users needing to use their own wallet or any other application. This enables you to offer your users one-stop shopping for anything related to crypto and Web3.
 
-# 
-
-Creating a Wallet Link connection
-
-[](#creating-a-wallet-link-connection)
+# [Creating a Wallet Link connection](#creating-a-wallet-link-connection)
 
 The Wallet Link currently supports [WalletConnect](https://walletconnect.com/) connections. WalletConnect is a well-established standard for connecting wallets and Web3 applications and is supported by all of the leading dApps today.
 
@@ -74,11 +66,7 @@ JavaScript
 }
 </code></pre>
 
-# 
-
-Approving a Web3 connection request
-
-[](#approving-a-web3-connection-request)
+# [Approving a Web3 connection request](#approving-a-web3-connection-request)
 
 You can approve or reject the Web3 connection request based on the data in the connection response.
 
@@ -96,13 +84,7 @@ Note
 
 If you want to limit your users to only some dApps, simply reject connection requests from any unapproved dApp.
 
-</Info>
-
-# 
-
-Listing connections
-
-[](#listing-connections)
+</Info># [Listing connections](#listing-connections)
 
 To list all your existing Web3 connections, run the following command:
 
@@ -142,11 +124,7 @@ exampleSession === {
 }
 </code></pre>
 
-# 
-
-Removing a connection
-
-[](#removing-a-connection)
+# [Removing a connection](#removing-a-connection)
 
 To remove a connection, run the following command:
 
@@ -155,11 +133,7 @@ JavaScript
 <pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-javascript theme-light" data-lang="javascript" name="" tabindex="0">const result = await fireblocks.removeWeb3Connection("WalletConnect", exampleSession.id);
 </code></pre>
 
-# 
-
-Signing a dApp-originated transaction
-
-[](#signing-a-dapp-originated-transaction)
+# [Signing a dApp-originated transaction](#signing-a-dapp-originated-transaction)
 
 Once connected to a dApp, the user can perform an action that will result in a signing operation by Fireblocks. This operation is created by the API user that created the Web3 connection and is subject to the [Transaction Authorization Policy (TAP)](https://support.fireblocks.io/hc/en-us/articles/4401998390546-TAP-for-DeFi-operations) like any other operation.
 
