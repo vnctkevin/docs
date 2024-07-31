@@ -24,7 +24,8 @@ Visit our Help Center to learn more about [installing and maintaining the API Co
 
 
 
-</Info>  
+</Info>
+  
 
 The process of generating and signing a Fireblocks transaction using the Fireblocks REST API, the API Co-Signer, and the optional callback handler is as follows:
 
@@ -64,7 +65,8 @@ Please Note:
 1.  Sandbox workspaces are automatically connected to the Communal API Co-Signer.
 2.  Customers using Production Testnet workspaces can configure their API keys to pair with the Communal API Co-Signer as described in this [guide](https://support.fireblocks.io/hc/en-us/articles/4625706934300-Fireblocks-Communal-API-Co-Signer).
 
-</Info>  
+</Info>
+  
 
 The Fireblocks Communal API Co-Signer is used to prepare a Fireblocks workspace for full automation and API development. Deploying a new cloud or on-premise instance often takes time to request and approve within a company. Therefore, Fireblocks speeds up development time for customers by providing the Communal API Co-Signer, which can be used before a proprietary cloud environment or on-premise server is configured.
 
@@ -105,18 +107,17 @@ Your API Co-Signer logs are structured using the following Regular Expression (R
 
 Log Structure
 
-<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-css theme-light" data-lang="css" name="Log Structure" tabindex="0">${AppName}:${Line} ${LogLevel} ${dd/MM/yyyy} ${HH:mm:ss,fff} ${ClassName} ::${MethodName} - ${LogMessage}
-</code></pre>
+```
+
+```
 
 These logs are collected by the docker container’s `STDOUT` stream and written into a log file on the container’s host machine at the location specified below. These log files are rotated with a max file size of 4MB for each log file.
 
 Log Files
 
-<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-css theme-light" data-lang="css" name="Log Files" tabindex="0">/databases/cosigner/log/customer_cosigner.log  
-/databases/cosigner/log/customer_cosigner.log.1  
-/databases/cosigner/log/customer_cosigner.log.2  
-...
-</code></pre>
+```
+
+```
 
 **Note:**
 

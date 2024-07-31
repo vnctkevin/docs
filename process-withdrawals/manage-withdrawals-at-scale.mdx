@@ -115,11 +115,9 @@ When creating transactions, Fireblocks strongly recommends using the `externalTx
 
 JSON
 
-<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang-json theme-light" data-lang="json" name="" tabindex="0">{
-  "message": "External Tx ID Duplicate",
-  "code": "1438"
-}
-</code></pre>
+```
+
+```
 
 The main difference between the `Idempotency-Key` header, which can be provided for any PUT or POST request, and the `externalTxId` parameter is that the former is saved for only 24 hours. In contrast, the `externalTxId` is saved permanently on the Fireblocks side, and will return an error if the same value is used in a transaction created even after 24 hours from the first one.
 
@@ -132,7 +130,8 @@ Learn more about API Idempotency [here](/reference/api-idempotency)
 
 
 
-</Info><Info>
+</Info>
+<Info>
 
 ## 📘
 

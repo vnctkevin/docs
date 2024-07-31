@@ -61,7 +61,8 @@ It is best to have 2 separate API users for different functions, such as:
 1.  A 'Viewer' role that performs read-only operations.
 2.  A 'Signer' role with transaction signing capabilities.
 
-</Tip>### [Create Transaction Authorization Policy rules for API users](#create-transaction-authorization-policy-rules-for-api-users)
+</Tip>
+### [Create Transaction Authorization Policy rules for API users](#create-transaction-authorization-policy-rules-for-api-users)
 
 API Users with transaction initiation and signing capabilities are able to execute transactions like any other Fireblocks Console user.
 
@@ -75,7 +76,8 @@ Best Practice
 
 It is best to create TAP rules that limit API users to transact from a specific account and only up to a certain amount. This requires additional approvals or blocks the transaction, preventing users from trying to exceed the pre-defined amount or from transacting from an unauthorized vault account.
 
-</Tip>### [Whitelisting IP addresses for API requests](#whitelisting-ip-addresses-for-api-requests)
+</Tip>
+### [Whitelisting IP addresses for API requests](#whitelisting-ip-addresses-for-api-requests)
 
 Each API user type on your workspace can whitelist specific IP addresses to only allow API calls from the provided address(es). If there aren't any whitelisted IP addresses for a user, API requests are possible from any IP address.
 
@@ -87,7 +89,8 @@ Address format requirements
 
 Only /32 IP addresses are accepted. Do not enter addresses as a range of values.
 
-</Warning><Tip>
+</Warning>
+<Tip>
 
 ## 👍
 
@@ -99,7 +102,8 @@ It is best practice to explicitly whitelist the only IPs that you expect to be c
 
 [Submit a request to Fireblocks Support to enable / disable this feature.](https://support.fireblocks.io/hc/en-us/requests/new)
 
-</Tip>### [Generating & storing RSA 4096 private keys](#generating--storing-rsa-4096-private-keys)
+</Tip>
+### [Generating & storing RSA 4096 private keys](#generating--storing-rsa-4096-private-keys)
 
 Each API user requires a corresponding public/private key pair used to sign requests. It is _imperative_ that you keep your Fireblocks Secret Key (`fireblocks_secret.key`) safe and secure.
 

@@ -48,155 +48,155 @@
       "url": "https://mintlify.com/blog"
     }
   ],
-  "navigation": [
-    {
-      "group": "introduction",
-      "pages": [
-        "introduction/introduction",
-        "introduction/what-is-fireblocks-",
-        {
-          "group": "introduction/explore-use-cases",
-          "pages": [
-            "introduction/explore-use-cases",
-            "introduction/explore-use-cases/wallet-as-a-service",
-            "introduction/explore-use-cases/self-custody-infrastructure",
-            "introduction/explore-use-cases/tokenization",
-            "introduction/explore-use-cases/treasury-management"
-          ]
-        },
-        "introduction/wallet-as-a-service",
-        "introduction/self-custody-infrastructure",
-        "introduction/tokenization",
-        "introduction/treasury-management",
-        "introduction/fireblocks-key-features---capabilities",
-        "introduction/fireblocks-object-model",
-        "introduction/workspace-comparision",
-        "introduction/data-privacy-and-protection",
-        "introduction/developer-center"
-      ]
-    },
-    {
-      "group": "secure-your-workspace",
-      "pages": [
-        "secure-your-workspace/manage-users",
-        "secure-your-workspace/manage-api-access",
-        "secure-your-workspace/whitelist-ips-for-api-keys",
-        "secure-your-workspace/define-approval-quorums",
-        "secure-your-workspace/set-transaction-authorization-policy",
-        "secure-your-workspace/segregate-duties"
-      ]
-    },
-    {
-      "group": "manage-wallets",
-      "pages": [
-        "manage-wallets/overview",
-        "manage-wallets/compare-workspace-types",
-        "manage-wallets/create-direct-custody-wallets",
-        "manage-wallets/create-embedded-wallets"
-      ]
-    },
-    {
-      "group": "process-deposits",
-      "pages": [
-        "process-deposits/control-deposit-confirmation-policy",
-        "process-deposits/manage-deposits-at-scale",
-        "process-deposits/sweep-funds",
-        {
-          "group": "process-deposits/work-with-fireblocks-gas-station",
-          "pages": [
-            "process-deposits/work-with-fireblocks-gas-station",
-            "process-deposits/work-with-fireblocks-gas-station/enable-the-gas-station",
-            "process-deposits/work-with-fireblocks-gas-station/set-auto-fueling-property",
-            "process-deposits/work-with-fireblocks-gas-station/configure-gas-station-values"
-          ]
-        },
-        "process-deposits/enable-the-gas-station",
-        "process-deposits/set-auto-fueling-property",
-        "process-deposits/configure-gas-station-values",
-        "process-deposits/validate-balances",
-        "process-deposits/associate-end-clients"
-      ]
-    },
-    {
-      "group": "process-withdrawals",
-      "pages": [
-        "process-withdrawals/manage-destination-addresses",
-        "process-withdrawals/estimate-transaction-fees",
-        "process-withdrawals/manage-withdrawals-at-scale",
-        "process-withdrawals/boost-transactions"
-      ]
-    },
-    {
-      "group": "comply-with-regulation",
-      "pages": [
-        "comply-with-regulation/define-aml-policies",
-        "comply-with-regulation/define-travel-rule-policies",
-        "comply-with-regulation/interact-with-trust"
-      ]
-    },
-    {
-      "group": "manage-treasury",
-      "pages": [
-        "manage-treasury/connect-to-the-fireblocks-network",
-        "manage-treasury/execute-smart-transfers",
-        "manage-treasury/connect-to-exchanges-and-fiat-providers",
-        "manage-treasury/stake-assets"
-      ]
-    },
-    {
-      "group": "manage-assets",
-      "pages": [
-        "manage-assets/get-supported-assets",
-        "manage-assets/add-tokens"
-      ]
-    },
-    {
-      "group": "automate-flows",
-      "pages": [
-        "automate-flows/configure-webhooks",
-        "automate-flows/deploy-api-co-signer",
-        "automate-flows/create-api-co-signer-callback-handler"
-      ]
-    },
-    {
-      "group": "manage-smart-contracts",
-      "pages": [
-        "manage-smart-contracts/tokenize-assets",
-        "manage-smart-contracts/interact-with-smart-contracts"
-      ]
-    },
-    {
-      "group": "process-payments",
-      "pages": [
-        "process-payments/create-payouts",
-        "process-payments/define-payment-flows"
-      ]
-    },
-    {
-      "group": "design-business-continuity-plan",
-      "pages": [
-        "design-business-continuity-plan/configure-co-signer-in-ha-mode",
-        "design-business-continuity-plan/perform-drs-process"
-      ]
-    },
-    {
-      "group": "sign-offchain-messages",
-      "pages": [
-        "sign-offchain-messages/sign-raw-messages",
-        "sign-offchain-messages/sign-typed-message"
-      ]
-    },
-    {
-      "group": "explore-integrations",
-      "pages": [
-        "explore-integrations/fireblocks-network-link-for-exchanges",
-        "explore-integrations/-base--testnet-support",
-        "explore-integrations/wallet-link",
-        "explore-integrations/integrating-third-party-aml-providers",
-        "explore-integrations/off-exchange"
-      ]
-    }
-  ],
+    "navigation": [
+      {
+        "group": "introduction",
+        "pages": [
+          "introduction/introduction",
+          "introduction/what-is-fireblocks-",
+          {
+            "group": "introduction/explore-use-cases",
+            "pages": [
+              "introduction/explore-use-cases",
+              "introduction/explore-use-cases/wallet-as-a-service",
+              "introduction/explore-use-cases/self-custody-infrastructure",
+              "introduction/explore-use-cases/tokenization",
+              "introduction/explore-use-cases/treasury-management"
+            ]
+          },
+          "introduction/wallet-as-a-service",
+          "introduction/self-custody-infrastructure",
+          "introduction/tokenization",
+          "introduction/treasury-management",
+          "introduction/fireblocks-key-features---capabilities",
+          "introduction/fireblocks-object-model",
+          "introduction/workspace-comparision",
+          "introduction/data-privacy-and-protection",
+          "introduction/developer-center"
+        ]
+      },
+      {
+        "group": "secure-your-workspace",
+        "pages": [
+          "secure-your-workspace/manage-users",
+          "secure-your-workspace/manage-api-access",
+          "secure-your-workspace/whitelist-ips-for-api-keys",
+          "secure-your-workspace/define-approval-quorums",
+          "secure-your-workspace/set-transaction-authorization-policy",
+          "secure-your-workspace/segregate-duties"
+        ]
+      },
+      {
+        "group": "manage-wallets",
+        "pages": [
+          "manage-wallets/overview",
+          "manage-wallets/compare-workspace-types",
+          "manage-wallets/create-direct-custody-wallets",
+          "manage-wallets/create-embedded-wallets"
+        ]
+      },
+      {
+        "group": "process-deposits",
+        "pages": [
+          "process-deposits/control-deposit-confirmation-policy",
+          "process-deposits/manage-deposits-at-scale",
+          "process-deposits/sweep-funds",
+          {
+            "group": "process-deposits/work-with-fireblocks-gas-station",
+            "pages": [
+              "process-deposits/work-with-fireblocks-gas-station",
+              "process-deposits/work-with-fireblocks-gas-station/enable-the-gas-station",
+              "process-deposits/work-with-fireblocks-gas-station/set-auto-fueling-property",
+              "process-deposits/work-with-fireblocks-gas-station/configure-gas-station-values"
+            ]
+          },
+          "process-deposits/enable-the-gas-station",
+          "process-deposits/set-auto-fueling-property",
+          "process-deposits/configure-gas-station-values",
+          "process-deposits/validate-balances",
+          "process-deposits/associate-end-clients"
+        ]
+      },
+      {
+        "group": "process-withdrawals",
+        "pages": [
+          "process-withdrawals/manage-destination-addresses",
+          "process-withdrawals/estimate-transaction-fees",
+          "process-withdrawals/manage-withdrawals-at-scale",
+          "process-withdrawals/boost-transactions"
+        ]
+      },
+      {
+        "group": "comply-with-regulation",
+        "pages": [
+          "comply-with-regulation/define-aml-policies",
+          "comply-with-regulation/define-travel-rule-policies",
+          "comply-with-regulation/interact-with-trust"
+        ]
+      },
+      {
+        "group": "manage-treasury",
+        "pages": [
+          "manage-treasury/connect-to-the-fireblocks-network",
+          "manage-treasury/execute-smart-transfers",
+          "manage-treasury/connect-to-exchanges-and-fiat-providers",
+          "manage-treasury/stake-assets"
+        ]
+      },
+      {
+        "group": "manage-assets",
+        "pages": [
+          "manage-assets/get-supported-assets",
+          "manage-assets/add-tokens"
+        ]
+      },
+      {
+        "group": "automate-flows",
+        "pages": [
+          "automate-flows/configure-webhooks",
+          "automate-flows/deploy-api-co-signer",
+          "automate-flows/create-api-co-signer-callback-handler"
+        ]
+      },
+      {
+        "group": "manage-smart-contracts",
+        "pages": [
+          "manage-smart-contracts/tokenize-assets",
+          "manage-smart-contracts/interact-with-smart-contracts"
+        ]
+      },
+      {
+        "group": "process-payments",
+        "pages": [
+          "process-payments/create-payouts",
+          "process-payments/define-payment-flows"
+        ]
+      },
+      {
+        "group": "design-business-continuity-plan",
+        "pages": [
+          "design-business-continuity-plan/configure-co-signer-in-ha-mode",
+          "design-business-continuity-plan/perform-drs-process"
+        ]
+      },
+      {
+        "group": "sign-offchain-messages",
+        "pages": [
+          "sign-offchain-messages/sign-raw-messages",
+          "sign-offchain-messages/sign-typed-message"
+        ]
+      },
+      {
+        "group": "explore-integrations",
+        "pages": [
+          "explore-integrations/fireblocks-network-link-for-exchanges",
+          "explore-integrations/-base--testnet-support",
+          "explore-integrations/wallet-link",
+          "explore-integrations/integrating-third-party-aml-providers",
+          "explore-integrations/off-exchange"
+        ]
+      }
+    ],
   "footerSocials": {
     "x": "https://x.com/mintlify",
     "github": "https://github.com/mintlify",

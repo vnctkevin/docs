@@ -24,7 +24,8 @@ Base Support is only active in Developer Sandbox workspaces
 
 Please note that the Base Goerli integration is only active in the Developer Sandbox. We do not have a clear timeline for support in regular Testnet/Mainnet workspaces.
 
-</Info># [Getting Started using Web3Provider](#getting-started-using-web3provider)
+</Info>
+# [Getting Started using Web3Provider](#getting-started-using-web3provider)
 
 To develop on Base Goerli Testnet using `web3.js` or `ethers.js`:
 
@@ -35,15 +36,9 @@ To develop on Base Goerli Testnet using `web3.js` or `ethers.js`:
 
 At the end your `FireblocksWeb3Provider` constructor would look similar to:
 
-<pre><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">const eip1193Provider = new FireblocksWeb3Provider({
-    apiBaseUrl: ApiBaseUrl.Sandbox // If using a sandbox workspace
-    privateKey: process.env.FIREBLOCKS_API_PRIVATE_KEY_PATH,
-    apiKey: process.env.FIREBLOCKS_API_KEY,
-    vaultAccountIds: process.env.FIREBLOCKS_VAULT_ACCOUNT_IDS,
-    chainId: 84531,
-    assetId: 'BASECHAIN_ETH_TEST3',
-})
-</code></pre>
+```
+
+```
 
 With this you can just interact with BASE Goerli Testnet this like any other EVM chain.
 
