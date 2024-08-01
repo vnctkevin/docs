@@ -28,8 +28,7 @@
   "tabs": [
     {
       "name": "API Overview",
-      "url": "api-overview",
-      "openapi": "https://developers.fireblocks.com/openapi/65822295d5b6620038263daa"
+      "url": "api-overview"
     }
   ],
   "anchors": [
