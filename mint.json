@@ -31,11 +31,6 @@
       "url": "introduction"
     },
     {
-      "name": "API Reference",
-      "url": "api-overview/fireblocks-api",
-      "openapi": "/openapi.json"
-    },
-    {
       "name": "API Overview",
       "url": "api-overview"
     }
