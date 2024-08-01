@@ -14,7 +14,7 @@ Fireblocks provides clients with two API endpoints to estimate transaction fees:
   
 ### [Estimate Transaction Fee](#estimate-transaction-fee)
 
-The [`Estimate Transaction Fee` endpoint](/reference/estimatetransactionfee) is designed to simulate a real transaction and calculate its potential fee. This process considers factors such as the source and destination amounts, the number of inputs and outputs, and other relevant transaction details. Essentially, it mimics the actual transaction to determine what the fee would be if executed.
+The <a target="_self" href="/reference/estimatetransactionfee"><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">Estimate Transaction Fee</code> endpoint</a> is designed to simulate a real transaction and calculate its potential fee. This process considers factors such as the source and destination amounts, the number of inputs and outputs, and other relevant transaction details. Essentially, it mimics the actual transaction to determine what the fee would be if executed.
 
 When using this endpoint, clients should be aware that it follows the same rules as creating a transaction. This includes requiring the relevant vault wallet in the vault account, ensuring the estimated transaction's balance is in the wallet, and providing a valid destination.
 
@@ -23,7 +23,7 @@ While many clients implement logic to estimate the transaction fee before each e
   
 ### [Estimate Network Fee](#estimate-network-fee)
 
-The [`Estimate Network Fee` endpoint](/reference/estimatenetworkfee) returns the current network fee for a specified network. This allows clients to calculate transaction fees or display the current network fee to their users. For instance, it provides the current gas price for ETH, which is part of the entire transaction fee formula, alongside the gas limit and other parameters.
+The <a target="_self" href="/reference/estimatenetworkfee"><button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">Estimate Network Fee</code> endpoint</a> returns the current network fee for a specified network. This allows clients to calculate transaction fees or display the current network fee to their users. For instance, it provides the current gas price for ETH, which is part of the entire transaction fee formula, alongside the gas limit and other parameters.
 
 The network fee response is cached for 30 seconds on the Fireblocks side. Clients should consider this interval when using this endpoint, as querying it more frequently than every 30 seconds does not provide additional value and the fee level value would remain the same.
 
@@ -73,6 +73,6 @@ Check out the [Fee Management Developer Guide](/reference/estimate-transaction-f
 
 </Info>
 
-Updated 26 days ago
+Updated 27 days ago
 
 * * *

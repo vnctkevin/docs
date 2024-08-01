@@ -105,19 +105,24 @@ The API Co-Signer generates two different types of logs for troubleshooting and 
 
 Your API Co-Signer logs are structured using the following Regular Expression (RegEx):
 
-Log Structure
+<CodeGroup>
+```css
+${AppName}:${Line} ${LogLevel} ${dd/MM/yyyy} ${HH:mm:ss,fff} ${ClassName} ::${MethodName} - ${LogMessage}
 
 ```
+</CodeGroup>
+
+These logs are collected by the docker container’s <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">STDOUT</code> stream and written into a log file on the container’s host machine at the location specified below. These log files are rotated with a max file size of 4MB for each log file.
+
+<CodeGroup>
+```css
+/databases/cosigner/log/customer_cosigner.log  
+/databases/cosigner/log/customer_cosigner.log.1  
+/databases/cosigner/log/customer_cosigner.log.2  
+...
 
 ```
-
-These logs are collected by the docker container’s `STDOUT` stream and written into a log file on the container’s host machine at the location specified below. These log files are rotated with a max file size of 4MB for each log file.
-
-Log Files
-
-```
-
-```
+</CodeGroup>
 
 **Note:**
 

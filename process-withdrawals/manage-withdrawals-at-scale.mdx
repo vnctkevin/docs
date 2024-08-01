@@ -79,7 +79,7 @@ Batching transactions has both advantages and disadvantages. On one hand, it all
 
 The key is to find a balance that optimizes costs without significantly impacting the user experience, based on the volume of withdrawal transactions in your product.
 
-Fireblocks supports creating a single transaction with multiple destinations for UTXO-based assets only. This can be accomplished using our [Create Transaction API endpoint](link) by passing the `destinations` array, which contains different `destination` objects within it.
+Fireblocks supports creating a single transaction with multiple destinations for UTXO-based assets only. This can be accomplished using our <a target="_self" href="link">Create Transaction API endpoint</a> by passing the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">destinations</code> array, which contains different <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">destination</code> objects within it.
 
 Check out the Developer Guide for creating a UTXO transaction with multiple destinations [here](link-to-batch-utxo).
 
@@ -105,21 +105,25 @@ In the context of RESTful APIs, idempotency refers to the property of an operati
 
 Common issue with Non-Idempotent transactions is duplicate transactions - multiple requests can result in multiple identical transactions being processed. This is especially problematic for financial operations, such as withdrawals, where it can lead to sending users more funds than they actually have, causing significant financial discrepancies.
 
-To mitigate this issue, Fireblocks provides a mechanism to ensure idempotency for transaction creation using the `externalTxId` parameter.
+To mitigate this issue, Fireblocks provides a mechanism to ensure idempotency for transaction creation using the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">externalTxId</code> parameter.
 
 ## [What is externalTxId?](#what-is-externaltxid)
 
 The externalTxId parameter is a unique identifier provided by the client when creating a transaction via the Fireblocks API. This parameter ensures that repeated requests with the same externalTxId will not result in multiple transactions. Instead, the API will recognize the duplicate request and handle it appropriately, maintaining idempotency. This is particularly useful if you don’t receive a response or if an API call isn’t completed successfully.
 
-When creating transactions, Fireblocks strongly recommends using the `externalTxId` parameter in the [Create Transaction API](link) call. This parameter ensures that the transaction is idempotent. If another transaction request is made with the same `externalTxId` value, it will be rejected with an HTTP 400 code and the following error message:
+When creating transactions, Fireblocks strongly recommends using the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">externalTxId</code> parameter in the <a target="_self" href="link">Create Transaction API</a> call. This parameter ensures that the transaction is idempotent. If another transaction request is made with the same <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">externalTxId</code> value, it will be rejected with an HTTP 400 code and the following error message:
 
-JSON
+<CodeGroup>
+```json
+{
+  "message": "External Tx ID Duplicate",
+  "code": "1438"
+}
 
 ```
+</CodeGroup>
 
-```
-
-The main difference between the `Idempotency-Key` header, which can be provided for any PUT or POST request, and the `externalTxId` parameter is that the former is saved for only 24 hours. In contrast, the `externalTxId` is saved permanently on the Fireblocks side, and will return an error if the same value is used in a transaction created even after 24 hours from the first one.
+The main difference between the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">Idempotency-Key</code> header, which can be provided for any PUT or POST request, and the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">externalTxId</code> parameter is that the former is saved for only 24 hours. In contrast, the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">externalTxId</code> is saved permanently on the Fireblocks side, and will return an error if the same value is used in a transaction created even after 24 hours from the first one.
 
   
 <Info>

@@ -22,7 +22,7 @@ It is important to note that this is an on-chain operation and includes **transa
 
 The trigger for the sweeping operation varies from customer to customer, depending on specific strategies, business needs, and regulatory requirements.
 
-For instance, some customers may choose to sweep the funds immediately after the deposit is completed, while others may trigger the sweeping mechanism only after a certain amount of deposits (either by total balance or number of deposits). Since sweeping is an on-chain operation that incurs transaction fees, some customers opt to execute the sweeping operation only when the current network fee is below a predefined acceptable threshold. Fireblocks enables customers to monitor current network fees/gas prices using the `GET /estimate_network_fee` [endpoint](/reference/estimatenetworkfee).
+For instance, some customers may choose to sweep the funds immediately after the deposit is completed, while others may trigger the sweeping mechanism only after a certain amount of deposits (either by total balance or number of deposits). Since sweeping is an on-chain operation that incurs transaction fees, some customers opt to execute the sweeping operation only when the current network fee is below a predefined acceptable threshold. Fireblocks enables customers to monitor current network fees/gas prices using the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">GET /estimate_network_fee</code> <a target="_self" href="/reference/estimatenetworkfee">endpoint</a>.
 
 There is no right or wrong approach; customers should determine what works best for their business needs.
 
@@ -32,12 +32,12 @@ There is no right or wrong approach; customers should determine what works best 
 
 # [Automate Sweeping](#automate-sweeping)
 
-To create sweeping transactions, Fireblocks customers can use the `POST /transactions` [endpoint](/reference/createtransaction). First, identify the vault account from which you want to initiate the sweeping operation and then send the sweeping transaction request to the Fireblocks API. This process should be executed for every vault account from which sweeping is desired.
+To create sweeping transactions, Fireblocks customers can use the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">POST /transactions</code> <a target="_self" href="/reference/createtransaction">endpoint</a>. First, identify the vault account from which you want to initiate the sweeping operation and then send the sweeping transaction request to the Fireblocks API. This process should be executed for every vault account from which sweeping is desired.
 
 Automating sweeping transactions involves not only creating the transactions in a fully automated manner but also automating the entire signing process. We recommend using an [API Co-Signer](/docs/deploy-api-co-signer) to automatically sweep funds according to your organization's logic and fee prices.
 
 Additionally, when sweeping funds, you pay a fee in the base asset of the deposited token's blockchain. To ensure you always have enough funds for the sweeping transaction, we introduced the [Fireblocks Gas Station](/docs/work-with-gas-station) feature, which automatically identifies incoming transactions to your predefined vault accounts and deposits enough of the base asset to cover fees for sweeping funds to your main treasury.
 
-Updated 26 days ago
+Updated 27 days ago
 
 * * *

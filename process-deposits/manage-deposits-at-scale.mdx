@@ -72,7 +72,7 @@ Learn more about the Fireblocks [Webhook service](/docs/configure-webhooks)
   
 # [Process UTXO and Tag/Memo Based Assets Deposits](#process-utxo-and-tagmemo-based-assets-deposits)
 
-Customers who find the Omnibus structure suitable for their business needs and work with UTXO-based assets will notice that all such assets (e.g., BTC, BCH, LTC, DOGE, ADA) are deposited into a single "Deposit" vault account. Each user has their own deposit address identified by the `description` parameter.
+Customers who find the Omnibus structure suitable for their business needs and work with UTXO-based assets will notice that all such assets (e.g., BTC, BCH, LTC, DOGE, ADA) are deposited into a single "Deposit" vault account. Each user has their own deposit address identified by the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">description</code> parameter.
 
 Processing these funds is straightforward in terms of address generation and management, but it introduces some potential challenges that should be considered during the integration phase. When running a retail-facing business and processing a large volume of UTXO-based asset deposits, customers may find that their deposit vault account accumulates a significant number of unspent transaction outputs (UTXOs) for a specific asset. Efficiently managing these UTXOs is crucial for the following reasons:
 
