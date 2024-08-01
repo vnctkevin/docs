@@ -29,7 +29,7 @@
     {
       "name": "API Overview",
       "url": "api-overview",
-      "openapi": "npx @mintlify/scraping@latest openapi-file https://developers.fireblocks.com/openapi/65822295d5b6620038263daa -o api-reference"
+      "openapi": "https://developers.fireblocks.com/openapi/65822295d5b6620038263daa"
     }
   ],
   "anchors": [
