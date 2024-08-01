@@ -196,9 +196,9 @@
     {
       "group": "Vaults",
       "pages": [
-        "api-overview\\vaults\\get-vault-accounts",
-        "api-overview\\vaults\\create-a-new-vault-account",
-        "api-overview\\vaults\\get-vault-accounts-paginated",
+        "api-overview/vaults/get-vault-accounts",
+        "api-overview/vaults/create-a-new-vault-account",
+        "api-overview/vaults/get-vault-accounts-paginated",
         "api-overview\\vaults\\get-a-vault-account-by-id",
         "api-overview\\vaults\\rename-a-vault-account",
         "api-overview\\vaults\\get-vault-wallets-paginated",
