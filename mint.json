@@ -33,6 +33,11 @@
     {
       "name": "API Overview",
       "url": "api-overview"
+    },
+    {
+      "name": "API Reference",
+      "url": "api-reference",
+      "openapi": "/openapi.json"
     }
   ],
   "anchors": [
@@ -1484,6 +1489,358 @@
             "api-overview/fireblocks-api/key-link--beta-/get-list-of-registered-validation-keys",
             "api-overview/fireblocks-api/key-link--beta-/get-a-validation-key-by--keyid-",
             "api-overview/fireblocks-api/key-link--beta-/disables-a-validation-key"
+          ]
+        },
+        {
+          "group": "Vaults",
+          "pages": [
+            "api-reference/vaults/get-vault-accounts",
+            "api-reference/vaults/create-a-new-vault-account",
+            "api-reference/vaults/get-vault-accounts-paginated",
+            "api-reference/vaults/get-a-vault-account-by-id",
+            "api-reference/vaults/rename-a-vault-account",
+            "api-reference/vaults/get-vault-wallets-paginated",
+            "api-reference/vaults/hide-a-vault-account-in-the-console",
+            "api-reference/vaults/unhide-a-vault-account-in-the-console",
+            "api-reference/vaults/activate-a-wallet-in-a-vault-account",
+            "api-reference/vaults/set-an-amlkyt-customer-reference-id-for-a-vault-account",
+            "api-reference/vaults/set-auto-fueling-to-on-or-off",
+            "api-reference/vaults/get-the-asset-balance-for-a-vault-account",
+            "api-reference/vaults/create-a-new-vault-wallet",
+            "api-reference/vaults/refresh-asset-balance-data",
+            "api-reference/vaults/get-asset-addresses",
+            "api-reference/vaults/create-new-asset-deposit-address",
+            "api-reference/vaults/get-addresses-paginated",
+            "api-reference/vaults/get-the-maximum-spendable-amount-in-a-single-transaction",
+            "api-reference/vaults/update-address-description",
+            "api-reference/vaults/assign-aml-customer-reference-id",
+            "api-reference/vaults/convert-a-segwit-address-to-legacy-format",
+            "api-reference/vaults/get-utxo-unspent-inputs-information",
+            "api-reference/vaults/get-the-public-key-for-a-derivation-path",
+            "api-reference/vaults/get-the-public-key-of-an-asset-in-a-vault-account",
+            "api-reference/vaults/get-asset-balance-for-chosen-assets",
+            "api-reference/vaults/get-vault-balance-by-an-asset"
+          ]
+        },
+        {
+          "group": "Workspace Management",
+          "pages": [
+            "api-reference/workspace-management/freeze",
+            "api-reference/workspace-management/list-user-groups",
+            "api-reference/workspace-management/create-user-group",
+            "api-reference/workspace-management/get-user-group",
+            "api-reference/workspace-management/update-user-group",
+            "api-reference/workspace-management/delete-user-group",
+            "api-reference/workspace-management/list-users",
+            "api-reference/workspace-management/get-audit-logs",
+            "api-reference/workspace-management/get-audit-logs-1",
+            "api-reference/workspace-management/update-admin-quorum-threshold",
+            "api-reference/workspace-management/returns-current-one-time-address-status",
+            "api-reference/workspace-management/enable-or-disable-transactions-to-one-time-addresses",
+            "api-reference/workspace-management/returns-current-workspace-status",
+            "api-reference/workspace-management/get-console-users",
+            "api-reference/workspace-management/create-console-user",
+            "api-reference/workspace-management/get-api-keys",
+            "api-reference/workspace-management/create-api-key",
+            "api-reference/workspace-management/resets-device",
+            "api-reference/workspace-management/get-whitelisted-ip-addresses-for-an-api-key"
+          ]
+        },
+        {
+          "group": "Exchange Accounts",
+          "pages": [
+            "api-reference/exchange-accounts/list-exchange-accounts",
+            "api-reference/exchange-accounts/list-connected-exchange-accounts",
+            "api-reference/exchange-accounts/get-a-specific-exchange-account",
+            "api-reference/exchange-accounts/internal-transfer-for-exchange-accounts",
+            "api-reference/exchange-accounts/convert-exchange-account-funds-from-the-source-asset-to-the-destination-asset",
+            "api-reference/exchange-accounts/get-an-asset-for-an-exchange-account"
+          ]
+        },
+        {
+          "group": "Fiat Accounts",
+          "pages": [
+            "api-reference/fiat-accounts/list-fiat-accounts",
+            "api-reference/fiat-accounts/find-a-specific-fiat-account",
+            "api-reference/fiat-accounts/redeem-funds-to-dda",
+            "api-reference/fiat-accounts/deposit-funds-from-dda"
+          ]
+        },
+        {
+          "group": "Fireblocks Network",
+          "pages": [
+            "api-reference/fireblocks-network/list-network-connections",
+            "api-reference/fireblocks-network/creates-a-new-network-connection",
+            "api-reference/fireblocks-network/update-network-connection-routing-policy",
+            "api-reference/fireblocks-network/retrieve-third-party-network-routing-validation-by-asset-type",
+            "api-reference/fireblocks-network/get-a-network-connection",
+            "api-reference/fireblocks-network/deletes-a-network-connection-by-id",
+            "api-reference/fireblocks-network/returns-all-network-ids-both-local-ids-and-discoverable-remote-ids",
+            "api-reference/fireblocks-network/creates-a-new-network-id",
+            "api-reference/fireblocks-network/returns-all-enabled-routing-policy-asset-groups",
+            "api-reference/fireblocks-network/returns-specific-network-id",
+            "api-reference/fireblocks-network/deletes-specific-network-id",
+            "api-reference/fireblocks-network/update-network-id-routing-policy",
+            "api-reference/fireblocks-network/update-network-ids-discoverability",
+            "api-reference/fireblocks-network/update-network-ids-name"
+          ]
+        },
+        {
+          "group": "Whitelisted Internal Wallets",
+          "pages": [
+            "api-reference/whitelisted-internal-wallets/list-internal-wallets",
+            "api-reference/whitelisted-internal-wallets/create-an-internal-wallet",
+            "api-reference/whitelisted-internal-wallets/get-assets-for-internal-wallet",
+            "api-reference/whitelisted-internal-wallets/delete-an-internal-wallet",
+            "api-reference/whitelisted-internal-wallets/set-an-amlkyt-customer-reference-id-for-an-internal-wallet",
+            "api-reference/whitelisted-internal-wallets/get-an-asset-from-an-internal-wallet",
+            "api-reference/whitelisted-internal-wallets/add-an-asset-to-an-internal-wallet",
+            "api-reference/whitelisted-internal-wallets/delete-a-whitelisted-address-from-an-internal-wallet"
+          ]
+        },
+        {
+          "group": "Key Link (Beta)",
+          "pages": [
+            "api-reference/key-link-beta/get-list-of-signing-keys",
+            "api-reference/key-link-beta/add-a-new-signing-key",
+            "api-reference/key-link-beta/get-a-signing-key-by-`keyid`",
+            "api-reference/key-link-beta/modify-the-signing-by-fireblocks-provided-`keyid`",
+            "api-reference/key-link-beta/set-agent-user-id-that-can-sign-with-the-signing-key-identified-by-the-fireblocks-provided-`keyid`",
+            "api-reference/key-link-beta/get-list-of-registered-validation-keys",
+            "api-reference/key-link-beta/add-a-new-validation-key",
+            "api-reference/key-link-beta/get-a-validation-key-by-`keyid`",
+            "api-reference/key-link-beta/disables-a-validation-key"
+          ]
+        },
+        {
+          "group": "Whitelisted External Wallets",
+          "pages": [
+            "api-reference/whitelisted-external-wallets/list-external-wallets",
+            "api-reference/whitelisted-external-wallets/create-an-external-wallet",
+            "api-reference/whitelisted-external-wallets/find-an-external-wallet",
+            "api-reference/whitelisted-external-wallets/delete-an-external-wallet",
+            "api-reference/whitelisted-external-wallets/set-an-aml-customer-reference-id-for-an-external-wallet",
+            "api-reference/whitelisted-external-wallets/get-an-asset-from-an-external-wallet",
+            "api-reference/whitelisted-external-wallets/add-an-asset-to-an-external-wallet",
+            "api-reference/whitelisted-external-wallets/delete-an-asset-from-an-external-wallet"
+          ]
+        },
+        {
+          "group": "Whitelisted Contracts",
+          "pages": [
+            "api-reference/whitelisted-contracts/list-whitelisted-contracts",
+            "api-reference/whitelisted-contracts/create-a-whitelisted-contract",
+            "api-reference/whitelisted-contracts/find-a-specific-whitelisted-contract",
+            "api-reference/whitelisted-contracts/delete-a-whitelisted-contract",
+            "api-reference/whitelisted-contracts/find-a-whitelisted-contracts-asset",
+            "api-reference/whitelisted-contracts/add-an-asset-to-a-whitelisted-contract",
+            "api-reference/whitelisted-contracts/delete-a-whitelisted-contracts-asset"
+          ]
+        },
+        {
+          "group": "Blockchains & Assets",
+          "pages": [
+            "api-reference/blockchains-&-assets/list-all-asset-types-supported-by-fireblocks",
+            "api-reference/blockchains-&-assets/register-an-asset",
+            "api-reference/blockchains-&-assets/validate-destination-address",
+            "api-reference/blockchains-&-assets/estimate-the-required-fee-for-an-asset"
+          ]
+        },
+        {
+          "group": "Transactions",
+          "pages": [
+            "api-reference/transactions/get-transaction-history",
+            "api-reference/transactions/create-a-new-transaction",
+            "api-reference/transactions/estimate-transaction-fee",
+            "api-reference/transactions/get-a-specific-transaction-by-fireblocks-transaction-id",
+            "api-reference/transactions/get-a-specific-transaction-by-external-transaction-id",
+            "api-reference/transactions/set-confirmation-threshold-by-fireblocks-transaction-id",
+            "api-reference/transactions/drop-eth-evm-transaction-by-id",
+            "api-reference/transactions/cancel-a-transaction",
+            "api-reference/transactions/freeze-a-transaction",
+            "api-reference/transactions/unfreeze-a-transaction",
+            "api-reference/transactions/set-confirmation-threshold-by-transaction-hash"
+          ]
+        },
+        {
+          "group": "Payments - Payout",
+          "pages": [
+            "api-reference/payments--payout/create-a-payout-instruction-set",
+            "api-reference/payments--payout/execute-a-payout-instruction-set",
+            "api-reference/payments--payout/get-the-status-of-a-payout-instruction-set"
+          ]
+        },
+        {
+          "group": "Payments - Flows",
+          "pages": [
+            "api-reference/payments--flows/create-payment-flow-configuration",
+            "api-reference/payments--flows/retrieve-workflow-configuration",
+            "api-reference/payments--flows/delete-workflow-configuration",
+            "api-reference/payments--flows/create-workflow-execution",
+            "api-reference/payments--flows/get-workflow-execution-details",
+            "api-reference/payments--flows/execute-the-payments-workflow"
+          ]
+        },
+        {
+          "group": "Gas Station",
+          "pages": [
+            "api-reference/gas-station/get-gas-station-settings",
+            "api-reference/gas-station/get-gas-station-settings-by-asset",
+            "api-reference/gas-station/edit-gas-station-settings",
+            "api-reference/gas-station/edit-gas-station-settings-for-an-asset"
+          ]
+        },
+        {
+          "group": "Off Exchange",
+          "pages": [
+            "api-reference/off-exchange/add-collateral",
+            "api-reference/off-exchange/remove-collateral",
+            "api-reference/off-exchange/create-settlement-for-a-trader",
+            "api-reference/off-exchange/get-settlements-transactions-from-exchange",
+            "api-reference/off-exchange/find-a-specific-collateral-exchange-account"
+          ]
+        },
+        {
+          "group": "Webhooks",
+          "pages": [
+            "api-reference/webhooks/resend-failed-webhooks",
+            "api-reference/webhooks/resend-webhooks-for-a-transaction-by-id"
+          ]
+        },
+        {
+          "group": "Contract Templates",
+          "pages": [
+            "api-reference/contract-templates/list-all-contract-templates",
+            "api-reference/contract-templates/upload-contract-template",
+            "api-reference/contract-templates/return-contract-template-by-id",
+            "api-reference/contract-templates/delete-a-contract-template-by-id",
+            "api-reference/contract-templates/return-contract-templates-constructor",
+            "api-reference/contract-templates/return-contract-templates-function",
+            "api-reference/contract-templates/deploy-contract"
+          ]
+        },
+        {
+          "group": "Deployed Contracts",
+          "pages": [
+            "api-reference/deployed-contracts/list-deployed-contracts-data",
+            "api-reference/deployed-contracts/return-deployed-contract-data-by-id",
+            "api-reference/deployed-contracts/return-deployed-contract-data"
+          ]
+        },
+        {
+          "group": "Tokenization",
+          "pages": [
+            "api-reference/tokenization/list-all-linked-tokens",
+            "api-reference/tokenization/issue-a-new-token",
+            "api-reference/tokenization/link-a-token",
+            "api-reference/tokenization/return-a-linked-token",
+            "api-reference/tokenization/unlink-a-token"
+          ]
+        },
+        {
+          "group": "Contract Interactions",
+          "pages": [
+            "api-reference/contract-interactions/return-deployed-contracts-abi",
+            "api-reference/contract-interactions/call-a-read-function-on-a-deployed-contract",
+            "api-reference/contract-interactions/call-a-write-function-on-a-deployed-contract"
+          ]
+        },
+        {
+          "group": "Staking",
+          "pages": [
+            "api-reference/staking/list-supported-chains-for-fireblocks-staking",
+            "api-reference/staking/get-chain-specific-staking-summary",
+            "api-reference/staking/execute-a-staking-action",
+            "api-reference/staking/list-staking-positions-details",
+            "api-reference/staking/get-staking-summary-details",
+            "api-reference/staking/get-staking-summary-details-by-vault",
+            "api-reference/staking/get-staking-position-details",
+            "api-reference/staking/list-staking-providers-details",
+            "api-reference/staking/approve-staking-terms-of-service"
+          ]
+        },
+        {
+          "group": "NFTs",
+          "pages": [
+            "api-reference/nfts/list-all-owned-tokens-paginated",
+            "api-reference/nfts/refresh-vault-account-tokens",
+            "api-reference/nfts/list-all-distinct-owned-tokens-paginated",
+            "api-reference/nfts/list-owned-collections-paginated",
+            "api-reference/nfts/list-token-data-by-id",
+            "api-reference/nfts/refresh-token-metadata",
+            "api-reference/nfts/list-tokens-by-ids",
+            "api-reference/nfts/update-token-ownership-status",
+            "api-reference/nfts/update-tokens-ownership-status",
+            "api-reference/nfts/update-tokens-ownership-spam-property"
+          ]
+        },
+        {
+          "group": "dApp Connections",
+          "pages": [
+            "api-reference/dapp-connections/list-all-open-dapp-connections",
+            "api-reference/dapp-connections/create-a-new-dapp-connection",
+            "api-reference/dapp-connections/respond-to-a-pending-dapp-connection-request",
+            "api-reference/dapp-connections/remove-an-existing-dapp-connection"
+          ]
+        },
+        {
+          "group": "Compliance",
+          "pages": [
+            "api-reference/compliance/validate-travel-rule-transaction",
+            "api-reference/compliance/validate-full-travel-rule-transaction",
+            "api-reference/compliance/get-vasp-details",
+            "api-reference/compliance/get-all-vasps",
+            "api-reference/compliance/add-jsondidkey-to-vasp-details",
+            "api-reference/compliance/travel-rule--view-post-screening-policy",
+            "api-reference/compliance/travel-rule--view-screening-policy",
+            "api-reference/compliance/get-travel-rule-screening-policy-configuration",
+            "api-reference/compliance/update-travel-rule-configuration",
+            "api-reference/compliance/get-aml-screening-policy-configuration",
+            "api-reference/compliance/update-aml-configuration",
+            "api-reference/compliance/aml--view-screening-policy",
+            "api-reference/compliance/aml--view-post-screening-policy",
+            "api-reference/compliance/screening-configuration-update"
+          ]
+        },
+        {
+          "group": "Policy Editor (Beta)",
+          "pages": [
+            "api-reference/policy-editor-beta/get-the-active-policy-and-its-validation",
+            "api-reference/policy-editor-beta/get-the-active-draft",
+            "api-reference/policy-editor-beta/update-the-draft-with-a-new-set-of-rules",
+            "api-reference/policy-editor-beta/send-publish-request-for-a-certain-draft-id",
+            "api-reference/policy-editor-beta/send-publish-request-for-a-set-of-policy-rules"
+          ]
+        },
+        {
+          "group": "Smart Transfers",
+          "pages": [
+            "api-reference/smart-transfers/find-ticket",
+            "api-reference/smart-transfers/create-ticket",
+            "api-reference/smart-transfers/search-ticket-by-id",
+            "api-reference/smart-transfers/set-expiration",
+            "api-reference/smart-transfers/add-external-ref-id",
+            "api-reference/smart-transfers/submit-ticket",
+            "api-reference/smart-transfers/fund-ticket-manually",
+            "api-reference/smart-transfers/cancel-ticket",
+            "api-reference/smart-transfers/create-leg-term",
+            "api-reference/smart-transfers/get-smart-transfer-ticket-term",
+            "api-reference/smart-transfers/update-ticket-leg-term",
+            "api-reference/smart-transfers/delete-ticket-leg-term",
+            "api-reference/smart-transfers/define-funding-source",
+            "api-reference/smart-transfers/manually-add-term-transaction",
+            "api-reference/smart-transfers/get-user-group",
+            "api-reference/smart-transfers/set-user-group"
+          ]
+        },
+        {
+          "group": "Cosigners (Beta)",
+          "pages": [
+            "api-reference/cosigners-beta/get-all-cosigners",
+            "api-reference/cosigners-beta/get-cosigner",
+            "api-reference/cosigners-beta/rename-cosigner",
+            "api-reference/cosigners-beta/get-all-api-keys",
+            "api-reference/cosigners-beta/get-api-key"
           ]
         }
       ]
