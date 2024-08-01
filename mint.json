@@ -28,7 +28,8 @@
   "tabs": [
     {
       "name": "API Overview",
-      "url": "https://developers.fireblocks.com/openapi/65822295d5b6620038263daa"
+      "url": "api-overview",
+      "openapi": "npx @mintlify/scraping@latest openapi-file https://developers.fireblocks.com/openapi/65822295d5b6620038263daa -o api-reference"
     }
   ],
   "anchors": [
