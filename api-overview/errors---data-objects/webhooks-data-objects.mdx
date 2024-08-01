@@ -1,0 +1,16 @@
+---
+title: "Webhooks Data Objects"
+---
+  
+  # Webhooks Data Objects
+
+# [Overview](#overview)
+
+Webhooks allow you to receive notifications for events that happen in your Fireblocks workspace. [Learn more about configuring and validating webhooks](/docs/configure-webhooks).
+
+All Fireblocks webhooks follow the same object structure:
+
+*   **type** - This is a fixed value that describes each specific webhook.
+*   **tenantId** - The unique ID of your Fireblocks workspace.
+*   **timestamp** - The timestamp of the event in milliseconds.
+*   **data** - This is an object containing information that relates to each specific webhook type.

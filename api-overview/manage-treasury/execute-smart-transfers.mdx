@@ -1,0 +1,229 @@
+---
+title: "Execute Smart Transfers"
+---
+  
+  # Execute Smart Transfers
+
+# [Create a Smart Transfer ticket](#create-a-smart-transfer-ticket)
+
+1.  Call this [endpoint](/reference/createticket) to create a Smart Transfer ticket.
+2.  In the **NetworkId** field, enter the Network profile of the counterparties you want to create a smart transfer with.
+3.  Under the **terms** field, add assets and amounts that are going to be exchanged.
+
+In the example below, we are exchanging 1.23 BTC for 23.213 ETH, where:
+
+1.  BTC will be sent from Network ID `e41bd5cb-088c-41f2-bb6c-9fb027075e5a` to  
+    Network ID `798ac350-8aec-459f-96f5-505481933f98`.
+2.  ETH will be sent from Network ID `798ac350-8aec-459f-96f5-505481933f98` to  
+    Network ID `e41bd5cb-088c-41f2-bb6c-9fb027075e5a`.
+
+  
+
+* * *
+
+  
+# [Fund Smart Transfer ticket](#fund-smart-transfer-ticket)
+
+To fund the Smart Transfer ticket call this [endpoint](/reference/fulfillticket). You can fund a ticket in any order, i.e. any side can go first. In order to fund a ticket, you must first define the funding source (vault or connected exchange account).
+
+  
+
+* * *
+
+  
+# [Cancel Smart Transfer ticket](#cancel-smart-transfer-ticket)
+
+To cancel a ticket, call this [endpoint](/reference/cancelticket). Canceling is only possible if none of the ticket’s legs (terms) have been previously funded. Otherwise, only the side that already funded the ticket has the ability to cancel it.
+
+  
+
+* * *
+
+  
+# [Examples](#examples)
+<CodeGroup>
+```typescript
+const createSmartTransferTicket = async (
+  assetIdToSend: string,
+  assetIdToRecieve: string,
+  amountToSend: number,
+  amountToRecieve: number,
+  fromNetworkId: string,
+  toNetworkId: string,
+  externalRefId?: string,
+): Promise<SmartTransferTicket | undefined> => {
+  try {
+    const ticket = await fireblocks.smartTransfer.createTicket({
+      smartTransferCreateTicket: {
+        createdByNetworkId: fromNetworkId,
+        type: SmartTransferCreateTicketTypeEnum.Async,
+        expiresIn: 24,
+        terms: [
+          {
+            asset: assetIdToSend,
+            amount: amountToSend,
+            fromNetworkId,
+            toNetworkId,
+          },
+          {
+            asset: assetIdToRecieve,
+            amount: amountToRecieve,
+            fromNetworkId,
+            toNetworkId,
+          },
+        ],
+        externalRefId,
+        note: "Custom Smart Transfer note",
+        submit: true,
+      },
+    });
+
+    console.log(JSON.stringify(ticket.data, null, 2));
+    return ticket.data.data;
+  } catch (error: any) {
+    console.error(error);
+  }
+};
+
+const fundSmartTransferTicket = async (
+  smartTransferTicket: SmartTransferTicket,
+  networkConnectionId: string, // connectionId between networks "e41bd5cb-088c-41f2-bb6c-9fb027075e5a" and "798ac350-8aec-459f-96f5-505481933f98"
+  fundingSourceType: TransferPeerPathType,
+  fundingSourceId: string,
+): Promise<SmartTransferTicketTermResponse> => {
+  try {
+    const fundedTicketTerm = await fireblocks.smartTransfer.fundTicketTerm({
+      ticketId: smartTransferTicket.id,
+      termId: smartTransferTicket.terms[0].id,
+      smartTransferFundTerm: {
+        asset: smartTransferTicket.terms[0].asset,
+        amount: smartTransferTicket.terms[0].amount,
+        networkConnectionId,
+        srcType: fundingSourceType,
+        srcId: fundingSourceId,
+      },
+    });
+
+    console.log(JSON.stringify(fundedTicketTerm.data, null, 2));
+    return fundedTicketTerm.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const main = async () => {
+  const smartTransferTicket = await createSmartTransferTicket(
+    "BTC",
+    "ETH",
+    1.23,
+    23.213,
+    "e41bd5cb-088c-41f2-bb6c-9fb027075e5a",
+    "798ac350-8aec-459f-96f5-505481933f98",
+    "SomeExternalReferenceIdentifie",
+  );
+
+  await fundSmartTransferTicket(
+    smartTransferTicket,
+    "db33d21c-18e2-40d2-88c0-67541b61aff3",
+    TransferPeerPathType.VaultAccount,
+    "1",
+  );
+};
+
+main();
+
+
+```
+
+```typescript
+//prerequisites: API key from fireblocks, set up in console
+
+
+const fs = require('fs');
+const path = require('path');
+const { FireblocksSDK } = require('fireblocks-sdk');
+const { exit } = require('process');
+const { inspect } = require('util');
+
+
+//api secret key file created
+const apiSecret = fs.readFileSync(path.resolve("../fireblocks_secret.key"), "utf8");
+const apiKey = "<API_KEY HERE>"
+// Choose the right api url for your workspace type
+const baseUrl = "https://api.fireblocks.io";
+const fireblocks = new FireblocksSDK(apiSecret, apiKey, baseUrl);
+
+
+(async () => {
+ let ticket = await fireblocks.createSmartTransferTicket({
+  createdByNetworkId: "e41bd5cb-088c-41f2-bb6c-9fb027075e5a",
+  type: "ASYNC",
+  expiresIn: 24,
+  terms: [
+   {
+    asset: "BTC",
+    amount: "1.23",
+    fromNetworkId: "e41bd5cb-088c-41f2-bb6c-9fb027075e5a",
+    toNetworkId: "798ac350-8aec-459f-96f5-505481933f98",
+   },
+   {
+    asset: "ETH",
+    amount: "23.213",
+    fromNetworkId: "798ac350-8aec-459f-96f5-505481933f98",
+    toNetworkId: "e41bd5cb-088c-41f2-bb6c-9fb027075e5a",
+   },
+  ],
+  externalRefId: "External ref. ID",
+  note: "Custom Smart Transfer note",
+  submit: true,
+ });
+
+
+ console.log(JSON.stringify(ticket));
+
+
+ await fireblocks.fundSmartTransferTicketTerm(ticket.id, ticket.terms[0].id, {
+  asset: "BTC",
+  amount: "1.23",
+  networkConnectionId: "db33d21c-18e2-40d2-88c0-67541b61aff3", // connectionId between networks "e41bd5cb-088c-41f2-bb6c-9fb027075e5a" and "798ac350-8aec-459f-96f5-505481933f98"
+  srcId: "1",
+  srcType: "VAULT_ACCOUNT",
+ });
+
+
+})().catch((e)=>{
+ console.error(`Failed: ${e}`);
+ exit(-1);
+});
+
+```
+
+```python
+import json
+from pathlib import Path
+
+
+from fireblocks_sdk import FireblocksSDK
+from fireblocks_sdk.api_types import *
+
+
+
+
+def initialize_fireblocks(api_secret, api_key, base_url):
+   try:
+       return FireblocksSDK(private_key=api_secret, api_key=api_key, api_base_url=base_url)
+   except Exception as e:
+       raise ConnectionError(f"Error initializing Fireblocks SDK: {e}")
+
+
+
+
+def create_ticket(fireblocks_instance):
+   try:
+       ticket_result = fireblocks_instance.create_smart_transfer_ticket(
+           created_by_network_id="e41bd5cb-088c-41f2-bb6c-9fb027075e5a",
+           ticket_type="ASYNC",
+           expires_in=24,
+
+```
+</CodeGroup>

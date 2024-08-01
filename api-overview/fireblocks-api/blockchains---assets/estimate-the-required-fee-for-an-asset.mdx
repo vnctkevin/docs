@@ -1,0 +1,25 @@
+---
+title: "Estimate The Required Fee For An Asset"
+---
+  
+  # Estimate the required fee for an asset
+
+get https://api.fireblocks.io/v1/estimate\_network\_fee
+
+Gets the estimated required fee for an asset.  
+Fireblocks fetches, calculates and caches the result every 30 seconds.  
+Customers should query this API while taking the caching interval into consideration.
+
+*   For UTXO based assets, the response will contain the suggested fee per byte
+*   For ETH (and all EVM) based assets, the suggested gas price
+*   For XRP/XLM, the transaction fee
+
+Language
+
+ShellJavaScriptPython
+
+URL
+
+Base URL
+
+https://api.fireblocks.io/v1/estimate\_network\_fee

@@ -1,0 +1,9 @@
+---
+title: "Payments   Flows"
+---
+  
+  # Create payment flow configuration
+
+post https://api.fireblocks.io/v1/payments/workflow\_config
+
+Generate a new configuration ID to be used for initiating executions in subsequent phases. This configuration should include the operations you intend to incorporate into the workflow, such as TRANSFER, CONVERT, and DISBURSE, in addition to your pre-screening preferences, which are disabled by default.

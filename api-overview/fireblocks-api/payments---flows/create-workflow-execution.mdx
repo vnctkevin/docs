@@ -1,0 +1,19 @@
+---
+title: "Create Workflow Execution"
+---
+  
+  # Create workflow execution
+
+post https://api.fireblocks.io/v1/payments/workflow\_execution
+
+Validate the "workflow-config" previously created by utilizing the unique "configId". This step requires the mandatory field amount, and allows for modifications to other fields defined via the "workflow-config" endpoint, including pre-screening preferences. A response containing the "workflowExecutionId" and detailing the validation status will be provided. Execution is ready when the "workflow-execution" status is READY\_FOR\_LAUNCH, at which point it can be initiated with "POST /workflow-execution/{workflowExecutionId}/actions/execute".
+
+Language
+
+ShellJavaScriptPython
+
+URL
+
+Base URL
+
+https://api.fireblocks.io/v1/payments/workflow\_execution

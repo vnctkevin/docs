@@ -1,0 +1,37 @@
+---
+title: "Hide A Vault Account In The Console"
+---
+  
+  # Hide a vault account in the console
+
+post https://api.fireblocks.io/v1/vault/accounts/{vaultAccountId}/hide
+
+Hides the requested vault account from the web console view.  
+This operation is required when creating thousands of vault accounts to serve your end-users.  
+Used for preventing the web console to be swamped with too much vault accounts.
+
+NOTE: Hiding the vault account from the web console will also hide all the related transactions to/from this vault.
+
+Hides the requested vault account from the web console view.
+
+This operation is required when creating thousands of vault accounts to serve your end-users. This prevents the web console from being swamped with too many vault accounts.
+
+<Info>
+
+## 📘
+
+NOTE
+
+Hiding a vault account from the web console also hides all related transactions to/from this vault from the Recent Activity panel.
+
+</Info>
+
+Language
+
+ShellJavaScriptPython
+
+URL
+
+Base URL
+
+https://api.fireblocks.io/v1/vault/accounts/{vaultAccountId}/hide

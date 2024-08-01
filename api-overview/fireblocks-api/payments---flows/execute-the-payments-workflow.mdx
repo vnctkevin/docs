@@ -1,0 +1,19 @@
+---
+title: "Execute The Payments Workflow"
+---
+  
+  # Execute the payments workflow
+
+post https://api.fireblocks.io/v1/payments/workflow\_execution/{workflowExecutionId}/actions/execute
+
+Launch the execution of a pre-configured workflow, identified by "workflowExecutionId", once it reaches the READY\_FOR\_LAUNCH state. The workflow undergoes several phases during execution - EXECUTION\_IN\_PROGRESS - Marks the start of the workflow execution. EXECUTION\_COMPLETED or EXECUTION\_FAILED - Indicates the execution has reached a final state.
+
+Language
+
+ShellJavaScriptPython
+
+URL
+
+Base URL
+
+https://api.fireblocks.io/v1/payments/workflow\_execution/{workflowExecutionId}/actions/execute

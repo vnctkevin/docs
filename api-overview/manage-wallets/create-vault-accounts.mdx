@@ -1,0 +1,69 @@
+---
+title: "Create Vault Accounts"
+---
+  
+  # Create Vault Accounts
+
+Your Fireblocks workspace utilizes a hierarchy of vault accounts as part of its [Object Model](/docs/object-model). This hierarchy allows you to segregate funds belonging to different business units or deposited by different users.
+
+A Vault account can hold multiple assets. To transfer to or from vault accounts, your source or destination targets must be provided with both their vault ID and asset ID.
+
+Use the [Create a new vault account](/reference/createvaultaccount) API call to create a new vault account that will hold your UTXO or account-based wallets.
+
+### [Code Example](#code-example)
+<CodeGroup>
+```typescript
+(async() => {
+
+  const vaultAccount = await fireblocks.vaults.createVaultAccount({
+    createVaultAccountRequest: {
+      name: "MyVaultAccount",
+      autoFuel: true,
+      hiddenOnUI: false
+    }
+  })
+  console.log(JSON.stringify(vaultAccount.data, null, 2))
+
+})();
+
+```
+
+```python
+vault_account = fireblocks.create_vault_account(
+    name="MyVaultAccount",
+    hiddenOnUI=False,
+    autoFuel=True
+)
+
+```
+</CodeGroup>### [Response Example](#response-example)
+<CodeGroup>
+```json
+{
+  "id": "148",
+  "name": "MyVaultAccount",
+  "hiddenOnUI": false,
+  "assets": [],
+  "autoFuel": true
+}
+
+```
+</CodeGroup>  
+  
+
+* * *
+
+  
+# [Optional parameters](#optional-parameters)
+  
+### [hiddenOnUI](#hiddenonui)
+
+Set to <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">true</code> by default, hides this vault account from appearing in the Fireblocks Console.
+
+This is the best practice when creating intermediate deposit vault accounts for your users as it helps reduce visual clutter and improves UI loading time.
+
+The best practice is configuring this setting so that only your omnibus account and another operational vault account (or multiple) are visible in the Fireblocks Console.
+
+### [autoFuel](#autofuel)
+
+If the <span class="GlossaryItem-trigger">Gas Station</span> service is enabled on your workspace, this flag needs to be set to <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">true</code> if you wish to monitor and fuel this account's Ethereum address upon detected balance refresh events, such as when deposits of ERC20 tokens occur.

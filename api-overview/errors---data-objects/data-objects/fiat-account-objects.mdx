@@ -1,0 +1,24 @@
+---
+title: "Fiat Account Objects"
+---
+  
+  # Fiat Account Objects
+
+## [FiatAccount](#fiataccount)
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| id | string | The ID of the account |
+| type | string | \[ BLINC \] |
+| name | string | The display name of the fiat account |
+| address | string | The address of the account |
+| assets | Array of [FiatAssets](#fiatasset) | An array of the assets under the account |
+
+* * *
+
+## [FiatAsset](#fiatasset)
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| id | string | The ID of the asset |
+| balance | string | The balance of the asset |

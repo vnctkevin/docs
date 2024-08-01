@@ -1,0 +1,214 @@
+---
+title: "Select Utxos"
+---
+  
+  # Select UTXOs
+
+# [Overview](#overview)
+
+If you regularly run operations on the Bitcoin blockchain, you will likely notice that the list of UTXOs in your wallets grows very quickly. This is especially common in situations where you have multiple addresses used to consolidate into an omnibus account or just as part of an ongoing operation. This can be a major problem for retail-facing operations.
+
+There will be specific occurrences, where you would like to manually select the list of inputs used in the transaction.
+
+## [Example](#example)
+
+The logic to decide which unspent UTXOs to use can be as simple or complex as you wish, but in this example, we will use any small unspent UTXO that has received enough confirmations.
+
+We have 3 steps in the process of consolidating UTXOs:
+
+1.  Retrieve the list of UTXOs for the wallet.
+2.  Choose up to 250 UTXOs based on a specific logic.
+3.  Create a transaction from the chosen UTXOs back to our wallet.
+
+<CodeGroup>
+```typescript
+const greaterThanUTXOfilters = { // UTXO filtering criteria
+	amountTofilter: 0.0001,
+	confirmationsToFilter: 3,
+};
+
+const transactionPayload = { 
+	assetId: "BTC_TEST",
+	amount: Number(""),
+	source: {
+			type: TransferPeerPathType.VaultAccount,
+			id: "2" // Id of the source vault account you are selecting inputs from
+	},
+	destination: {
+			type: TransferPeerPathType.VaultAccount,
+			id: "0" // Id of the destination vault account you are sending the funds to
+	},
+	extraParameters:{  
+		inputsSelection:{
+				inputsToSpend: [],
+		}
+	},
+};
+
+let amountToSpend = 0;
+
+const manualInputSelection = async(
+	greaterThanUTXOfilters: { amountTofilter: number; confirmationsToFilter: number; }
+	):Promise<CreateTransactionResponse | undefined > => {
+	const filteredInpustList = await filterInputs(
+		transactionPayload.source.id,
+		transactionPayload.assetId,
+		greaterThanUTXOfilters.amountTofilter,
+		greaterThanUTXOfilters.confirmationsToFilter
+	);
+	transactionPayload.amount = amountToSpend;
+	transactionPayload.extraParameters.inputsSelection.inputsToSpend = filteredInpustList;
+	console.log("Selecting the following " +filteredInpustList.length+ " UTXOs to be spent: \n", transactionPayload.extraParameters.inputsSelection.inputsToSpend);
+
+	try{
+		const result = await fireblocks.transactions.createTransaction(
+			{
+				transactionRequest:transactionPayload
+			}
+		);
+		return result.data;
+  }
+	catch(error){
+    console.error(error);
+  }
+}
+
+const filterInputs = async(
+	inputsVaultId:any, 
+	inputsAssetId: string, 
+	amountTofilter: string | number, 
+	confirmationsToFilter: string | number
+	) => {
+	try {
+		const unspentInputs = await fireblocks.vaults.getUnspentInputs(
+			{
+			"vaultAccountId": inputsVaultId,
+			"assetId": inputsAssetId
+			}
+		);
+		console.log("The selected vault account has these "+ unspentInputs.data.length + " UTXOs available for spending:\n");
+		console.log(unspentInputs.data);
+		let filteredUnspentInputsList: any = [];
+		for (let i = 0; i < unspentInputs.data.length ; i++){
+      if( // UTXO Filtering criteria
+				(unspentInputs.data[i]?.amount ?? "0") >= amountTofilter 
+				&& 
+				(unspentInputs.data[i]?.confirmations ?? "0") > confirmationsToFilter
+				)
+			{
+			filteredUnspentInputsList.push(unspentInputs.data[i].input);
+			amountToSpend = amountToSpend + Number(unspentInputs.data[i].amount);
+			}
+  	}
+		return filteredUnspentInputsList;
+	}
+	catch(error){
+		console.error(error);
+	}
+}
+
+manualInputSelection(greaterThanUTXOfilters);
+
+```
+
+```javascript
+async function prepareToConsolidate(vaultAccountId, assetId, filterAmount, filterConfirmations){
+    const unspentInputs = await fireblocks.getUnspentInputs(vaultAccountId, assetId);
+    let filteredUnspent =[];
+    for (let i = 0; i<unspentInputs.length ; i++){
+        if (unspentInputs[i].amount >= 0.01 && unspentInputs[i].confirmations > 3){
+            filteredUnspent[i] = unspentInputs[i];
+        }
+    }
+ }
+  
+ prepareToConsolidate("0","BTC_TEST", "0.01", "3");
+ 
+ async function consolidate(vaultAccountId, assetId, filterAmount, filterConfirmations, treasuryVault){
+    const filteredList = await prepareToConsolidate(vaultAccountId, assetId, filterAmount, filterConfirmations);
+        const payload = {
+            assetId,
+            amount: "",
+            source: {
+                type: PeerType.VAULT_ACCOUNT,
+                id: vaultAccountId
+            },
+            destination: {
+                type: PeerType.VAULT_ACCOUNT,
+                id: treasuryVault
+            },
+            extraParameters:{  
+                inputsSelection:{
+                    inputsToSpend :[]
+                }
+            },
+        };
+        let amount = 0;
+        for(let i = 0; i<filteredList.length ; i++){
+            payload.extraParameters.inputsSelection.inputsToSpend.push(
+                {
+                txHash: filteredList[i].input.txHash,
+                index: filteredList[i].input.index
+                }
+            )
+            amount = amount + Number(filteredList[i].amount);
+        }
+    payload.amount = amount;
+    const result = await fireblocks.createTransaction(payload);
+    console.log(JSON.stringify(result, null, 2));
+ }
+  
+ consolidate("0","BTC_TEST", "0.01", "3", "1");
+
+```
+
+```python
+from  fireblocks_sdk import TransferPeerPath, DestinationTransferPeerPath
+
+VAULT_ID = "<vault_id>"
+ASSET = "<asset>" # (e.g. "BTC" / "BTC_TEST")
+DEST_ID = "<dest_vault_id>"
+
+utxo_list = fireblocks.get_unspent_inputs(VAULT_ID, ASSET)
+
+filtered_utxo_list = [utxo for utxo in utxo_list if (float(utxo['amount']) <= 0.01 and int(utxo['confirmations']) > 3)][:250]
+
+inputs_list = [utxo['input'] for utxo in filtered_utxo_list]
+amount = str(sum([float(utxo['amount']) for utxo in filtered_utxo_list]))
+
+fireblocks.create_transaction(
+   asset_id=ASSET,
+   amount=amount,
+   source=TransferPeerPath(VAULT_ACCOUNT, VAULT_ID),
+   destination=DestinationTransferPeerPath(VAULT_ACCOUNT, DEST_ID),
+   extra_parameters={
+		"inputsSelection": {
+       "inputsToSpend": inputs_list
+    }
+   }
+)
+
+```
+</CodeGroup>
+
+Retrieving the list of UTXOs can be performed easily with the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">getUnspentInputs</code> method.
+
+The above code example gets all of the unspent UTXOs for <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">&lt;vault_id&gt;</code>.
+
+The call will return the details of the txHash index, address, amount, number of confirmations, and status of the UTXO within its response body.
+
+The code examples then filter the list of all <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">txHash</code> of BTC_TEST under vault account <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">0</code> and select all UTXOs that have more than 3 confirmations on the blockchain and amounts smaller than 0.01 BTC.
+
+<Info>
+
+## 📘
+
+UTXO input limit
+
+You can only select up to 250 inputs to be included in the sent transaction.
+
+</Info>
+
+After we have reduced the list to the assets we want, we can create the transaction.
+
+To include the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">inputs_list</code> that is mentioned in the code example above, you add it under the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">extra_parameters</code>, within the <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">inputsToSpend</code>.

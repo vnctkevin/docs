@@ -1,0 +1,58 @@
+---
+title: "Raw Signing"
+---
+  
+  # Structure the API Call
+
+# [Structuring The Raw Signing request](#structuring-the-raw-signing-request)
+
+Fireblocks RAW signing can be executed via the Create Transaction API endpoint . Customers should build the transaction payload as described below:
+
+1.  Add `extraParameters`
+2.  Within this object, add `rawMessageData`
+3.  Within that object, add a `messages` array.
+
+<CodeGroup>
+```json
+{
+  assetId: "assetId",
+  operation: TransactionOperation.RAW,
+  source: {
+    type: PeerType.VAULT_ACCOUNT,
+    id: "vaultAccountId",
+  },
+  note: ``,
+  extraParameters: {
+    rawMessageData: {
+      algorithm: "MPC_ECDSA_SECP256K1"/"MPC_ECDSA_SECP256R1"/"MPC_EDDSA_ED25519", // Optional
+      messages: [
+       	{
+          content: "<your_content_to_sign>", // Required
+          bip44AddressIndex: 0, // Optional
+          bip44change: 0, // Optional
+          derivationPath: [44, 0, 0, 0, 0] // Optional
+        }
+      ]
+    },
+  },
+}
+
+```
+</CodeGroup><Info>
+
+## 📘
+
+rawMessageData object:
+
+<a target="_self" href="/reference/raw-signing-objects#rawmessagedata">See here for more details</a> on how to construct the<button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">rawMessageData</code> object
+
+</Info>
+<Info>
+
+## 📘
+
+About messages
+
+You can aggregate a maximum of 127 messages for Raw Signing
+
+</Info>

@@ -1,0 +1,23 @@
+---
+title: "Set Agent User Id That Can Sign With The Signing Key Identified By The Fireblocks Provided  Keyid "
+---
+  
+  # Set agent user id that can sign with the signing key identified by the Fireblocks provided \`keyId\`
+
+patch https://api.fireblocks.io/v1/key\_link/signing\_keys/{keyId}/agent\_user\_id
+
+Can modify existing signing key id if the key is not enabled. The change done in background and will be visible once applied. If key is already enabled (after proof of ownership) the user cannot be changed.  
+Please note that this endpoint is available only for Key Link enabled workspaces.  
+**Note:**  
+This endpoint is currently in beta and might be subject to changes.  
+If you want to participate and learn more about the Fireblocks Key Link, please contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
+
+Language
+
+ShellJavaScriptPython
+
+URL
+
+Base URL
+
+https://api.fireblocks.io/v1/key\_link/signing\_keys/{keyId}/agent\_user\_id

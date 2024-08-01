@@ -1,0 +1,23 @@
+---
+title: "Freeze A Transaction"
+---
+  
+  # Freeze a transaction
+
+post https://api.fireblocks.io/v1/transactions/{txId}/freeze
+
+Freezes a transaction by ID.
+
+Usually used for AML integrations when the incoming funds should be quarantined.  
+For account based assets - the entire amount of the transaction is frozen  
+For UTXO based assets - all UTXOs of the specified transaction are frozen
+
+Language
+
+ShellJavaScriptPython
+
+URL
+
+Base URL
+
+https://api.fireblocks.io/v1/transactions/{txId}/freeze

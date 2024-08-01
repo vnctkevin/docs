@@ -31,8 +31,8 @@
       "url": "introduction"
     },
     {
-      "name": "API Overview",
-      "url": "api-overview",
+      "name": "API Reference",
+      "url": "api-overview/fireblocks-api",
       "openapi": "/openapi.json"
     }
   ],
@@ -192,6 +192,1356 @@
         "introduction/explore-integrations/wallet-link",
         "introduction/explore-integrations/integrating-third-party-aml-providers",
         "introduction/explore-integrations/off-exchange"
+      ]
+    },
+    {
+      "group": "Introduction",
+      "pages": [
+        "api-overview/introduction/api-overview",
+        "api-overview/introduction/rest-api-guide",
+        "api-overview/introduction/authenticate",
+        "api-overview/introduction/api-idempotency",
+        "api-overview/introduction/rate-limiting",
+        "api-overview/introduction/transaction-sources---destinations"
+      ]
+    },
+    {
+      "group": "Errors   Data Objects",
+      "pages": [
+        "api-overview/errors---data-objects/api-responses-and-error-codes",
+        {
+          "group": "Transaction Statuses",
+          "pages": [
+            "api-overview/errors---data-objects/transaction-statuses",
+            "api-overview/errors---data-objects/transaction-statuses/statuses",
+            "api-overview/errors---data-objects/transaction-statuses/sub-statuses"
+          ]
+        },
+        {
+          "group": "Data Objects",
+          "pages": [
+            "api-overview/errors---data-objects/data-objects",
+            "api-overview/errors---data-objects/data-objects/vault-objects",
+            "api-overview/errors---data-objects/data-objects/exchange-account-objects",
+            "api-overview/errors---data-objects/data-objects/fiat-account-objects",
+            "api-overview/errors---data-objects/data-objects/network-connection-objects",
+            "api-overview/errors---data-objects/data-objects/internal-external-wallet-objects",
+            "api-overview/errors---data-objects/data-objects/contract-objects",
+            "api-overview/errors---data-objects/data-objects/blockchain---asset-objects",
+            "api-overview/errors---data-objects/data-objects/transaction-objects",
+            "api-overview/errors---data-objects/data-objects/transaction-authorization-objects",
+            "api-overview/errors---data-objects/data-objects/fee-estimation-objects",
+            "api-overview/errors---data-objects/data-objects/transaction-screening-objects",
+            "api-overview/errors---data-objects/data-objects/raw-signing-objects",
+            "api-overview/errors---data-objects/data-objects/payments-objects",
+            "api-overview/errors---data-objects/data-objects/gas-station-objects",
+            "api-overview/errors---data-objects/data-objects/user-object",
+            "api-overview/errors---data-objects/data-objects/webhook-object",
+            "api-overview/errors---data-objects/data-objects/nft-objects",
+            "api-overview/errors---data-objects/data-objects/web3-connection-objects",
+            "api-overview/errors---data-objects/data-objects/general-objects"
+          ]
+        },
+        {
+          "group": "Webhooks Data Objects",
+          "pages": [
+            "api-overview/errors---data-objects/webhooks-data-objects",
+            "api-overview/errors---data-objects/webhooks-data-objects/vault-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/exchange---fiat-account-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/network-connection-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/smart-transfer-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/internal--external---contract-wallet-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/transaction-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/nft-webhooks"
+          ]
+        },
+        "api-overview/errors---data-objects/handle-api-errors"
+      ]
+    },
+    {
+      "group": "Sdks   Dev Tools",
+      "pages": [
+        "api-overview/sdks---dev-tools/postman-guide",
+        "api-overview/sdks---dev-tools/typescript-sdk",
+        "api-overview/sdks---dev-tools/python-sdk",
+        "api-overview/sdks---dev-tools/java-sdk",
+        "api-overview/sdks---dev-tools/js-sdk--legacy-",
+        "api-overview/sdks---dev-tools/python-sdk--legacy-",
+        "api-overview/sdks---dev-tools/evm-web3-provider",
+        "api-overview/sdks---dev-tools/evm-local-json-rpc",
+        "api-overview/sdks---dev-tools/hardhat-plugin",
+        "api-overview/sdks---dev-tools/solana-web3-adapter"
+      ]
+    },
+    {
+      "group": "Manage Your Workspace",
+      "pages": [
+        "api-overview/manage-your-workspace/create-api-keys",
+        "api-overview/manage-your-workspace/configure-transaction-authorization-policy"
+      ]
+    },
+    {
+      "group": "Manage Wallets",
+      "pages": [
+        "api-overview/manage-wallets/create-vault-accounts",
+        "api-overview/manage-wallets/create-vault-wallets",
+        "api-overview/manage-wallets/create-omnibus-structure"
+      ]
+    },
+    {
+      "group": "Manage Transactions",
+      "pages": [
+        "api-overview/manage-transactions/create-transactions",
+        "api-overview/manage-transactions/boost-transactions",
+        "api-overview/manage-transactions/sweep-to-omnibus",
+        "api-overview/manage-transactions/select-utxos",
+        "api-overview/manage-transactions/consolidate-utxos",
+        "api-overview/manage-transactions/monitoring-transaction-statuses"
+      ]
+    },
+    {
+      "group": "Manage Transaction Fees",
+      "pages": [
+        {
+          "group": "Configure Gas Station",
+          "pages": [
+            "api-overview/manage-transaction-fees/configure-gas-station",
+            "api-overview/manage-transaction-fees/configure-gas-station/enable-auto-fueling",
+            "api-overview/manage-transaction-fees/configure-gas-station/set-the-gas-station-values",
+            "api-overview/manage-transaction-fees/configure-gas-station/fund-the-gas-station",
+            "api-overview/manage-transaction-fees/configure-gas-station/monitor-the-gas-station"
+          ]
+        },
+        "api-overview/manage-transaction-fees/estimate-transaction-fee"
+      ]
+    },
+    {
+      "group": "Manage Treasury",
+      "pages": [
+        "api-overview/manage-treasury/execute-smart-transfers",
+        {
+          "group": "Stake Assets",
+          "pages": [
+            "api-overview/manage-treasury/stake-assets",
+            "api-overview/manage-treasury/stake-assets/overview",
+            "api-overview/manage-treasury/stake-assets/create-a-staking-position",
+            "api-overview/manage-treasury/stake-assets/unstake---withdraw"
+          ]
+        },
+        "api-overview/manage-treasury/connect-to-exchanges---fiat-providers"
+      ]
+    },
+    {
+      "group": "Comply With Regulation",
+      "pages": [
+        "api-overview/comply-with-regulation/validate-travel-rule"
+      ]
+    },
+    {
+      "group": "Manage Smart Contracts",
+      "pages": [
+        "api-overview/manage-smart-contracts/upload-contract-template"
+      ]
+    },
+    {
+      "group": "Manage Assets",
+      "pages": [
+        "api-overview/manage-assets/get-supported-assets",
+        "api-overview/manage-assets/add-tokens",
+        {
+          "group": "Manage Nfts",
+          "pages": [
+            "api-overview/manage-assets/manage-nfts",
+            "api-overview/manage-assets/manage-nfts/deploy-an-nft-collection",
+            "api-overview/manage-assets/manage-nfts/mint-an-nft",
+            "api-overview/manage-assets/manage-nfts/retrieve-nfts",
+            "api-overview/manage-assets/manage-nfts/transfer-nfts"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Sign Offchain Messages",
+      "pages": [
+        {
+          "group": "Typed Message Signing",
+          "pages": [
+            "api-overview/sign-offchain-messages/typed-message-signing",
+            "api-overview/sign-offchain-messages/typed-message-signing/structure-the-api-call",
+            "api-overview/sign-offchain-messages/typed-message-signing/sign-typed-messages-in-ethereum",
+            "api-overview/sign-offchain-messages/typed-message-signing/sign-typed-messages-in-tron",
+            "api-overview/sign-offchain-messages/typed-message-signing/sign-typed-messages-in-bitcoin"
+          ]
+        },
+        {
+          "group": "Raw Signing",
+          "pages": [
+            "api-overview/sign-offchain-messages/raw-signing",
+            "api-overview/sign-offchain-messages/raw-signing/structure-the-api-call",
+            "api-overview/sign-offchain-messages/raw-signing/code-examples"
+          ]
+        },
+        "api-overview/sign-offchain-messages/caching-signatures"
+      ]
+    },
+    {
+      "group": "Automate Your Flows",
+      "pages": [
+        {
+          "group": "Set Api Co Signer Callback Handler",
+          "pages": [
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/authenticate",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/response-object",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/approve-transactions",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/approve-configuration-changes",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/code-examples",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/basic-code-example",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/use-the-plugin-based-callback-handler",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/validate-eth-raw-transactions"
+          ]
+        },
+        {
+          "group": "Consume Webhooks",
+          "pages": [
+            "api-overview/automate-your-flows/consume-webhooks",
+            "api-overview/automate-your-flows/consume-webhooks/configure-webhook-urls",
+            "api-overview/automate-your-flows/consume-webhooks/validate-requests",
+            "api-overview/automate-your-flows/consume-webhooks/resend-webhook-notifications",
+            "api-overview/automate-your-flows/consume-webhooks/code-examples",
+            "api-overview/automate-your-flows/consume-webhooks/understand-webhook-data-objects"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Create Payments",
+      "pages": [
+        "api-overview/create-payments/execute-payouts",
+        {
+          "group": "Create Payment Flows",
+          "pages": [
+            "api-overview/create-payments/create-payment-flows",
+            "api-overview/create-payments/create-payment-flows/workflow-data-objects",
+            "api-overview/create-payments/create-payment-flows/create-workflow-configuration",
+            "api-overview/create-payments/create-payment-flows/create-workflow-execution",
+            "api-overview/create-payments/create-payment-flows/launch-workflow-execution"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Fireblocks Api",
+      "pages": [
+        {
+          "group": "Workspace Management",
+          "pages": [
+            "api-overview/fireblocks-api/workspace-management",
+            "api-overview/fireblocks-api/workspace-management/freeze",
+            "api-overview/fireblocks-api/workspace-management/list-user-groups",
+            "api-overview/fireblocks-api/workspace-management/create-user-group",
+            "api-overview/fireblocks-api/workspace-management/get-user-group",
+            "api-overview/fireblocks-api/workspace-management/update-user-group",
+            "api-overview/fireblocks-api/workspace-management/delete-user-group",
+            "api-overview/fireblocks-api/workspace-management/list-users",
+            "api-overview/fireblocks-api/workspace-management/get-audit-logs",
+            "api-overview/fireblocks-api/workspace-management/get-audit-logs",
+            "api-overview/fireblocks-api/workspace-management/update-admin-quorum-threshold",
+            "api-overview/fireblocks-api/workspace-management/enable-or-disable-transactions-to-one-time-addresses",
+            "api-overview/fireblocks-api/workspace-management/returns-current-one-time-address-status",
+            "api-overview/fireblocks-api/workspace-management/returns-current-workspace-status",
+            "api-overview/fireblocks-api/workspace-management/get-console-users",
+            "api-overview/fireblocks-api/workspace-management/create-console-user",
+            "api-overview/fireblocks-api/workspace-management/get-api-keys",
+            "api-overview/fireblocks-api/workspace-management/create-api-key",
+            "api-overview/fireblocks-api/workspace-management/resets-device",
+            "api-overview/fireblocks-api/workspace-management/get-whitelisted-ip-addresses-for-an-api-key"
+          ]
+        },
+        {
+          "group": "Policy Editor  Beta ",
+          "pages": [
+            "api-overview/fireblocks-api/policy-editor--beta-",
+            "api-overview/fireblocks-api/policy-editor--beta-/get-the-active-policy-and-its-validation",
+            "api-overview/fireblocks-api/policy-editor--beta-/get-the-active-draft",
+            "api-overview/fireblocks-api/policy-editor--beta-/update-the-draft-with-a-new-set-of-rules",
+            "api-overview/fireblocks-api/policy-editor--beta-/send-publish-request-for-a-certain-draft-id",
+            "api-overview/fireblocks-api/policy-editor--beta-/send-publish-request-for-a-set-of-policy-rules"
+          ]
+        },
+        {
+          "group": "Compliance",
+          "pages": [
+            "api-overview/fireblocks-api/compliance",
+            "api-overview/fireblocks-api/compliance/validate-travel-rule-transaction",
+            "api-overview/fireblocks-api/compliance/validate-full-travel-rule-transaction",
+            "api-overview/fireblocks-api/compliance/get-vasp-details",
+            "api-overview/fireblocks-api/compliance/get-all-vasps",
+            "api-overview/fireblocks-api/compliance/add-jsondidkey-to-vasp-details",
+            "api-overview/fireblocks-api/compliance/travel-rule---view-post-screening-policy",
+            "api-overview/fireblocks-api/compliance/travel-rule---view-screening-policy",
+            "api-overview/fireblocks-api/compliance/get-travel-rule-screening-policy-configuration",
+            "api-overview/fireblocks-api/compliance/update-travel-rule-configuration",
+            "api-overview/fireblocks-api/compliance/get-aml-screening-policy-configuration",
+            "api-overview/fireblocks-api/compliance/update-aml-configuration",
+            "api-overview/fireblocks-api/compliance/aml---view-screening-policy",
+            "api-overview/fireblocks-api/compliance/aml---view-post-screening-policy",
+            "api-overview/fireblocks-api/compliance/screening-configuration-update"
+          ]
+        },
+        {
+          "group": "Blockchains   Assets",
+          "pages": [
+            "api-overview/fireblocks-api/blockchains---assets",
+            "api-overview/fireblocks-api/blockchains---assets/list-all-asset-types-supported-by-fireblocks",
+            "api-overview/fireblocks-api/blockchains---assets/register-an-asset",
+            "api-overview/fireblocks-api/blockchains---assets/validate-destination-address",
+            "api-overview/fireblocks-api/blockchains---assets/estimate-the-required-fee-for-an-asset"
+          ]
+        },
+        {
+          "group": "Vaults",
+          "pages": [
+            "api-overview/fireblocks-api/vaults",
+            "api-overview/fireblocks-api/vaults/get-vault-accounts",
+            "api-overview/fireblocks-api/vaults/create-a-new-vault-account",
+            "api-overview/fireblocks-api/vaults/get-vault-accounts--paginated-",
+            "api-overview/fireblocks-api/vaults/get-a-vault-account-by-id",
+            "api-overview/fireblocks-api/vaults/rename-a-vault-account",
+            "api-overview/fireblocks-api/vaults/get-vault-wallets--paginated-",
+            "api-overview/fireblocks-api/vaults/hide-a-vault-account-in-the-console",
+            "api-overview/fireblocks-api/vaults/unhide-a-vault-account-in-the-console",
+            "api-overview/fireblocks-api/vaults/activate-a-wallet-in-a-vault-account",
+            "api-overview/fireblocks-api/vaults/set-an-aml-kyt-customer-reference-id-for-a-vault-account",
+            "api-overview/fireblocks-api/vaults/set-auto-fueling-to-on-or-off",
+            "api-overview/fireblocks-api/vaults/get-the-asset-balance-for-a-vault-account",
+            "api-overview/fireblocks-api/vaults/create-a-new-vault-wallet",
+            "api-overview/fireblocks-api/vaults/refresh-asset-balance-data",
+            "api-overview/fireblocks-api/vaults/get-asset-addresses",
+            "api-overview/fireblocks-api/vaults/create-new-asset-deposit-address",
+            "api-overview/fireblocks-api/vaults/get-addresses--paginated-",
+            "api-overview/fireblocks-api/vaults/get-the-maximum-spendable-amount-in-a-single-transaction-",
+            "api-overview/fireblocks-api/vaults/update-address-description",
+            "api-overview/fireblocks-api/vaults/assign-aml-customer-reference-id",
+            "api-overview/fireblocks-api/vaults/convert-a-segwit-address-to-legacy-format",
+            "api-overview/fireblocks-api/vaults/get-utxo-unspent-inputs-information",
+            "api-overview/fireblocks-api/vaults/get-the-public-key-for-a-derivation-path",
+            "api-overview/fireblocks-api/vaults/get-the-public-key-of-an-asset-in-a-vault-account",
+            "api-overview/fireblocks-api/vaults/get-asset-balance-for-chosen-assets",
+            "api-overview/fireblocks-api/vaults/get-vault-balance-by-an-asset"
+          ]
+        },
+        {
+          "group": "Transactions",
+          "pages": [
+            "api-overview/fireblocks-api/transactions",
+            "api-overview/fireblocks-api/transactions/get-transaction-history",
+            "api-overview/fireblocks-api/transactions/create-a-new-transaction",
+            "api-overview/fireblocks-api/transactions/estimate-transaction-fee",
+            "api-overview/fireblocks-api/transactions/get-a-specific-transaction-by-fireblocks-transaction-id",
+            "api-overview/fireblocks-api/transactions/get-a-specific-transaction-by-external-transaction-id",
+            "api-overview/fireblocks-api/transactions/set-confirmation-threshold-by-fireblocks-transaction-id",
+            "api-overview/fireblocks-api/transactions/drop-eth--evm--transaction-by-id",
+            "api-overview/fireblocks-api/transactions/cancel-a-transaction",
+            "api-overview/fireblocks-api/transactions/freeze-a-transaction",
+            "api-overview/fireblocks-api/transactions/unfreeze-a-transaction",
+            "api-overview/fireblocks-api/transactions/set-confirmation-threshold-by-transaction-hash"
+          ]
+        },
+        {
+          "group": "Gas Station",
+          "pages": [
+            "api-overview/fireblocks-api/gas-station",
+            "api-overview/fireblocks-api/gas-station/get-gas-station-settings",
+            "api-overview/fireblocks-api/gas-station/get-gas-station-settings-by-asset",
+            "api-overview/fireblocks-api/gas-station/edit-gas-station-settings",
+            "api-overview/fireblocks-api/gas-station/edit-gas-station-settings-for-an-asset"
+          ]
+        },
+        {
+          "group": "Whitelisted Internal Wallets",
+          "pages": [
+            "api-overview/fireblocks-api/whitelisted-internal-wallets",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/list-internal-wallets",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/create-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/get-assets-for-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/delete-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/set-an-aml-kyt-customer-reference-id-for-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/get-an-asset-from-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/add-an-asset-to-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/delete-a-whitelisted-address-from-an-internal-wallet"
+          ]
+        },
+        {
+          "group": "Whitelisted External Wallets",
+          "pages": [
+            "api-overview/fireblocks-api/whitelisted-external-wallets",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/list-external-wallets",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/create-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/find-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/delete-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/set-an-aml-customer-reference-id-for-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/get-an-asset-from-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/add-an-asset-to-an-external-wallet-",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/delete-an-asset-from-an-external-wallet"
+          ]
+        },
+        {
+          "group": "Whitelisted Contracts",
+          "pages": [
+            "api-overview/fireblocks-api/whitelisted-contracts",
+            "api-overview/fireblocks-api/whitelisted-contracts/list-whitelisted-contracts",
+            "api-overview/fireblocks-api/whitelisted-contracts/create-a-whitelisted-contract",
+            "api-overview/fireblocks-api/whitelisted-contracts/find-a-specific-whitelisted-contract",
+            "api-overview/fireblocks-api/whitelisted-contracts/delete-a-whitelisted-contract",
+            "api-overview/fireblocks-api/whitelisted-contracts/find-a-whitelisted-contract-s-asset",
+            "api-overview/fireblocks-api/whitelisted-contracts/add-an-asset-to-a-whitelisted-contract",
+            "api-overview/fireblocks-api/whitelisted-contracts/delete-a-whitelisted-contract-s-asset"
+          ]
+        },
+        {
+          "group": "Fireblocks Network",
+          "pages": [
+            "api-overview/fireblocks-api/fireblocks-network",
+            "api-overview/fireblocks-api/fireblocks-network/list-network-connections",
+            "api-overview/fireblocks-api/fireblocks-network/creates-a-new-network-connection",
+            "api-overview/fireblocks-api/fireblocks-network/update-network-connection-routing-policy-",
+            "api-overview/fireblocks-api/fireblocks-network/retrieve-third-party-network-routing-validation-by-asset-type-",
+            "api-overview/fireblocks-api/fireblocks-network/get-a-network-connection",
+            "api-overview/fireblocks-api/fireblocks-network/deletes-a-network-connection-by-id",
+            "api-overview/fireblocks-api/fireblocks-network/returns-all-network-ids--both-local-ids-and-discoverable-remote-ids",
+            "api-overview/fireblocks-api/fireblocks-network/creates-a-new-network-id",
+            "api-overview/fireblocks-api/fireblocks-network/returns-all-enabled-routing-policy-asset-groups",
+            "api-overview/fireblocks-api/fireblocks-network/returns-specific-network-id-",
+            "api-overview/fireblocks-api/fireblocks-network/deletes-specific-network-id-",
+            "api-overview/fireblocks-api/fireblocks-network/update-network-id-routing-policy-",
+            "api-overview/fireblocks-api/fireblocks-network/update-network-id-s-discoverability-",
+            "api-overview/fireblocks-api/fireblocks-network/update-network-id-s-name-"
+          ]
+        },
+        {
+          "group": "Smart Transfers",
+          "pages": [
+            "api-overview/fireblocks-api/smart-transfers",
+            "api-overview/fireblocks-api/smart-transfers/create-ticket",
+            "api-overview/fireblocks-api/smart-transfers/find-ticket",
+            "api-overview/fireblocks-api/smart-transfers/search-ticket-by-id",
+            "api-overview/fireblocks-api/smart-transfers/set-expiration",
+            "api-overview/fireblocks-api/smart-transfers/add-external-ref--id",
+            "api-overview/fireblocks-api/smart-transfers/submit-ticket",
+            "api-overview/fireblocks-api/smart-transfers/fund-ticket-manually",
+            "api-overview/fireblocks-api/smart-transfers/cancel-ticket",
+            "api-overview/fireblocks-api/smart-transfers/create-leg--term-",
+            "api-overview/fireblocks-api/smart-transfers/get-smart-transfer-ticket-term",
+            "api-overview/fireblocks-api/smart-transfers/update-ticket-leg--term-",
+            "api-overview/fireblocks-api/smart-transfers/delete-ticket-leg--term-",
+            "api-overview/fireblocks-api/smart-transfers/define-funding-source",
+            "api-overview/fireblocks-api/smart-transfers/manually-add-term-transaction",
+            "api-overview/fireblocks-api/smart-transfers/set-user-group",
+            "api-overview/fireblocks-api/smart-transfers/get-user-group"
+          ]
+        },
+        {
+          "group": "Exchange Accounts",
+          "pages": [
+            "api-overview/fireblocks-api/exchange-accounts",
+            "api-overview/fireblocks-api/exchange-accounts/list-exchange-accounts",
+            "api-overview/fireblocks-api/exchange-accounts/list-connected-exchange-accounts",
+            "api-overview/fireblocks-api/exchange-accounts/get-a-specific-exchange-account",
+            "api-overview/fireblocks-api/exchange-accounts/internal-transfer-for-exchange-accounts",
+            "api-overview/fireblocks-api/exchange-accounts/convert-exchange-account-funds-from-the-source-asset-to-the-destination-asset",
+            "api-overview/fireblocks-api/exchange-accounts/get-an-asset-for-an-exchange-account"
+          ]
+        },
+        {
+          "group": "Fiat Accounts",
+          "pages": [
+            "api-overview/fireblocks-api/fiat-accounts",
+            "api-overview/fireblocks-api/fiat-accounts/list-fiat-accounts",
+            "api-overview/fireblocks-api/fiat-accounts/find-a-specific-fiat-account",
+            "api-overview/fireblocks-api/fiat-accounts/redeem-funds-to-dda",
+            "api-overview/fireblocks-api/fiat-accounts/deposit-funds-from-dda"
+          ]
+        },
+        {
+          "group": "Tokenization",
+          "pages": [
+            "api-overview/fireblocks-api/tokenization",
+            "api-overview/fireblocks-api/tokenization/issue-a-new-token",
+            "api-overview/fireblocks-api/tokenization/list-all-linked-tokens",
+            "api-overview/fireblocks-api/tokenization/link-a-token",
+            "api-overview/fireblocks-api/tokenization/unlink-a-token",
+            "api-overview/fireblocks-api/tokenization/return-a-linked-token"
+          ]
+        },
+        {
+          "group": "Contract Templates",
+          "pages": [
+            "api-overview/fireblocks-api/contract-templates",
+            "api-overview/fireblocks-api/contract-templates/list-all-contract-templates",
+            "api-overview/fireblocks-api/contract-templates/upload-contract-template",
+            "api-overview/fireblocks-api/contract-templates/return-contract-template-by-id",
+            "api-overview/fireblocks-api/contract-templates/delete-a-contract-template-by-id",
+            "api-overview/fireblocks-api/contract-templates/return-contract-template-s-constructor",
+            "api-overview/fireblocks-api/contract-templates/return-contract-template-s-function",
+            "api-overview/fireblocks-api/contract-templates/deploy-contract"
+          ]
+        },
+        {
+          "group": "Deployed Contracts",
+          "pages": [
+            "api-overview/fireblocks-api/deployed-contracts",
+            "api-overview/fireblocks-api/deployed-contracts/list-deployed-contracts-data",
+            "api-overview/fireblocks-api/deployed-contracts/return-deployed-contract-data-by-id",
+            "api-overview/fireblocks-api/deployed-contracts/return-deployed-contract-data"
+          ]
+        },
+        {
+          "group": "Contract Interactions",
+          "pages": [
+            "api-overview/fireblocks-api/contract-interactions",
+            "api-overview/fireblocks-api/contract-interactions/return-deployed-contract-s-abi",
+            "api-overview/fireblocks-api/contract-interactions/call-a-read-function-on-a-deployed-contract",
+            "api-overview/fireblocks-api/contract-interactions/call-a-write-function-on-a-deployed-contract"
+          ]
+        },
+        {
+          "group": "Staking",
+          "pages": [
+            "api-overview/fireblocks-api/staking",
+            "api-overview/fireblocks-api/staking/list-supported-chains-for-fireblocks-staking",
+            "api-overview/fireblocks-api/staking/get-chain-specific-staking-summary",
+            "api-overview/fireblocks-api/staking/execute-a-staking-action",
+            "api-overview/fireblocks-api/staking/list-staking-positions-details",
+            "api-overview/fireblocks-api/staking/get-staking-summary-details",
+            "api-overview/fireblocks-api/staking/get-staking-summary-details-by-vault",
+            "api-overview/fireblocks-api/staking/get-staking-position-details",
+            "api-overview/fireblocks-api/staking/list-staking-providers-details",
+            "api-overview/fireblocks-api/staking/approve-staking-terms-of-service"
+          ]
+        },
+        {
+          "group": "Nfts",
+          "pages": [
+            "api-overview/fireblocks-api/nfts",
+            "api-overview/fireblocks-api/nfts/refresh-vault-account-tokens",
+            "api-overview/fireblocks-api/nfts/list-all-owned-tokens--paginated-",
+            "api-overview/fireblocks-api/nfts/list-all-distinct-owned-tokens--paginated-",
+            "api-overview/fireblocks-api/nfts/list-owned-collections--paginated-",
+            "api-overview/fireblocks-api/nfts/refresh-token-metadata",
+            "api-overview/fireblocks-api/nfts/list-token-data-by-id",
+            "api-overview/fireblocks-api/nfts/list-tokens-by-ids",
+            "api-overview/fireblocks-api/nfts/update-token-ownership-status",
+            "api-overview/fireblocks-api/nfts/update-tokens-ownership-status",
+            "api-overview/fireblocks-api/nfts/update-tokens-ownership-spam-property"
+          ]
+        },
+        {
+          "group": "Dapp Connections",
+          "pages": [
+            "api-overview/fireblocks-api/dapp-connections",
+            "api-overview/fireblocks-api/dapp-connections/list-all-open-dapp-connections",
+            "api-overview/fireblocks-api/dapp-connections/create-a-new-dapp-connection-",
+            "api-overview/fireblocks-api/dapp-connections/respond-to-a-pending-dapp-connection-request",
+            "api-overview/fireblocks-api/dapp-connections/remove-an-existing-dapp-connection"
+          ]
+        },
+        {
+          "group": "Cosigners  Beta ",
+          "pages": [
+            "api-overview/fireblocks-api/cosigners--beta-",
+            "api-overview/fireblocks-api/cosigners--beta-/get-all-cosigners",
+            "api-overview/fireblocks-api/cosigners--beta-/get-cosigner",
+            "api-overview/fireblocks-api/cosigners--beta-/rename-cosigner",
+            "api-overview/fireblocks-api/cosigners--beta-/get-all-api-keys",
+            "api-overview/fireblocks-api/cosigners--beta-/get-api-key"
+          ]
+        },
+        {
+          "group": "Webhooks",
+          "pages": [
+            "api-overview/fireblocks-api/webhooks",
+            "api-overview/fireblocks-api/webhooks/resend-failed-webhooks",
+            "api-overview/fireblocks-api/webhooks/resend-webhooks-for-a-transaction-by-id"
+          ]
+        },
+        {
+          "group": "Off Exchange",
+          "pages": [
+            "api-overview/fireblocks-api/off-exchange",
+            "api-overview/fireblocks-api/off-exchange/add-collateral",
+            "api-overview/fireblocks-api/off-exchange/remove-collateral",
+            "api-overview/fireblocks-api/off-exchange/create-settlement-for-a-trader",
+            "api-overview/fireblocks-api/off-exchange/get-settlements-transactions-from-exchange",
+            "api-overview/fireblocks-api/off-exchange/find-a-specific-collateral-exchange-account"
+          ]
+        },
+        {
+          "group": "Payments   Payout",
+          "pages": [
+            "api-overview/fireblocks-api/payments---payout",
+            "api-overview/fireblocks-api/payments---payout/create-a-payout-instruction-set",
+            "api-overview/fireblocks-api/payments---payout/execute-a-payout-instruction-set",
+            "api-overview/fireblocks-api/payments---payout/get-the-status-of-a-payout-instruction-set"
+          ]
+        },
+        {
+          "group": "Payments   Flows",
+          "pages": [
+            "api-overview/fireblocks-api/payments---flows",
+            "api-overview/fireblocks-api/payments---flows/create-payment-flow-configuration",
+            "api-overview/fireblocks-api/payments---flows/retrieve-workflow-configuration",
+            "api-overview/fireblocks-api/payments---flows/delete-workflow-configuration",
+            "api-overview/fireblocks-api/payments---flows/create-workflow-execution",
+            "api-overview/fireblocks-api/payments---flows/get-workflow-execution-details",
+            "api-overview/fireblocks-api/payments---flows/execute-the-payments-workflow"
+          ]
+        },
+        {
+          "group": "Key Link  Beta ",
+          "pages": [
+            "api-overview/fireblocks-api/key-link--beta-",
+            "api-overview/fireblocks-api/key-link--beta-/add-a-new-signing-key",
+            "api-overview/fireblocks-api/key-link--beta-/get-list-of-signing-keys",
+            "api-overview/fireblocks-api/key-link--beta-/get-a-signing-key-by--keyid-",
+            "api-overview/fireblocks-api/key-link--beta-/modify-the-signing-by-fireblocks-provided--keyid-",
+            "api-overview/fireblocks-api/key-link--beta-/set-agent-user-id-that-can-sign-with-the-signing-key-identified-by-the-fireblocks-provided--keyid-",
+            "api-overview/fireblocks-api/key-link--beta-/add-a-new-validation-key",
+            "api-overview/fireblocks-api/key-link--beta-/get-list-of-registered-validation-keys",
+            "api-overview/fireblocks-api/key-link--beta-/get-a-validation-key-by--keyid-",
+            "api-overview/fireblocks-api/key-link--beta-/disables-a-validation-key"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Ncw Api",
+      "pages": [
+        {
+          "group": "Non Custodial Wallets",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallets",
+            "api-overview/ncw-api/non-custodial-wallets/create-a-new-wallet",
+            "api-overview/ncw-api/non-custodial-wallets/list-wallets",
+            "api-overview/ncw-api/non-custodial-wallets/get-a-wallet",
+            "api-overview/ncw-api/non-custodial-wallets/get-wallet-latest-backup-details",
+            "api-overview/ncw-api/non-custodial-wallets/get-wallet-key-setup-state",
+            "api-overview/ncw-api/non-custodial-wallets/enable-or-disable-a-wallet"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallet Accounts",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallet-accounts",
+            "api-overview/ncw-api/non-custodial-wallet-accounts/create-a-new-account",
+            "api-overview/ncw-api/non-custodial-wallet-accounts/get-accounts",
+            "api-overview/ncw-api/non-custodial-wallet-accounts/get-an-account"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallet Assets",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallet-assets",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-assets",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-asset",
+            "api-overview/ncw-api/non-custodial-wallet-assets/add-asset-to-account",
+            "api-overview/ncw-api/non-custodial-wallet-assets/refresh-asset-balance",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-asset-balance",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-asset-addresses",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-supported-assets"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallet Devices",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallet-devices",
+            "api-overview/ncw-api/non-custodial-wallet-devices/get-registered-devices",
+            "api-overview/ncw-api/non-custodial-wallet-devices/enable-or-disable-device",
+            "api-overview/ncw-api/non-custodial-wallet-devices/get-device-key-setup-state"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallets Rpc",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallets-rpc",
+            "api-overview/ncw-api/non-custodial-wallets-rpc/invoke-rpc"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Introduction",
+      "pages": [
+        "api-overview/introduction/api-overview",
+        "api-overview/introduction/rest-api-guide",
+        "api-overview/introduction/authenticate",
+        "api-overview/introduction/api-idempotency",
+        "api-overview/introduction/rate-limiting",
+        "api-overview/introduction/transaction-sources---destinations"
+      ]
+    },
+    {
+      "group": "Errors   Data Objects",
+      "pages": [
+        "api-overview/errors---data-objects/api-responses-and-error-codes",
+        {
+          "group": "Transaction Statuses",
+          "pages": [
+            "api-overview/errors---data-objects/transaction-statuses",
+            "api-overview/errors---data-objects/transaction-statuses/statuses",
+            "api-overview/errors---data-objects/transaction-statuses/sub-statuses"
+          ]
+        },
+        {
+          "group": "Data Objects",
+          "pages": [
+            "api-overview/errors---data-objects/data-objects",
+            "api-overview/errors---data-objects/data-objects/vault-objects",
+            "api-overview/errors---data-objects/data-objects/exchange-account-objects",
+            "api-overview/errors---data-objects/data-objects/fiat-account-objects",
+            "api-overview/errors---data-objects/data-objects/network-connection-objects",
+            "api-overview/errors---data-objects/data-objects/internal-external-wallet-objects",
+            "api-overview/errors---data-objects/data-objects/contract-objects",
+            "api-overview/errors---data-objects/data-objects/blockchain---asset-objects",
+            "api-overview/errors---data-objects/data-objects/transaction-objects",
+            "api-overview/errors---data-objects/data-objects/transaction-authorization-objects",
+            "api-overview/errors---data-objects/data-objects/fee-estimation-objects",
+            "api-overview/errors---data-objects/data-objects/transaction-screening-objects",
+            "api-overview/errors---data-objects/data-objects/raw-signing-objects",
+            "api-overview/errors---data-objects/data-objects/payments-objects",
+            "api-overview/errors---data-objects/data-objects/gas-station-objects",
+            "api-overview/errors---data-objects/data-objects/user-object",
+            "api-overview/errors---data-objects/data-objects/webhook-object",
+            "api-overview/errors---data-objects/data-objects/nft-objects",
+            "api-overview/errors---data-objects/data-objects/web3-connection-objects",
+            "api-overview/errors---data-objects/data-objects/general-objects"
+          ]
+        },
+        {
+          "group": "Webhooks Data Objects",
+          "pages": [
+            "api-overview/errors---data-objects/webhooks-data-objects",
+            "api-overview/errors---data-objects/webhooks-data-objects/vault-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/exchange---fiat-account-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/network-connection-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/smart-transfer-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/internal--external---contract-wallet-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/transaction-webhooks",
+            "api-overview/errors---data-objects/webhooks-data-objects/nft-webhooks"
+          ]
+        },
+        "api-overview/errors---data-objects/handle-api-errors"
+      ]
+    },
+    {
+      "group": "Sdks   Dev Tools",
+      "pages": [
+        "api-overview/sdks---dev-tools/postman-guide",
+        "api-overview/sdks---dev-tools/typescript-sdk",
+        "api-overview/sdks---dev-tools/python-sdk",
+        "api-overview/sdks---dev-tools/java-sdk",
+        "api-overview/sdks---dev-tools/js-sdk--legacy-",
+        "api-overview/sdks---dev-tools/python-sdk--legacy-",
+        "api-overview/sdks---dev-tools/evm-web3-provider",
+        "api-overview/sdks---dev-tools/evm-local-json-rpc",
+        "api-overview/sdks---dev-tools/hardhat-plugin",
+        "api-overview/sdks---dev-tools/solana-web3-adapter"
+      ]
+    },
+    {
+      "group": "Manage Your Workspace",
+      "pages": [
+        "api-overview/manage-your-workspace/create-api-keys",
+        "api-overview/manage-your-workspace/configure-transaction-authorization-policy"
+      ]
+    },
+    {
+      "group": "Manage Wallets",
+      "pages": [
+        "api-overview/manage-wallets/create-vault-accounts",
+        "api-overview/manage-wallets/create-vault-wallets",
+        "api-overview/manage-wallets/create-omnibus-structure"
+      ]
+    },
+    {
+      "group": "Manage Transactions",
+      "pages": [
+        "api-overview/manage-transactions/create-transactions",
+        "api-overview/manage-transactions/boost-transactions",
+        "api-overview/manage-transactions/sweep-to-omnibus",
+        "api-overview/manage-transactions/select-utxos",
+        "api-overview/manage-transactions/consolidate-utxos",
+        "api-overview/manage-transactions/monitoring-transaction-statuses"
+      ]
+    },
+    {
+      "group": "Manage Transaction Fees",
+      "pages": [
+        {
+          "group": "Configure Gas Station",
+          "pages": [
+            "api-overview/manage-transaction-fees/configure-gas-station",
+            "api-overview/manage-transaction-fees/configure-gas-station/enable-auto-fueling",
+            "api-overview/manage-transaction-fees/configure-gas-station/set-the-gas-station-values",
+            "api-overview/manage-transaction-fees/configure-gas-station/fund-the-gas-station",
+            "api-overview/manage-transaction-fees/configure-gas-station/monitor-the-gas-station"
+          ]
+        },
+        "api-overview/manage-transaction-fees/estimate-transaction-fee"
+      ]
+    },
+    {
+      "group": "Manage Treasury",
+      "pages": [
+        "api-overview/manage-treasury/execute-smart-transfers",
+        {
+          "group": "Stake Assets",
+          "pages": [
+            "api-overview/manage-treasury/stake-assets",
+            "api-overview/manage-treasury/stake-assets/overview",
+            "api-overview/manage-treasury/stake-assets/create-a-staking-position",
+            "api-overview/manage-treasury/stake-assets/unstake---withdraw"
+          ]
+        },
+        "api-overview/manage-treasury/connect-to-exchanges---fiat-providers"
+      ]
+    },
+    {
+      "group": "Comply With Regulation",
+      "pages": [
+        "api-overview/comply-with-regulation/validate-travel-rule"
+      ]
+    },
+    {
+      "group": "Manage Smart Contracts",
+      "pages": [
+        "api-overview/manage-smart-contracts/upload-contract-template"
+      ]
+    },
+    {
+      "group": "Manage Assets",
+      "pages": [
+        "api-overview/manage-assets/get-supported-assets",
+        "api-overview/manage-assets/add-tokens",
+        {
+          "group": "Manage Nfts",
+          "pages": [
+            "api-overview/manage-assets/manage-nfts",
+            "api-overview/manage-assets/manage-nfts/deploy-an-nft-collection",
+            "api-overview/manage-assets/manage-nfts/mint-an-nft",
+            "api-overview/manage-assets/manage-nfts/retrieve-nfts",
+            "api-overview/manage-assets/manage-nfts/transfer-nfts"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Sign Offchain Messages",
+      "pages": [
+        {
+          "group": "Typed Message Signing",
+          "pages": [
+            "api-overview/sign-offchain-messages/typed-message-signing",
+            "api-overview/sign-offchain-messages/typed-message-signing/structure-the-api-call",
+            "api-overview/sign-offchain-messages/typed-message-signing/sign-typed-messages-in-ethereum",
+            "api-overview/sign-offchain-messages/typed-message-signing/sign-typed-messages-in-tron",
+            "api-overview/sign-offchain-messages/typed-message-signing/sign-typed-messages-in-bitcoin"
+          ]
+        },
+        {
+          "group": "Raw Signing",
+          "pages": [
+            "api-overview/sign-offchain-messages/raw-signing",
+            "api-overview/sign-offchain-messages/raw-signing/structure-the-api-call",
+            "api-overview/sign-offchain-messages/raw-signing/code-examples"
+          ]
+        },
+        "api-overview/sign-offchain-messages/caching-signatures"
+      ]
+    },
+    {
+      "group": "Automate Your Flows",
+      "pages": [
+        {
+          "group": "Set Api Co Signer Callback Handler",
+          "pages": [
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/authenticate",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/response-object",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/approve-transactions",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/approve-configuration-changes",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/code-examples",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/basic-code-example",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/use-the-plugin-based-callback-handler",
+            "api-overview/automate-your-flows/set-api-co-signer-callback-handler/validate-eth-raw-transactions"
+          ]
+        },
+        {
+          "group": "Consume Webhooks",
+          "pages": [
+            "api-overview/automate-your-flows/consume-webhooks",
+            "api-overview/automate-your-flows/consume-webhooks/configure-webhook-urls",
+            "api-overview/automate-your-flows/consume-webhooks/validate-requests",
+            "api-overview/automate-your-flows/consume-webhooks/resend-webhook-notifications",
+            "api-overview/automate-your-flows/consume-webhooks/code-examples",
+            "api-overview/automate-your-flows/consume-webhooks/understand-webhook-data-objects"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Create Payments",
+      "pages": [
+        "api-overview/create-payments/execute-payouts",
+        {
+          "group": "Create Payment Flows",
+          "pages": [
+            "api-overview/create-payments/create-payment-flows",
+            "api-overview/create-payments/create-payment-flows/workflow-data-objects",
+            "api-overview/create-payments/create-payment-flows/create-workflow-configuration",
+            "api-overview/create-payments/create-payment-flows/create-workflow-execution",
+            "api-overview/create-payments/create-payment-flows/launch-workflow-execution"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Fireblocks Api",
+      "pages": [
+        {
+          "group": "Workspace Management",
+          "pages": [
+            "api-overview/fireblocks-api/workspace-management",
+            "api-overview/fireblocks-api/workspace-management/freeze",
+            "api-overview/fireblocks-api/workspace-management/list-user-groups",
+            "api-overview/fireblocks-api/workspace-management/create-user-group",
+            "api-overview/fireblocks-api/workspace-management/get-user-group",
+            "api-overview/fireblocks-api/workspace-management/update-user-group",
+            "api-overview/fireblocks-api/workspace-management/delete-user-group",
+            "api-overview/fireblocks-api/workspace-management/list-users",
+            "api-overview/fireblocks-api/workspace-management/get-audit-logs",
+            "api-overview/fireblocks-api/workspace-management/get-audit-logs",
+            "api-overview/fireblocks-api/workspace-management/update-admin-quorum-threshold",
+            "api-overview/fireblocks-api/workspace-management/enable-or-disable-transactions-to-one-time-addresses",
+            "api-overview/fireblocks-api/workspace-management/returns-current-one-time-address-status",
+            "api-overview/fireblocks-api/workspace-management/returns-current-workspace-status",
+            "api-overview/fireblocks-api/workspace-management/get-console-users",
+            "api-overview/fireblocks-api/workspace-management/create-console-user",
+            "api-overview/fireblocks-api/workspace-management/get-api-keys",
+            "api-overview/fireblocks-api/workspace-management/create-api-key",
+            "api-overview/fireblocks-api/workspace-management/resets-device",
+            "api-overview/fireblocks-api/workspace-management/get-whitelisted-ip-addresses-for-an-api-key"
+          ]
+        },
+        {
+          "group": "Policy Editor  Beta ",
+          "pages": [
+            "api-overview/fireblocks-api/policy-editor--beta-",
+            "api-overview/fireblocks-api/policy-editor--beta-/get-the-active-policy-and-its-validation",
+            "api-overview/fireblocks-api/policy-editor--beta-/get-the-active-draft",
+            "api-overview/fireblocks-api/policy-editor--beta-/update-the-draft-with-a-new-set-of-rules",
+            "api-overview/fireblocks-api/policy-editor--beta-/send-publish-request-for-a-certain-draft-id",
+            "api-overview/fireblocks-api/policy-editor--beta-/send-publish-request-for-a-set-of-policy-rules"
+          ]
+        },
+        {
+          "group": "Compliance",
+          "pages": [
+            "api-overview/fireblocks-api/compliance",
+            "api-overview/fireblocks-api/compliance/validate-travel-rule-transaction",
+            "api-overview/fireblocks-api/compliance/validate-full-travel-rule-transaction",
+            "api-overview/fireblocks-api/compliance/get-vasp-details",
+            "api-overview/fireblocks-api/compliance/get-all-vasps",
+            "api-overview/fireblocks-api/compliance/add-jsondidkey-to-vasp-details",
+            "api-overview/fireblocks-api/compliance/travel-rule---view-post-screening-policy",
+            "api-overview/fireblocks-api/compliance/travel-rule---view-screening-policy",
+            "api-overview/fireblocks-api/compliance/get-travel-rule-screening-policy-configuration",
+            "api-overview/fireblocks-api/compliance/update-travel-rule-configuration",
+            "api-overview/fireblocks-api/compliance/get-aml-screening-policy-configuration",
+            "api-overview/fireblocks-api/compliance/update-aml-configuration",
+            "api-overview/fireblocks-api/compliance/aml---view-screening-policy",
+            "api-overview/fireblocks-api/compliance/aml---view-post-screening-policy",
+            "api-overview/fireblocks-api/compliance/screening-configuration-update"
+          ]
+        },
+        {
+          "group": "Blockchains   Assets",
+          "pages": [
+            "api-overview/fireblocks-api/blockchains---assets",
+            "api-overview/fireblocks-api/blockchains---assets/list-all-asset-types-supported-by-fireblocks",
+            "api-overview/fireblocks-api/blockchains---assets/register-an-asset",
+            "api-overview/fireblocks-api/blockchains---assets/validate-destination-address",
+            "api-overview/fireblocks-api/blockchains---assets/estimate-the-required-fee-for-an-asset"
+          ]
+        },
+        {
+          "group": "Vaults",
+          "pages": [
+            "api-overview/fireblocks-api/vaults",
+            "api-overview/fireblocks-api/vaults/get-vault-accounts",
+            "api-overview/fireblocks-api/vaults/create-a-new-vault-account",
+            "api-overview/fireblocks-api/vaults/get-vault-accounts--paginated-",
+            "api-overview/fireblocks-api/vaults/get-a-vault-account-by-id",
+            "api-overview/fireblocks-api/vaults/rename-a-vault-account",
+            "api-overview/fireblocks-api/vaults/get-vault-wallets--paginated-",
+            "api-overview/fireblocks-api/vaults/hide-a-vault-account-in-the-console",
+            "api-overview/fireblocks-api/vaults/unhide-a-vault-account-in-the-console",
+            "api-overview/fireblocks-api/vaults/activate-a-wallet-in-a-vault-account",
+            "api-overview/fireblocks-api/vaults/set-an-aml-kyt-customer-reference-id-for-a-vault-account",
+            "api-overview/fireblocks-api/vaults/set-auto-fueling-to-on-or-off",
+            "api-overview/fireblocks-api/vaults/get-the-asset-balance-for-a-vault-account",
+            "api-overview/fireblocks-api/vaults/create-a-new-vault-wallet",
+            "api-overview/fireblocks-api/vaults/refresh-asset-balance-data",
+            "api-overview/fireblocks-api/vaults/get-asset-addresses",
+            "api-overview/fireblocks-api/vaults/create-new-asset-deposit-address",
+            "api-overview/fireblocks-api/vaults/get-addresses--paginated-",
+            "api-overview/fireblocks-api/vaults/get-the-maximum-spendable-amount-in-a-single-transaction-",
+            "api-overview/fireblocks-api/vaults/update-address-description",
+            "api-overview/fireblocks-api/vaults/assign-aml-customer-reference-id",
+            "api-overview/fireblocks-api/vaults/convert-a-segwit-address-to-legacy-format",
+            "api-overview/fireblocks-api/vaults/get-utxo-unspent-inputs-information",
+            "api-overview/fireblocks-api/vaults/get-the-public-key-for-a-derivation-path",
+            "api-overview/fireblocks-api/vaults/get-the-public-key-of-an-asset-in-a-vault-account",
+            "api-overview/fireblocks-api/vaults/get-asset-balance-for-chosen-assets",
+            "api-overview/fireblocks-api/vaults/get-vault-balance-by-an-asset"
+          ]
+        },
+        {
+          "group": "Transactions",
+          "pages": [
+            "api-overview/fireblocks-api/transactions",
+            "api-overview/fireblocks-api/transactions/get-transaction-history",
+            "api-overview/fireblocks-api/transactions/create-a-new-transaction",
+            "api-overview/fireblocks-api/transactions/estimate-transaction-fee",
+            "api-overview/fireblocks-api/transactions/get-a-specific-transaction-by-fireblocks-transaction-id",
+            "api-overview/fireblocks-api/transactions/get-a-specific-transaction-by-external-transaction-id",
+            "api-overview/fireblocks-api/transactions/set-confirmation-threshold-by-fireblocks-transaction-id",
+            "api-overview/fireblocks-api/transactions/drop-eth--evm--transaction-by-id",
+            "api-overview/fireblocks-api/transactions/cancel-a-transaction",
+            "api-overview/fireblocks-api/transactions/freeze-a-transaction",
+            "api-overview/fireblocks-api/transactions/unfreeze-a-transaction",
+            "api-overview/fireblocks-api/transactions/set-confirmation-threshold-by-transaction-hash"
+          ]
+        },
+        {
+          "group": "Gas Station",
+          "pages": [
+            "api-overview/fireblocks-api/gas-station",
+            "api-overview/fireblocks-api/gas-station/get-gas-station-settings",
+            "api-overview/fireblocks-api/gas-station/get-gas-station-settings-by-asset",
+            "api-overview/fireblocks-api/gas-station/edit-gas-station-settings",
+            "api-overview/fireblocks-api/gas-station/edit-gas-station-settings-for-an-asset"
+          ]
+        },
+        {
+          "group": "Whitelisted Internal Wallets",
+          "pages": [
+            "api-overview/fireblocks-api/whitelisted-internal-wallets",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/list-internal-wallets",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/create-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/get-assets-for-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/delete-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/set-an-aml-kyt-customer-reference-id-for-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/get-an-asset-from-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/add-an-asset-to-an-internal-wallet",
+            "api-overview/fireblocks-api/whitelisted-internal-wallets/delete-a-whitelisted-address-from-an-internal-wallet"
+          ]
+        },
+        {
+          "group": "Whitelisted External Wallets",
+          "pages": [
+            "api-overview/fireblocks-api/whitelisted-external-wallets",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/list-external-wallets",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/create-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/find-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/delete-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/set-an-aml-customer-reference-id-for-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/get-an-asset-from-an-external-wallet",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/add-an-asset-to-an-external-wallet-",
+            "api-overview/fireblocks-api/whitelisted-external-wallets/delete-an-asset-from-an-external-wallet"
+          ]
+        },
+        {
+          "group": "Whitelisted Contracts",
+          "pages": [
+            "api-overview/fireblocks-api/whitelisted-contracts",
+            "api-overview/fireblocks-api/whitelisted-contracts/list-whitelisted-contracts",
+            "api-overview/fireblocks-api/whitelisted-contracts/create-a-whitelisted-contract",
+            "api-overview/fireblocks-api/whitelisted-contracts/find-a-specific-whitelisted-contract",
+            "api-overview/fireblocks-api/whitelisted-contracts/delete-a-whitelisted-contract",
+            "api-overview/fireblocks-api/whitelisted-contracts/find-a-whitelisted-contract-s-asset",
+            "api-overview/fireblocks-api/whitelisted-contracts/add-an-asset-to-a-whitelisted-contract",
+            "api-overview/fireblocks-api/whitelisted-contracts/delete-a-whitelisted-contract-s-asset"
+          ]
+        },
+        {
+          "group": "Fireblocks Network",
+          "pages": [
+            "api-overview/fireblocks-api/fireblocks-network",
+            "api-overview/fireblocks-api/fireblocks-network/list-network-connections",
+            "api-overview/fireblocks-api/fireblocks-network/creates-a-new-network-connection",
+            "api-overview/fireblocks-api/fireblocks-network/update-network-connection-routing-policy-",
+            "api-overview/fireblocks-api/fireblocks-network/retrieve-third-party-network-routing-validation-by-asset-type-",
+            "api-overview/fireblocks-api/fireblocks-network/get-a-network-connection",
+            "api-overview/fireblocks-api/fireblocks-network/deletes-a-network-connection-by-id",
+            "api-overview/fireblocks-api/fireblocks-network/returns-all-network-ids--both-local-ids-and-discoverable-remote-ids",
+            "api-overview/fireblocks-api/fireblocks-network/creates-a-new-network-id",
+            "api-overview/fireblocks-api/fireblocks-network/returns-all-enabled-routing-policy-asset-groups",
+            "api-overview/fireblocks-api/fireblocks-network/returns-specific-network-id-",
+            "api-overview/fireblocks-api/fireblocks-network/deletes-specific-network-id-",
+            "api-overview/fireblocks-api/fireblocks-network/update-network-id-routing-policy-",
+            "api-overview/fireblocks-api/fireblocks-network/update-network-id-s-discoverability-",
+            "api-overview/fireblocks-api/fireblocks-network/update-network-id-s-name-"
+          ]
+        },
+        {
+          "group": "Smart Transfers",
+          "pages": [
+            "api-overview/fireblocks-api/smart-transfers",
+            "api-overview/fireblocks-api/smart-transfers/create-ticket",
+            "api-overview/fireblocks-api/smart-transfers/find-ticket",
+            "api-overview/fireblocks-api/smart-transfers/search-ticket-by-id",
+            "api-overview/fireblocks-api/smart-transfers/set-expiration",
+            "api-overview/fireblocks-api/smart-transfers/add-external-ref--id",
+            "api-overview/fireblocks-api/smart-transfers/submit-ticket",
+            "api-overview/fireblocks-api/smart-transfers/fund-ticket-manually",
+            "api-overview/fireblocks-api/smart-transfers/cancel-ticket",
+            "api-overview/fireblocks-api/smart-transfers/create-leg--term-",
+            "api-overview/fireblocks-api/smart-transfers/get-smart-transfer-ticket-term",
+            "api-overview/fireblocks-api/smart-transfers/update-ticket-leg--term-",
+            "api-overview/fireblocks-api/smart-transfers/delete-ticket-leg--term-",
+            "api-overview/fireblocks-api/smart-transfers/define-funding-source",
+            "api-overview/fireblocks-api/smart-transfers/manually-add-term-transaction",
+            "api-overview/fireblocks-api/smart-transfers/set-user-group",
+            "api-overview/fireblocks-api/smart-transfers/get-user-group"
+          ]
+        },
+        {
+          "group": "Exchange Accounts",
+          "pages": [
+            "api-overview/fireblocks-api/exchange-accounts",
+            "api-overview/fireblocks-api/exchange-accounts/list-exchange-accounts",
+            "api-overview/fireblocks-api/exchange-accounts/list-connected-exchange-accounts",
+            "api-overview/fireblocks-api/exchange-accounts/get-a-specific-exchange-account",
+            "api-overview/fireblocks-api/exchange-accounts/internal-transfer-for-exchange-accounts",
+            "api-overview/fireblocks-api/exchange-accounts/convert-exchange-account-funds-from-the-source-asset-to-the-destination-asset",
+            "api-overview/fireblocks-api/exchange-accounts/get-an-asset-for-an-exchange-account"
+          ]
+        },
+        {
+          "group": "Fiat Accounts",
+          "pages": [
+            "api-overview/fireblocks-api/fiat-accounts",
+            "api-overview/fireblocks-api/fiat-accounts/list-fiat-accounts",
+            "api-overview/fireblocks-api/fiat-accounts/find-a-specific-fiat-account",
+            "api-overview/fireblocks-api/fiat-accounts/redeem-funds-to-dda",
+            "api-overview/fireblocks-api/fiat-accounts/deposit-funds-from-dda"
+          ]
+        },
+        {
+          "group": "Tokenization",
+          "pages": [
+            "api-overview/fireblocks-api/tokenization",
+            "api-overview/fireblocks-api/tokenization/issue-a-new-token",
+            "api-overview/fireblocks-api/tokenization/list-all-linked-tokens",
+            "api-overview/fireblocks-api/tokenization/link-a-token",
+            "api-overview/fireblocks-api/tokenization/unlink-a-token",
+            "api-overview/fireblocks-api/tokenization/return-a-linked-token"
+          ]
+        },
+        {
+          "group": "Contract Templates",
+          "pages": [
+            "api-overview/fireblocks-api/contract-templates",
+            "api-overview/fireblocks-api/contract-templates/list-all-contract-templates",
+            "api-overview/fireblocks-api/contract-templates/upload-contract-template",
+            "api-overview/fireblocks-api/contract-templates/return-contract-template-by-id",
+            "api-overview/fireblocks-api/contract-templates/delete-a-contract-template-by-id",
+            "api-overview/fireblocks-api/contract-templates/return-contract-template-s-constructor",
+            "api-overview/fireblocks-api/contract-templates/return-contract-template-s-function",
+            "api-overview/fireblocks-api/contract-templates/deploy-contract"
+          ]
+        },
+        {
+          "group": "Deployed Contracts",
+          "pages": [
+            "api-overview/fireblocks-api/deployed-contracts",
+            "api-overview/fireblocks-api/deployed-contracts/list-deployed-contracts-data",
+            "api-overview/fireblocks-api/deployed-contracts/return-deployed-contract-data-by-id",
+            "api-overview/fireblocks-api/deployed-contracts/return-deployed-contract-data"
+          ]
+        },
+        {
+          "group": "Contract Interactions",
+          "pages": [
+            "api-overview/fireblocks-api/contract-interactions",
+            "api-overview/fireblocks-api/contract-interactions/return-deployed-contract-s-abi",
+            "api-overview/fireblocks-api/contract-interactions/call-a-read-function-on-a-deployed-contract",
+            "api-overview/fireblocks-api/contract-interactions/call-a-write-function-on-a-deployed-contract"
+          ]
+        },
+        {
+          "group": "Staking",
+          "pages": [
+            "api-overview/fireblocks-api/staking",
+            "api-overview/fireblocks-api/staking/list-supported-chains-for-fireblocks-staking",
+            "api-overview/fireblocks-api/staking/get-chain-specific-staking-summary",
+            "api-overview/fireblocks-api/staking/execute-a-staking-action",
+            "api-overview/fireblocks-api/staking/list-staking-positions-details",
+            "api-overview/fireblocks-api/staking/get-staking-summary-details",
+            "api-overview/fireblocks-api/staking/get-staking-summary-details-by-vault",
+            "api-overview/fireblocks-api/staking/get-staking-position-details",
+            "api-overview/fireblocks-api/staking/list-staking-providers-details",
+            "api-overview/fireblocks-api/staking/approve-staking-terms-of-service"
+          ]
+        },
+        {
+          "group": "Nfts",
+          "pages": [
+            "api-overview/fireblocks-api/nfts",
+            "api-overview/fireblocks-api/nfts/refresh-vault-account-tokens",
+            "api-overview/fireblocks-api/nfts/list-all-owned-tokens--paginated-",
+            "api-overview/fireblocks-api/nfts/list-all-distinct-owned-tokens--paginated-",
+            "api-overview/fireblocks-api/nfts/list-owned-collections--paginated-",
+            "api-overview/fireblocks-api/nfts/refresh-token-metadata",
+            "api-overview/fireblocks-api/nfts/list-token-data-by-id",
+            "api-overview/fireblocks-api/nfts/list-tokens-by-ids",
+            "api-overview/fireblocks-api/nfts/update-token-ownership-status",
+            "api-overview/fireblocks-api/nfts/update-tokens-ownership-status",
+            "api-overview/fireblocks-api/nfts/update-tokens-ownership-spam-property"
+          ]
+        },
+        {
+          "group": "Dapp Connections",
+          "pages": [
+            "api-overview/fireblocks-api/dapp-connections",
+            "api-overview/fireblocks-api/dapp-connections/list-all-open-dapp-connections",
+            "api-overview/fireblocks-api/dapp-connections/create-a-new-dapp-connection-",
+            "api-overview/fireblocks-api/dapp-connections/respond-to-a-pending-dapp-connection-request",
+            "api-overview/fireblocks-api/dapp-connections/remove-an-existing-dapp-connection"
+          ]
+        },
+        {
+          "group": "Cosigners  Beta ",
+          "pages": [
+            "api-overview/fireblocks-api/cosigners--beta-",
+            "api-overview/fireblocks-api/cosigners--beta-/get-all-cosigners",
+            "api-overview/fireblocks-api/cosigners--beta-/get-cosigner",
+            "api-overview/fireblocks-api/cosigners--beta-/rename-cosigner",
+            "api-overview/fireblocks-api/cosigners--beta-/get-all-api-keys",
+            "api-overview/fireblocks-api/cosigners--beta-/get-api-key"
+          ]
+        },
+        {
+          "group": "Webhooks",
+          "pages": [
+            "api-overview/fireblocks-api/webhooks",
+            "api-overview/fireblocks-api/webhooks/resend-failed-webhooks",
+            "api-overview/fireblocks-api/webhooks/resend-webhooks-for-a-transaction-by-id"
+          ]
+        },
+        {
+          "group": "Off Exchange",
+          "pages": [
+            "api-overview/fireblocks-api/off-exchange",
+            "api-overview/fireblocks-api/off-exchange/add-collateral",
+            "api-overview/fireblocks-api/off-exchange/remove-collateral",
+            "api-overview/fireblocks-api/off-exchange/create-settlement-for-a-trader",
+            "api-overview/fireblocks-api/off-exchange/get-settlements-transactions-from-exchange",
+            "api-overview/fireblocks-api/off-exchange/find-a-specific-collateral-exchange-account"
+          ]
+        },
+        {
+          "group": "Payments   Payout",
+          "pages": [
+            "api-overview/fireblocks-api/payments---payout",
+            "api-overview/fireblocks-api/payments---payout/create-a-payout-instruction-set",
+            "api-overview/fireblocks-api/payments---payout/execute-a-payout-instruction-set",
+            "api-overview/fireblocks-api/payments---payout/get-the-status-of-a-payout-instruction-set"
+          ]
+        },
+        {
+          "group": "Payments   Flows",
+          "pages": [
+            "api-overview/fireblocks-api/payments---flows",
+            "api-overview/fireblocks-api/payments---flows/create-payment-flow-configuration",
+            "api-overview/fireblocks-api/payments---flows/retrieve-workflow-configuration",
+            "api-overview/fireblocks-api/payments---flows/delete-workflow-configuration",
+            "api-overview/fireblocks-api/payments---flows/create-workflow-execution",
+            "api-overview/fireblocks-api/payments---flows/get-workflow-execution-details",
+            "api-overview/fireblocks-api/payments---flows/execute-the-payments-workflow"
+          ]
+        },
+        {
+          "group": "Key Link  Beta ",
+          "pages": [
+            "api-overview/fireblocks-api/key-link--beta-",
+            "api-overview/fireblocks-api/key-link--beta-/add-a-new-signing-key",
+            "api-overview/fireblocks-api/key-link--beta-/get-list-of-signing-keys",
+            "api-overview/fireblocks-api/key-link--beta-/get-a-signing-key-by--keyid-",
+            "api-overview/fireblocks-api/key-link--beta-/modify-the-signing-by-fireblocks-provided--keyid-",
+            "api-overview/fireblocks-api/key-link--beta-/set-agent-user-id-that-can-sign-with-the-signing-key-identified-by-the-fireblocks-provided--keyid-",
+            "api-overview/fireblocks-api/key-link--beta-/add-a-new-validation-key",
+            "api-overview/fireblocks-api/key-link--beta-/get-list-of-registered-validation-keys",
+            "api-overview/fireblocks-api/key-link--beta-/get-a-validation-key-by--keyid-",
+            "api-overview/fireblocks-api/key-link--beta-/disables-a-validation-key"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Ncw Api",
+      "pages": [
+        {
+          "group": "Non Custodial Wallets",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallets",
+            "api-overview/ncw-api/non-custodial-wallets/create-a-new-wallet",
+            "api-overview/ncw-api/non-custodial-wallets/list-wallets",
+            "api-overview/ncw-api/non-custodial-wallets/get-a-wallet",
+            "api-overview/ncw-api/non-custodial-wallets/get-wallet-latest-backup-details",
+            "api-overview/ncw-api/non-custodial-wallets/get-wallet-key-setup-state",
+            "api-overview/ncw-api/non-custodial-wallets/enable-or-disable-a-wallet"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallet Accounts",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallet-accounts",
+            "api-overview/ncw-api/non-custodial-wallet-accounts/create-a-new-account",
+            "api-overview/ncw-api/non-custodial-wallet-accounts/get-accounts",
+            "api-overview/ncw-api/non-custodial-wallet-accounts/get-an-account"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallet Assets",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallet-assets",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-assets",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-asset",
+            "api-overview/ncw-api/non-custodial-wallet-assets/add-asset-to-account",
+            "api-overview/ncw-api/non-custodial-wallet-assets/refresh-asset-balance",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-asset-balance",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-asset-addresses",
+            "api-overview/ncw-api/non-custodial-wallet-assets/retrieve-supported-assets"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallet Devices",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallet-devices",
+            "api-overview/ncw-api/non-custodial-wallet-devices/get-registered-devices",
+            "api-overview/ncw-api/non-custodial-wallet-devices/enable-or-disable-device",
+            "api-overview/ncw-api/non-custodial-wallet-devices/get-device-key-setup-state"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallets Rpc",
+          "pages": [
+            "api-overview/ncw-api/non-custodial-wallets-rpc",
+            "api-overview/ncw-api/non-custodial-wallets-rpc/invoke-rpc"
+          ]
+        }
       ]
     }
   ],
