@@ -1,0 +1,79 @@
+---
+title: "Authenticate"
+---
+  
+  # Authenticate
+
+## [Signing a request](#signing-a-request)
+
+Fireblocks uses API keys to authenticate all API calls. Depending on the type of workspace environment, the **base API URL** will be one of the following:
+
+*   Sandbox: `https://sandbox-api.fireblocks.io/v1`
+*   Mainnet/Testnet: `https://api.fireblocks.io/v1`
+
+Every API request must contain the following headers:
+
+*   `X-API-Key` - The API Key created from your Fireblocks workspace.
+*   `Authorization` - This value should be set to `Bearer <Access Token>`. The access token is a Base64-encoded JSON Web Token (JWT).
+
+  
+## [JWT Structure](#jwt-structure)
+
+<button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">Authorization: Bearer &lt;JWT&gt;</code>
+
+The JWT payload field should contain the following fields:
+
+*   `uri` - The URI part of the request (e.g., /v1/transactions).
+*   `nonce` - Unique number or string. Each API request needs to have a different nonce.
+*   `iat` - The time at which the JWT was issued, in seconds since Epoch.
+*   `exp` - The expiration time on and after which the JWT must not be accepted for processing, in seconds since Epoch. (Must be less than `iat`+30sec.)
+*   `sub` - The API Key.
+*   `bodyHash` - Hex-encoded SHA-256 hash of the raw HTTP request body.
+
+The JWT must be signed with the Fireblocks API secret key and the RS256 (RSASSA-PKCS1-v1\_5 using SHA-256 hash) algorithm.
+
+  
+  
+<Info>
+
+## 📘
+
+API Authentication code examples:
+
+Check out the [following](https://github.com/fireblocks/developers-hub/tree/main/authentication_examples) API Authentication code examples
+
+</Info>
+  
+## [Using the Fireblocks SDKs](#using-the-fireblocks-sdks)
+
+You can setup the request headers using the [Fireblocks API SDKs](/docs/api-sdk-overview), like so:
+
+<CodeGroup>
+```javascript
+import fs from "fs";
+import path from "path";
+import {FireblocksSDK, PeerType, TransactionArguments, TransactionOperation, TransactionStatus} from "fireblocks-sdk";
+
+apiSecret = fs.readFileSync(path.resolve(__dirname, "./fireblocks_secret.key"), "utf8");
+const apiKey = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
+fireblocks = new FireblocksSDK(apiSecret, apiKey);
+
+```
+
+```python
+from fireblocks_sdk import FireblocksSDK, TransferPeerPath, DestinationTransferPeerPath, TRANSACTION_STATUS_CONFIRMED, TRANSACTION_STATUS_CANCELLED, TRANSACTION_STATUS_REJECTED, TRANSACTION_STATUS_FAILED, VAULT_ACCOUNT, TRANSACTION_MINT, TRANSACTION_BURN
+
+apiSecret = open('fireblocks_secret.key', 'r').read()
+apiKey = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
+fireblocks = FireblocksSDK(apiSecret, apiKey)
+
+```
+</CodeGroup><Info>
+
+## 📘
+
+Fireblocks API key
+
+When using the above SDK code examples to sign a request, be sure to replace <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">apiKey</code> with your own API Key.
+
+</Info>

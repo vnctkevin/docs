@@ -1,0 +1,116 @@
+---
+title: "Create Vault Wallets"
+---
+  
+  # Create Vault Wallets
+
+Fireblocks vault accounts contain vault wallets. For each vault wallet, there are one or more deposit addresses.
+
+# [Address generation](#address-generation)
+## [Account-based wallets](#account-based-wallets)
+
+For account-based assets, there are two address-generation options:
+
+1.  Account-based assets _without_ tag/memo/note support, such as ETH, can only generate one deposit address, making each vault account unique per vault wallet. This allows you to manage one deposit address per asset, per vault account. This requires you to create additional vault accounts when more than one deposit address of the same asset is required.
+2.  Account-based assets _with_ tag/memo/note support, such as XRP, can generate one or more deposit addresses. Each deposit address has the same on-chain address. However, they are differentiated by their tag/memo.
+
+## [UTXO wallets](#utxo-wallets)
+
+UTXO-based assets, such as Bitcoin, can hold multiple wallet addresses. This allows you to manage deposits in a single vault account.
+
+  
+### [Create Vault Wallet code example:](#create-vault-wallet-code-example)
+<CodeGroup>
+```typescript
+(async() => {
+
+  try {
+    const vaultWallet = await fireblocks.vaults.createVaultAccountAsset({
+      vaultAccountId: "148",
+      assetId: "BTC"
+    })
+
+    console.log(JSON.stringify(vaultWallet, null, 2))
+  } catch(e){
+    console.log(e)
+  }
+})();
+
+```
+
+```python
+vault_wallet = fireblocks.create_vault_asset(
+    vault_account_id="148",
+    asset_id="BTC"
+)
+pprint.pprint(vault_wallet)
+
+```
+</CodeGroup>  
+### [Response example](#response-example)
+<CodeGroup>
+```json
+{
+ 'address': 'bc1q8q87uy8h2mru0q5gc7u680w76dz350s6sx5u8a',
+ 'id': '148',
+ 'legacyAddress': '167RvaKttzN2wRrJwmYEwjKG7kvdjwhKfq',
+ 'tag': ''
+}
+
+
+```
+</CodeGroup>  
+### [Create Deposit Address for UTXO and Tag/Memo based assets:](#create-deposit-address-for-utxo-and-tagmemo-based-assets)
+<CodeGroup>
+```typescript
+(async() => {
+
+  try {
+    
+    const depositAddress = await fireblocks.vaults.createVaultAccountAssetAddress({
+      assetId: "BTC",
+      vaultAccountId: "148",
+      createAddressRequest: {
+        description: "EndUserA"
+      }
+    })
+
+    console.log(JSON.stringify(depositAddress, null, 2))
+  } catch(e){
+    console.log(e)
+  }
+})();
+
+```
+
+```python
+deposit_address= fireblocks.generate_new_address(
+    vault_account_id='148',
+    asset_id='BTC',
+    description='EndUserA'
+)
+
+pprint.pprint(deposit_address)
+
+```
+</CodeGroup>### [Response Example:](#response-example-1)
+<CodeGroup>
+```json
+{
+  'address': 'bc1qkwxyzs68a3nsulhe4eavfm5dzuucf25jjnefex',
+ 	'bip44AddressIndex': 1,
+ 	'legacyAddress': '1HNMyRRzt4beCDnYLRwQKEbPAwTgmKjwrJ',
+ 	'tag': ''
+}
+
+```
+</CodeGroup>  
+<Info>
+
+## 📘
+
+Check the [Create Vault Wallet](/reference/createvaultaccountasset) and [Create a Deposit Address](/reference/createvaultaccountassetaddress) API Reference
+
+
+
+</Info>

@@ -1,0 +1,238 @@
+---
+title: "Connect To Exchanges   Fiat Providers"
+---
+  
+  # Connect to Exchanges & FIAT Providers
+
+# [Overview](#overview)
+
+Our exchange integrations allow you to connect main, trading, and sub exchange accounts on Fireblocks. From our platform, you can fund, deposit, withdraw, rebalance and transfer funds to and from a Vault account, Exchange account, whitelisted/one-time address (OTA) or Fireblocks Network connection.
+
+Except for internal exchange transfers, all transfers are completed using the [Create a new transaction](/reference/post_transactions) endpoint call, which is used for all transactions in Fireblocks.
+
+[Learn more about building a transaction](/docs/building-a-transaction).
+
+<Info>
+
+## 📘
+
+Additional exchange account configuration
+
+Withdrawals from exchanges to some destinations may require additional exchange account configuration.
+
+</Info>
+<Warning>
+
+## 🚧
+
+Fireblocks console configuration needed
+
+Before you begin transacting with an Exchange, please set up your exchange account in the Fireblocks Console. See: [Fireblocks Exchange Connectivity](https://support.fireblocks.io/hc/en-us/articles/360017435399-Fireblocks-exchange-connectivity)
+
+</Warning>
+## [Transfer to Exchange example](#transfer-to-exchange-example)
+
+This example transfers 0.001 ETH to an exchange account from vault account ID <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">0</code>.
+
+<CodeGroup>
+```typescript
+const createTransferToExchangeAccount = async(
+  assetId: string, 
+  amount: number, 
+  sourceVaultAccountId: string, 
+  destinationId: string
+): Promise<CreateTransactionResponse | undefined> => {
+  
+  try {
+
+    let transactionPayload: TransactionsApiCreateTransactionRequest = {
+      transactionRequest: {
+        assetId,
+        amount,
+        source: {
+          type: TransferPeerPathType.VaultAccount,
+          id: sourceVaultAccountId
+        },
+        destination: {
+          type: TransferPeerPathType.ExchangeAccount,
+          id: destinationId
+        }
+      }
+    }
+
+
+    const transactionResponse = await fireblocks.transactions.createTransaction(transactionPayload)
+    console.log(`Submitted a new transaction:\n ${JSON.stringify(transactionResponse.data?.id, null, 2)}`)
+    
+    return transactionResponse.data as CreateTransactionResponse
+  
+  } catch(error) {
+    console.error(error)
+  }
+}
+
+
+createTransferToExchangeAccount("ETH_TEST5", 0.1, "1", "0b5376e8-e46e-5bb7-e2c0-8428e41a75c9")
+
+```
+
+```javascript
+async function createTransaction(assetId, amount, srcId, destId){ 
+    let payload = {
+        assetId,
+        amount,
+        source: {
+            type: PeerType.VAULT_ACCOUNT,
+            id: String(srcId)
+        },
+        destination: {
+            type: PeerType.EXCHANGE_ACCOUNT,
+            id: String(destId)
+        },
+        note: "Your first Exchange transaction!"
+    };
+    const result = await fireblocks.createTransaction(payload);
+    console.log(JSON.stringify(result, null, 2));
+}
+createTransaction("ETH", "0.001", "0", "0b5376e8-e46e-5bb7-e2c0-8428e41a75c9");
+
+```
+
+```python
+def create_transaction(asset_id, amount, src_id, dest_id):
+   tx_result = fireblocks.create_transaction(
+       asset_id=asset_id,
+       amount=amount,
+       source=TransferPeerPath(VAULT_ACCOUNT, src_id),
+       destination=DestinationTransferPeerPath(VAULT_ACCOUNT, dest_id),
+       note="Your first transaction!"
+   )
+   print(tx_result)
+
+create_transaction("ETH", "0.001", "0", "1")
+
+```
+</CodeGroup>## [Transfer from Exchange example](#transfer-from-exchange-example)
+
+This example transfers 0.001 ETH from an exchange account to vault account ID <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">1</code>.
+
+<CodeGroup>
+```typescript
+const createTransferFromExchange = async(
+  assetId: string, 
+  amount: number, 
+  sourceExchangeAccountId: string, 
+  destVaultAccountId: string
+): Promise<CreateTransactionResponse | undefined> => {
+  
+  try {
+
+    let transactionPayload: TransactionsApiCreateTransactionRequest = {
+      transactionRequest: {
+        assetId,
+        amount,
+        source: {
+          type: TransferPeerPathType.ExchangeAccount,
+          id: sourceExchangeAccountId
+        },
+        destination: {
+          type: TransferPeerPathType.VaultAccount,
+          id: destVaultAccountId
+        }
+      }
+    }
+
+
+    const transactionResponse = await fireblocks.transactions.createTransaction(transactionPayload)
+    console.log(`Submitted a new transaction:\n ${JSON.stringify(transactionResponse.data?.id, null, 2)}`)
+    
+    return transactionResponse.data as CreateTransactionResponse
+  
+  } catch(error) {
+    console.error(error)
+  }
+}
+
+createTransferFromExchange("ETH_TEST5", 0.1, "0b5376e8-e46e-5bb7-e2c0-8428e41a75c9", "1" )
+
+```
+
+```javascript
+async function createTransaction(assetId, amount, srcId, destId){ 
+    let payload = {
+        assetId,
+        amount,
+        source: {
+            type: PeerType.EXCHANGE_ACCOUNT,
+            id: String(srcId)
+        },
+        destination: {
+            type: PeerType.VAULT_ACCOUNT,
+            id: String(destId)
+        },
+        note: "Your first Exchange transaction!"
+    };
+    const result = await fireblocks.createTransaction(payload);
+    console.log(JSON.stringify(result, null, 2));
+}
+createTransaction("ETH", "0.001", "0b5376e8-e46e-5bb7-e2c0-8428e41a75c9","1");
+
+```
+
+```python
+def create_transaction(asset_id, amount, src_id, dest_id):
+   tx_result = fireblocks.create_transaction(
+       asset_id=asset_id,
+       amount=amount,
+       source=TransferPeerPath(VAULT_ACCOUNT, src_id),
+       destination=DestinationTransferPeerPath(VAULT_ACCOUNT, dest_id),
+       note="Your first transaction!"
+   )
+   print(tx_result)
+
+create_transaction("ETH", "0.001", "0", "1")
+
+```
+</CodeGroup># [Internal Exchange transfers](#internal-exchange-transfers)
+
+Make a request to the [Internal transfer for exchange accounts](/reference/post_exchange-accounts-exchangeaccountid-internal-transfer) endpoint to transfer funds between trading accounts under the same exchange account.
+
+## [Exchange account types](#exchange-account-types)
+### [Main accounts](#main-accounts)
+
+Your main account is the default account on the exchange. It is the exchange gateway for Fireblocks and other exchanges and is the only account that can make deposits and withdrawals.
+
+### [Sub accounts](#sub-accounts)
+
+You can add exchange sub-accounts and link them to your main account on the Fireblocks platform. Sub-accounts can be used to segregate different teams or accounts or to mitigate risk.
+
+To fund sub-accounts, transfer funds into the exchange main account, then to the sub-account. To withdraw from a sub-account, transfer funds to the main account and then to your preferred destination.
+
+### [Trading accounts](#trading-accounts)
+
+Fireblocks provides visibility into exchange trading accounts and enables rebalancing between them on supported exchanges. Transfers can only be sent between exchange trading accounts and their associated main accounts.
+
+To fund trading accounts, transfer funds to your main account or sub-account, and then transfer between trading accounts.
+
+<Warning>
+
+## 🚧
+
+Exchange account transfer limitations
+
+*   You can only transfer funds between main accounts and sub-accounts; or between main accounts and their associated exchange trading accounts
+*   Transfers between main accounts and sub-accounts; or between trading accounts take place off-chain and do not require a network fee.
+*   Transferring funds between sub-accounts is not supported.
+
+</Warning>
+<Info>
+
+## 📘
+
+Additional background
+
+[Trading Accounts](https://support.fireblocks.io/hc/en-us/articles/360018586480-Exchange-trading-account-support)
+
+[Feature list for Integrated Exchanges](https://support.fireblocks.io/hc/en-us/articles/360016884279-Feature-list-for-integrated-exchanges)
+
+</Info>

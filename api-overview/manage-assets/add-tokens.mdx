@@ -1,0 +1,66 @@
+---
+title: "Add Tokens"
+---
+  
+  # Add Tokens
+
+Fireblocks allows clients to add tokens across various blockchains via the Fireblocks API.
+
+To register a new token, use the [Register a New Asset](/reference/registernewasset) endpoint with the appropriate parameters for the supported blockchain. The blockchains supported for self-token addition via the API include:
+
+*   EVM-based chains
+*   Stellar
+*   Algorand
+*   TRON
+*   NEAR
+*   Solana
+
+  
+
+The API requires a POST request with the following parameters:
+
+*   `blockchainId`: The unique network identifier (e.g., `ETH`).
+*   `address`: The asset address:
+    *   **EVM-based chains**: Token contract address
+    *   **Stellar (XLM)**: Issuer address
+    *   **Algorand (ALGO)**: Asset ID
+    *   **TRON (TRX)**: Token contract address
+    *   **NEAR**: Token address
+    *   **Solana**: Token's mint account address
+*   `symbol`: Required for XLM tokens only
+
+  
+
+Below is a code example for adding a new token to your workspace:
+
+<CodeGroup>
+```typescript
+import { readFileSync } from 'fs';
+import { Fireblocks, BasePath } from "@fireblocks/ts-sdk";
+
+const FIREBLOCKS_API_SECRET_PATH = "<PATH_TO_YOUR_SECRET>";
+
+// Initialize a Fireblocks API instance with local variables
+const fireblocks = new Fireblocks({
+    apiKey: "<YOUR_API_KEY>",
+    basePath: BasePath.US,
+    secretKey: readFileSync(FIREBLOCKS_API_SECRET_PATH, "utf8"),
+});
+
+(async() => {
+
+  const addTokenRes = await fireblocks.blockchainsAssets.registerNewAsset({
+    registerNewAssetRequest: {
+      blockchainId: "ETH",
+      address: "0xdBA8e8021FE321af91FC3A08e223EF15908cB2bB"
+    }
+  })
+
+  console.log(JSON.stringify(addTokenRes, null, 2))
+
+})();
+
+```
+</CodeGroup>
+
+In this example we are adding the<button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">0xdBA8e8021FE321af91FC3A08e223EF15908cB2bB</code> token (Smart Contract address) on the Ethereum network.

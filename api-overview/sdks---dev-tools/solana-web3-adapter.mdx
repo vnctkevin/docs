@@ -1,0 +1,39 @@
+---
+title: "Solana Web3 Adapter"
+---
+  
+  # Solana Web3 Adapter
+
+# [Overview](#overview)
+  
+<Warning>
+
+## 🚧
+
+This Tool Utilizes Fireblocks RAW Signing
+
+Raw Signing is an insecure signing method and is not generally recommended.  
+Bad actors can trick someone into signing a valid transaction message and use it to steal funds.
+
+For this reason, Raw Signing is a premium feature that requires an additional purchase and is not available in production workspaces by default. If you're interested in this feature and want to see if your use case is eligible for it, please contact your Customer Success Manager.
+
+**Note:** Fireblocks Sandbox workspaces have Raw Signing enabled by default to allow for testing purposes.
+
+</Warning>
+  
+
+The [Fireblocks Solana Web3 Connection Adapter](https://github.com/fireblocks/solana-web3-adapter) facilitates interactions between the Fireblocks API and the Solana blockchain, simplifying the process of sending transactions through Fireblocks by handling complex authentication, nonce management, and transaction signing procedures.
+
+The Solana Web3 Connection Adapter utilizes Fireblocks Raw Singing for processing any non native, single instruction transactions.
+
+If the transaction has a single transfer instruction - the adapter will identify that and will execute the request a regular Fireblocks Solana transaction.
+
+<Info>
+
+## 📘
+
+Check out the Solana Web3 Connection Adapter code examples [here](https://github.com/fireblocks/solana-web3-adapter/tree/main/examples)
+
+
+
+</Info>

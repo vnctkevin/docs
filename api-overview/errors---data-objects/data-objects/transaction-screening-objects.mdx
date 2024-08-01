@@ -1,0 +1,62 @@
+---
+title: "Transaction Screening Objects"
+---
+  
+  # Transaction Screening Objects
+
+## [ComplianceResult](#complianceresult)
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| aml | [AmlScreeningResult](/reference/transaction-screening-objects#amlscreeningresult) | An object containing AML screening result information. |
+| amlList | array of [AmlScreeningResult](/reference/transaction-screening-objects#amlscreeningresult) | List of AML screening result objects. |
+| amlRegistration | [AmlRegistration](/reference/transaction-screening-objects#amlregistration) | An object containing AML registration information. |
+| tr | [TravelRuleScreeningResult](/reference/transaction-screening-objects#travelrulescreeningresult) | An object containing Travel Rule screening result information. |
+| status | string | The status of the AML or Travel Rule screening request. |
+
+* * *
+
+## [AmlScreeningResult](#amlscreeningresult)
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| provider | string | The AML service provider. |
+| payload | any | The response of the AML service provider. |
+| screeningStatus | string | The status of the AML screening request. |
+| bypassReason | string | The reason the transaction bypassed AML screening. |
+| timestamp | number | The date of the AML screening request in timestamp format. |
+| category | string | \[optional, Chainalysis only\] The risk category included the transaction screening. |
+| categoryId | number | \[optional, Chainalysis only\] The Chainalysis ID of the risk category. |
+| customerRefId | string | \[optional\] The Customer Reference ID associated with the transaction. |
+| destAddress | string | \[optional\] For multi-destination transactions, the destination address with the highest risk that's being screened. |
+| externalId | string | \[optional\] The AML provider's ID of the screening result. |
+| matchedAlert | any | \[optional, Chainalysis only\] The alert corresponding to the result for matchedRule. |
+| matchedRule | any | \[optional\] The AML Post-Screening Policy rule that matched with the transaction. |
+| matchedPrescreeningRule | any | \[optional\] The AML Transaction Screening Policy rule that matched with the transaction. |
+| risk |  | \[optional\] The risk score for your transaction. |
+| verdict | string | \[optional\] \[ACCEPT, REJECT, ALERT\] |
+
+* * *
+
+## [AmlRegistration](#amlregistration)
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| provider | string | The AML service provider. |
+| success | boolean | Specifies whether the AML registration was successful. |
+| timestamp | number | The date of the AML registration in timestamp format. |
+
+* * *
+
+## [TravelRuleScreeningResult](#travelrulescreeningresult)
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| provider | string | The Travel Rule service provider. |
+| verdict | string | \[ACCEPT, REJECT, ALERT, WAIT, FREEZE, CANCEL\] |
+| payload | any | The response of the Travel Rule service provider. |
+| matchedRule | any | The Travel Rule Post-Screening Policy rule that matched with the transaction. |
+| matchedPrescreeningRule | any | The Travel Rule Transaction Screening Policy rule that matched with the transaction. |
+| bypassReason | string | The reason the transaction bypassed Travel Rule screening. |
+| timestamp | number | The date of the Travel Rule screening request in timestamp format. |
+| status | string | The status of the Travel Rule screening request. |

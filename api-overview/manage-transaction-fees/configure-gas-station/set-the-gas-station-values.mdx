@@ -1,0 +1,55 @@
+---
+title: "Set The Gas Station Values"
+---
+  
+  # Set the Gas Station values
+
+You can change the [default Gas Station values](https://support.fireblocks.io/hc/en-us/articles/9378061609884-Default-Gas-Station-values) using the [Edit gas station settings endpoint](/reference/put_gas-station-configuration).
+
+To test, add this function to the code you should already have if you followed the language-specific guides under the Developing with Fireblocks section. This example triggers the Gas Station to auto-fuel once the ETH balance is below the threshold of 0.005 ETH and supplies the monitored vaults with 0.01 ETH\_TEST at a price no higher than 20 Gwei.
+
+<CodeGroup>
+```typescript
+const setGasStationConf = async (
+  gasThreshold: string,
+  gasCap: string,
+  maxGasPrice: string,
+) => {
+  try {
+    const gasStation =
+      await fireblocks.gasStations.updateGasStationConfiguration({
+        gasStationConfiguration: {
+          gasThreshold: gasThreshold,
+          gasCap: gasCap,
+          maxGasPrice: maxGasPrice,
+        },
+      });
+    console.log(JSON.stringify(gasStation.data, null, 2));
+  } catch (error: any) {
+    console.error(error);
+  }
+};
+
+setGasStationConf("0.005", "0.01", "20");
+
+
+```
+
+```javascript
+async function setGasStationConf(gasThreshold, gasCap, maxPrice){
+    const gasStation = await fireblocks.setGasStationConfiguration(gasThreshold, gasCap, maxPrice);
+    console.log(JSON.stringify(gasStation, null, 2));
+}
+
+setGasStationConf("0.005", "0.01", "20");
+
+```
+
+```python
+def configure_gas_station(gas_threshold: str, gas_cap: str, max_gas_price: str):
+    fireblocks.set_gas_station_configuration(gas_threshold=gas_threshold, gas_cap=gas_cap, max_gas_price=max_gas_price)
+    
+gas_station_conf = configure_gas_station("0.005", "0.01", "20")
+
+```
+</CodeGroup>

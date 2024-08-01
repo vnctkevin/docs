@@ -1,0 +1,81 @@
+---
+title: "Manage Nfts"
+---
+  
+  # Deploy an NFT Collection
+
+# [Overview](#overview)
+
+You can deploy smart contracts using [The Fireblocks Hardhat plugin integration](https://hardhat.org/hardhat-runner/docs/guides/deploying)
+
+# [Create your ERC-721 collection](#create-your-erc-721-collection)
+
+You can create your own NFT collection using the common ERC-721 standard.
+
+For this example, we’ll name our collection “Space Bunnies”.
+
+There are some great tools to help you do this pretty easily. This example was pre-generated using the [Contracts Wizard by OpenZeppelin](https://docs.openzeppelin.com/contracts/4.x/wizard).
+
+<CodeGroup>
+```solidity
+pragma solidity ^0.8.4;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+
+contract SpaceBunnies is ERC721, ERC721URIStorage, Ownable {
+    using Counters for Counters.Counter;
+
+    Counters.Counter private _tokenIdCounter;
+
+    constructor() ERC721("Space Bunnies", "SPCB") {}
+
+    function safeMint(address to, string memory uri) public onlyOwner {
+        uint256 tokenId = _tokenIdCounter.current();
+        _tokenIdCounter.increment();
+        _safeMint(to, tokenId);
+        _setTokenURI(tokenId, uri);
+    }
+
+    // The following functions are overrides required by Solidity.
+
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+}
+
+```
+</CodeGroup><Info>
+
+## 📘
+
+OpenZeppelin required
+
+To run the generated code, you also need to install the OpenZeppelin contracts package from NPM.
+
+In your project directory, run: <button aria-label="Copy Code" class="rdmd-code-copy fa"></button><code class="rdmd-code lang- theme-light" data-lang="" name="" tabindex="0">npm install @openzeppelin/contracts</code>.
+
+</Info>
+
+You are ready to go!
+
+Check out the [Fireblocks Hardhat Plugin Documenation](/reference/hardhat-plugin), [Fireblocks Local JSON RPC](/reference/evm-local-json-rpc) and [Fireblocks Web3 provider](/reference/evm-web3-provider) .
+
+Make sure you go through these and deploy the above contract as explained there, using your choice of available options.
+
+> ## 💫
+> 
+> Hardhat Deployment
+> 
+> Hardhat is the go-to market solution for easily deploying contracts. We highly recommend that you choose this option if you feel comfortable with going through the configuration process.

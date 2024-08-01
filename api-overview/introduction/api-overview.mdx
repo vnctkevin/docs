@@ -1,0 +1,44 @@
+---
+title: "Api Overview"
+---
+  
+  # API Overview
+
+# [REST API](#rest-api)
+
+Fireblocks provides a robust REST API for developers to leverage Fireblocks' capabilities programmatically. Our REST API is the base layer for all Fireblocks SDKs.
+
+If you prefer to work directly with the Fireblocks API, read our [REST API Guide](/reference/rest-api-guide-1).
+
+To practice with our API before implementing any code, read the [Postman Guide](/docs/postman-guide) containing the pre-defined API endpoints.
+
+# [Language-specific SDKs & guides](#language-specific-sdks--guides)
+
+Fireblocks supports and maintains SDKs in JavaScript and Python to help you interact with the Fireblocks API. We also offer guides for languages in which we don't have a currently active SDK.
+
+These guides provide you with a simple example to get you started and quickly past the first hurdles of securely signing API requests:
+
+*   [JavaScript Guide](/reference/js-sdk-legacy)
+*   [Python Guide](/docs/python-guide)
+*   [Java Guide](/reference/java-sdk)
+
+## [Need help deciding which language to use?](#need-help-deciding-which-language-to-use)
+
+Use the following decision tree to help you figure out which Fireblocks SDK is best for your use case.
+
+![](https://files.readme.io/ca29a2a-SDK_Decision_Tree.png)# [Web3/Smart Contract](#web3smart-contract)
+
+Fireblocks offers Web3 connector SDKs for developers who use a base library as part of their tech stack and want Fireblocks to act as the underlying wallet and security layer:
+
+*   [EVM Web3 Provider](/reference/evm-web3-provider): Learn about using `ethers.js`, `web3.js` or `web3.py` with Fireblocks as the Web3 Provider.
+
+# [Additional Tools](#additional-tools)
+
+*   [Fireblocks Hardhat Plugin](https://github.com/fireblocks/hardhat-fireblocks) - An easy-to-use plugin to enable Fireblocks signing for smart contract deployment using Hardhat. More information at [Fireblocks Hardhat plugin guide](/reference/hardhat-plugin).
+*   [Fireblocks Local JSON RPC](https://github.com/fireblocks/fireblocks-json-rpc) - A locally running EVM JSON RPC module that uses the Web3 Provider to use Fireblocks as the signing mechanism. This allows you to plug Fireblocks into any of the tools that require a JSON RPC URL, including different development and deployment tools. More information at [Fireblocks Local JSON RPC Guide](/reference/evm-local-json-rpc).
+
+# [Webhooks](#webhooks)
+
+Webhook notifications allow you to get push notifications for events that happen in your Fireblocks workspace directly to an HTTP webhook URL of your choice. This saves you the need to constantly check the API for updates.
+
+Read more at [Configure Webhooks](/docs/configure-webhooks).
