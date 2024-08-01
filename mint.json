@@ -28,7 +28,7 @@
   "tabs": [
     {
       "name": "API Overview",
-      "url": "api-overview"
+      "url": "https://developers.fireblocks.com/openapi/65822295d5b6620038263daa"
     }
   ],
   "anchors": [
@@ -50,13 +50,14 @@
   ],
   "navigation": [
     {
-      "group": "introduction",
+      "group": "Introduction",
       "pages": [
         "introduction/introduction",
         "introduction/what-is-fireblocks-",
         {
-          "group": "introduction/explore-use-cases",
+          "group": "Explore Use Cases",
           "pages": [
+            "introduction/explore-use-cases",
             "introduction/explore-use-cases/wallet-as-a-service",
             "introduction/explore-use-cases/self-custody-infrastructure",
             "introduction/explore-use-cases/tokenization",
@@ -71,7 +72,7 @@
       ]
     },
     {
-      "group": "secure-your-workspace",
+      "group": "Secure Your Workspace",
       "pages": [
         "secure-your-workspace/manage-users",
         "secure-your-workspace/manage-api-access",
@@ -82,7 +83,7 @@
       ]
     },
     {
-      "group": "manage-wallets",
+      "group": "Manage Wallets",
       "pages": [
         "manage-wallets/overview",
         "manage-wallets/compare-workspace-types",
@@ -91,14 +92,15 @@
       ]
     },
     {
-      "group": "process-deposits",
+      "group": "Process Deposits",
       "pages": [
         "process-deposits/control-deposit-confirmation-policy",
         "process-deposits/manage-deposits-at-scale",
         "process-deposits/sweep-funds",
         {
-          "group": "process-deposits/work-with-fireblocks-gas-station",
+          "group": "Work With Fireblocks Gas Station",
           "pages": [
+            "process-deposits/work-with-fireblocks-gas-station",
             "process-deposits/work-with-fireblocks-gas-station/enable-the-gas-station",
             "process-deposits/work-with-fireblocks-gas-station/set-auto-fueling-property",
             "process-deposits/work-with-fireblocks-gas-station/configure-gas-station-values"
@@ -109,7 +111,7 @@
       ]
     },
     {
-      "group": "process-withdrawals",
+      "group": "Process Withdrawals",
       "pages": [
         "process-withdrawals/manage-destination-addresses",
         "process-withdrawals/estimate-transaction-fees",
@@ -118,7 +120,7 @@
       ]
     },
     {
-      "group": "comply-with-regulation",
+      "group": "Comply With Regulation",
       "pages": [
         "comply-with-regulation/define-aml-policies",
         "comply-with-regulation/define-travel-rule-policies",
@@ -126,7 +128,7 @@
       ]
     },
     {
-      "group": "manage-treasury",
+      "group": "Manage Treasury",
       "pages": [
         "manage-treasury/connect-to-the-fireblocks-network",
         "manage-treasury/execute-smart-transfers",
@@ -135,14 +137,14 @@
       ]
     },
     {
-      "group": "manage-assets",
+      "group": "Manage Assets",
       "pages": [
         "manage-assets/get-supported-assets",
         "manage-assets/add-tokens"
       ]
     },
     {
-      "group": "automate-flows",
+      "group": "Automate Flows",
       "pages": [
         "automate-flows/configure-webhooks",
         "automate-flows/deploy-api-co-signer",
@@ -150,35 +152,35 @@
       ]
     },
     {
-      "group": "manage-smart-contracts",
+      "group": "Manage Smart Contracts",
       "pages": [
         "manage-smart-contracts/tokenize-assets",
         "manage-smart-contracts/interact-with-smart-contracts"
       ]
     },
     {
-      "group": "process-payments",
+      "group": "Process Payments",
       "pages": [
         "process-payments/create-payouts",
         "process-payments/define-payment-flows"
       ]
     },
     {
-      "group": "design-business-continuity-plan",
+      "group": "Design Business Continuity Plan",
       "pages": [
         "design-business-continuity-plan/configure-co-signer-in-ha-mode",
         "design-business-continuity-plan/perform-drs-process"
       ]
     },
     {
-      "group": "sign-offchain-messages",
+      "group": "Sign Offchain Messages",
       "pages": [
         "sign-offchain-messages/sign-raw-messages",
         "sign-offchain-messages/sign-typed-message"
       ]
     },
     {
-      "group": "explore-integrations",
+      "group": "Explore Integrations",
       "pages": [
         "explore-integrations/fireblocks-network-link-for-exchanges",
         "explore-integrations/-base--testnet-support",
