@@ -55,19 +55,14 @@
         "introduction/introduction",
         "introduction/what-is-fireblocks-",
         {
-          "group": "explore-use-cases",
+          "group": "introduction/explore-use-cases",
           "pages": [
-            "introduction/explore-use-cases",
             "introduction/explore-use-cases/wallet-as-a-service",
             "introduction/explore-use-cases/self-custody-infrastructure",
             "introduction/explore-use-cases/tokenization",
             "introduction/explore-use-cases/treasury-management"
           ]
         },
-        "introduction/wallet-as-a-service",
-        "introduction/self-custody-infrastructure",
-        "introduction/tokenization",
-        "introduction/treasury-management",
         "introduction/fireblocks-key-features---capabilities",
         "introduction/fireblocks-object-model",
         "introduction/workspace-comparison",
@@ -102,17 +97,13 @@
         "process-deposits/manage-deposits-at-scale",
         "process-deposits/sweep-funds",
         {
-          "group": "work-with-fireblocks-gas-station",
+          "group": "process-deposits/work-with-fireblocks-gas-station",
           "pages": [
-            "process-deposits/work-with-fireblocks-gas-station",
             "process-deposits/work-with-fireblocks-gas-station/enable-the-gas-station",
             "process-deposits/work-with-fireblocks-gas-station/set-auto-fueling-property",
             "process-deposits/work-with-fireblocks-gas-station/configure-gas-station-values"
           ]
         },
-        "process-deposits/enable-the-gas-station",
-        "process-deposits/set-auto-fueling-property",
-        "process-deposits/configure-gas-station-values",
         "process-deposits/validate-balances",
         "process-deposits/associate-end-clients"
       ]
