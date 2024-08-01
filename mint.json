@@ -1280,6 +1280,51 @@
             "api-overview/ncw-api/non-custodial-wallets-rpc",
             "api-overview/ncw-api/non-custodial-wallets-rpc/invoke-rpc"
           ]
+        },
+        {
+          "group": "Non Custodial Wallets",
+          "pages": [
+            "ncw-api-reference/non-custodial-wallets/list-wallets",
+            "ncw-api-reference/non-custodial-wallets/create-a-new-wallet",
+            "ncw-api-reference/non-custodial-wallets/get-a-wallet",
+            "ncw-api-reference/non-custodial-wallets/get-wallet-latest-backup-details",
+            "ncw-api-reference/non-custodial-wallets/get-wallet-key-setup-state",
+            "ncw-api-reference/non-custodial-wallets/enable-or-disable-a-wallet"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallet Accounts",
+          "pages": [
+            "ncw-api-reference/non-custodial-wallet-accounts/get-accounts",
+            "ncw-api-reference/non-custodial-wallet-accounts/create-a-new-account",
+            "ncw-api-reference/non-custodial-wallet-accounts/get-an-account"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallet Assets",
+          "pages": [
+            "ncw-api-reference/non-custodial-wallet-assets/retrieve-assets",
+            "ncw-api-reference/non-custodial-wallet-assets/retrieve-asset",
+            "ncw-api-reference/non-custodial-wallet-assets/add-asset-to-account",
+            "ncw-api-reference/non-custodial-wallet-assets/retrieve-asset-balance",
+            "ncw-api-reference/non-custodial-wallet-assets/refresh-asset-balance",
+            "ncw-api-reference/non-custodial-wallet-assets/retrieve-asset-addresses",
+            "ncw-api-reference/non-custodial-wallet-assets/retrieve-supported-assets"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallet Devices",
+          "pages": [
+            "ncw-api-reference/non-custodial-wallet-devices/get-registered-devices",
+            "ncw-api-reference/non-custodial-wallet-devices/enable-or-disable-device",
+            "ncw-api-reference/non-custodial-wallet-devices/get-device-key-setup-state"
+          ]
+        },
+        {
+          "group": "Non Custodial Wallets RPC",
+          "pages": [
+            "ncw-api-reference/non-custodial-wallets-rpc/invoke-rpc"
+          ]
         }
       ]
     }
