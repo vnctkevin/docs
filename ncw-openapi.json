@@ -1,0 +1,1834 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+      "/v1/ncw/wallets": {
+        "post": {
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const newWallet = await fireblocks.NCW.createWallet();",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "operationId": "create",
+          "summary": "Create a new wallet",
+          "description": "Create new Non Custodial Wallet",
+          "parameters": [],
+          "responses": {
+            "201": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WalletDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallets"
+          ]
+        },
+        "get": {
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const wallets = await fireblocks.NCW.getWallets({})",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "operationId": "findAllWallets",
+          "summary": "List wallets",
+          "description": "Get all Non Custodial Wallets",
+          "parameters": [
+            {
+              "name": "pageCursor",
+              "required": false,
+              "in": "query",
+              "description": "Cursor to the next page",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "pageSize",
+              "required": false,
+              "example": 50,
+              "in": "query",
+              "description": "Amount of results to return in the next page",
+              "schema": {
+                "type": "number",
+                "default": 10,
+                "maximum": 50
+              }
+            },
+            {
+              "name": "sort",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "enum": [
+                  "createdAt"
+                ],
+                "type": "string"
+              }
+            },
+            {
+              "name": "order",
+              "required": false,
+              "in": "query",
+              "description": "Is the order ascending or descending",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "ASC",
+                  "DESC"
+                ],
+                "default": "ASC"
+              }
+            },
+            {
+              "name": "enabled",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "boolean"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GetWalletsResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Query parameters were invalid"
+            }
+          },
+          "tags": [
+            "Non Custodial Wallets"
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}": {
+        "get": {
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const wallet = await fireblocks.NCW.getWallet(\"walletId\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "operationId": "findOneWallet",
+          "summary": "Get a wallet",
+          "description": "Get a specific Non Custodial Wallet by wallet ID",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WalletDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallets"
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/backup/latest": {
+        "get": {
+          "operationId": "getLatestBackup",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "await fireblocks.NCW.getLatestBackup(\"walletId\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Get wallet Latest Backup details",
+          "description": "Get wallet Latest Backup details, including the deviceId, and backup time.",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LatestBackupResponse"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallets"
+          ]
+        }
+      },
+      "/v1/wallets/{walletId}/setup_status": {
+        "get": {
+          "operationId": "getWalletSetupState",
+          "summary": "Get wallet key setup state",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/WalletSetupStatusResponse"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallets"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/enable": {
+        "put": {
+          "operationId": "enableWallet",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "await fireblocks.NCW.enableWallet(\"walletId\", true)",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Enable or disable a wallet",
+          "description": "Enable or disable a Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnableWalletDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Non Custodial Wallets"
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/accounts": {
+        "post": {
+          "operationId": "createAccount",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const newAccount = await fireblocks.NCW.createWalletAccount(\"walletId\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Create a new account",
+          "description": "Create a new account under a specific Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AccountDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Accounts"
+          ]
+        },
+        "get": {
+          "operationId": "findAllAccounts",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const accounts = await fireblocks.NCW.getWalletAccounts(\"walletId\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Get accounts",
+          "description": "Get all accounts under a specific Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "pageCursor",
+              "required": false,
+              "in": "query",
+              "description": "Cursor to the next page",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "pageSize",
+              "required": false,
+              "example": 50,
+              "in": "query",
+              "description": "Amount of results to return in the next page",
+              "schema": {
+                "type": "number",
+                "default": 10,
+                "maximum": 50
+              }
+            },
+            {
+              "name": "sort",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "default": {
+                  "enum": [
+                    "id"
+                  ]
+                },
+                "type": "string"
+              }
+            },
+            {
+              "name": "order",
+              "required": false,
+              "in": "query",
+              "description": "Is the order ascending or descending",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "ASC",
+                  "DESC"
+                ],
+                "default": "ASC"
+              }
+            },
+            {
+              "name": "enabled",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "boolean"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GetAccountsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Accounts"
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/accounts/{accountId}": {
+        "get": {
+          "operationId": "findOneAccount",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const account = await fireblocks.NCW.getWalletAccount(\"walletId\", 0)",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Get an account",
+          "description": "Get a specific account under a specific Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "accountId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "number",
+                "example": 0
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AccountDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Accounts"
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/accounts/{accountId}/assets": {
+        "get": {
+          "operationId": "getAssets",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const assets = await fireblocks.NCW.getWalletAssets(\"walletId\", 0)",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Retrieve assets",
+          "description": "Get all assets under a specific account, under a specific Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "accountId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "number",
+                "example": 0
+              }
+            },
+            {
+              "name": "pageCursor",
+              "required": false,
+              "in": "query",
+              "description": "Cursor to the next page",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "pageSize",
+              "required": false,
+              "in": "query",
+              "description": "Amount of results to return in the next page",
+              "schema": {
+                "type": "number",
+                "default": 10,
+                "example": 20,
+                "maximum": 50
+              }
+            },
+            {
+              "name": "sort",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "default": [
+                  "assetId"
+                ],
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "assetId",
+                    "createdAt"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "order",
+              "required": false,
+              "in": "query",
+              "description": "Is the order ascending or descending",
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "ASC",
+                  "DESC"
+                ],
+                "default": "ASC"
+              }
+            },
+            {
+              "name": "enabled",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "boolean"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GetAssetsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Assets"
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/accounts/{accountId}/assets/{assetId}": {
+        "get": {
+          "operationId": "getAsset",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const asset = await fireblocks.NCW.getWalletAsset(\"walletId\", 0, \"assetId\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Retrieve asset",
+          "description": "Get a specific asset, under a specific account, under a specific Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "accountId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "number",
+                "example": 0
+              }
+            },
+            {
+              "name": "assetId",
+              "required": true,
+              "example": "ETH",
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AssetResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Assets"
+          ]
+        },
+        "post": {
+          "operationId": "addAsset",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const newAsset = await fireblocks.NCW.activateWalletAsset(\"walletId\", 0, \"assetId\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Add asset to account",
+          "description": "Add a new asset to an existing account, under a specific Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "accountId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "number",
+                "example": 0
+              }
+            },
+            {
+              "name": "assetId",
+              "required": true,
+              "example": "ETH",
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AddressDetails"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Assets"
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/accounts/{accountId}/assets/{assetId}/balance": {
+        "put": {
+          "operationId": "refreshAssetBalance",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const refreshBalance = await fireblocks.NCW.refreshWalletAssetBalance(\"walletId\",0,\"assetId\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Refresh asset balance",
+          "description": "Refresh the balance of an asset in a specific account",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "accountId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "number",
+                "example": 0
+              }
+            },
+            {
+              "name": "assetId",
+              "required": true,
+              "example": "ETH",
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AssetBalance"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Assets"
+          ]
+        },
+        "get": {
+          "operationId": "getAssetBalance",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const assetBalance = await fireblocks.NCW.getWalletAssetBalance(\"walletId\", 0, \"assetId\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Retrieve asset balance",
+          "description": "Get balance for specific asset, under a specific account",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "accountId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "number",
+                "example": 0
+              }
+            },
+            {
+              "name": "assetId",
+              "required": true,
+              "example": "ETH",
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AssetBalance"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Assets"
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/accounts/{accountId}/assets/{assetId}/addresses": {
+        "get": {
+          "operationId": "getAddresses",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const addresses = await fireblocks.NCW.getWalletAssetAddresses(\"walletId\", 0, \"assetId\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Retrieve asset addresses",
+          "description": "Get the address of a specific asset, under a specific account, under a specific Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "accountId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "number",
+                "example": 0
+              }
+            },
+            {
+              "name": "assetId",
+              "required": true,
+              "example": "ETH",
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "pageCursor",
+              "required": true,
+              "in": "query",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "pageSize",
+              "required": true,
+              "example": 50,
+              "in": "query",
+              "schema": {
+                "minimum": 1,
+                "maximum": 100,
+                "type": "number"
+              }
+            },
+            {
+              "name": "sort",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "enum": [
+                  "address"
+                ],
+                "type": "string"
+              }
+            },
+            {
+              "name": "order",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "default": "ASC",
+                "enum": [
+                  "DESC",
+                  "ASC"
+                ],
+                "type": "string"
+              }
+            },
+            {
+              "name": "enabled",
+              "required": false,
+              "in": "query",
+              "schema": {
+                "type": "boolean"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GetAddressesResponse"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Assets"
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/devices": {
+        "get": {
+          "operationId": "getDevices",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "todo",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Get registered devices",
+          "description": "Get registered devices for a specific Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DeviceDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Devices"
+          ]
+        }
+      },
+      "/v1/wallets/supported_assets": {
+        "get": {
+          "operationId": "getSupportedAssets",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const supportedAssets = await fireblocks.NCW.getSupportedAssets(\n  {\n    undefined, \n    undefined, \n    true\n  }\n)\n",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Retrieve supported assets",
+          "parameters": [
+            {
+              "name": "pageCursor",
+              "required": false,
+              "in": "query",
+              "description": "Cursor to the next page",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "pageSize",
+              "required": false,
+              "in": "query",
+              "description": "Amount of results to return in the next page",
+              "schema": {
+                "type": "number",
+                "default": 10,
+                "maximum": 50
+              }
+            },
+            {
+              "name": "onlyBaseAssets",
+              "required": false,
+              "in": "query",
+              "description": "Only base assets",
+              "schema": {
+                "type": "boolean"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/GetAssetsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Assets"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/devices/{deviceId}/enable": {
+        "put": {
+          "operationId": "enableDevice",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "todo",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Enable or Disable device",
+          "description": "Enable or Disable a device under a specific Non Custodial Wallet",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "deviceId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "9ee1bff0-6dba-4f0c-9b75-03fe90e66fa3"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnableDeviceDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": ""
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Devices"
+          ]
+        }
+      },
+      "/v1/wallets/{walletId}/devices/{deviceId}/setup_status": {
+        "get": {
+          "operationId": "getDeviceSetupState",
+          "summary": "Get device key setup state",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "deviceId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DeviceKeySetupResponse"
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallet Devices"
+          ],
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/v1/ncw/wallets/{walletId}/devices/{deviceId}/invoke": {
+        "post": {
+          "operationId": "invokeRpc",
+          "x-readme": {
+            "code-samples": [
+              {
+                "language": "javascript",
+                "code": "const invokeRPC = await fireblocks.NCW.invokeWalletRpc(\"walletId\", \"deviceId\", \"payload\")",
+                "name": "Fireblocks Javascript NCW SDK example"
+              }
+            ]
+          },
+          "summary": "Invoke RPC",
+          "description": "Invoke Fireblocks RPC for MPC related operations",
+          "parameters": [
+            {
+              "name": "walletId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "550e8400-e29b-41d4-a716-446655440000"
+              }
+            },
+            {
+              "name": "deviceId",
+              "required": true,
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "9ee1bff0-6dba-4f0c-9b75-03fe90e66fa3"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RpcRequestDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/RpcResultDto"
+                      },
+                      {
+                        "$ref": "#/components/schemas/RpcErrorDto"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "tags": [
+            "Non Custodial Wallets RPC"
+          ]
+        }
+      }
+    },
+    "info": {
+      "title": "NCW API",
+      "description": "The NCW API description",
+      "version": "1.0.1",
+      "contact": {
+        "email": "support@fireblocks.com"
+      }
+    },
+    "tags": [
+      {
+        "name": "Non Custodial Wallets"
+      },
+      {
+        "name": "Non Custodial Wallet Accounts"
+      },
+      {
+        "name": "Non Custodial Wallet Assets"
+      },
+      {
+        "name": "Non Custodial Wallet Devices"
+      },
+      {
+        "name": "Non Custodial Wallets RPC"
+      }
+    ],
+    "servers": [
+      {
+        "url": "https://sandbox-api.fireblocks.io"
+      }
+    ],
+    "x-readme": {
+      "explorer-enabled": false,
+      "samples-languages": [
+        "javascript"
+      ],
+      "proxy-enabled": true
+    },
+    "components": {
+      "securitySchemes": {
+        "bearer": {
+          "scheme": "bearer",
+          "bearerFormat": "JWT",
+          "type": "http"
+        }
+      },
+      "schemas": {
+        "WalletDto": {
+          "type": "object",
+          "properties": {
+            "walletId": {
+              "type": "string",
+              "example": "550e8400-e29b-41d4-a716-446655440000"
+            },
+            "enabled": {
+              "type": "boolean",
+              "example": true
+            }
+          },
+          "required": [
+            "walletId",
+            "enabled"
+          ]
+        },
+        "Paging": {
+          "type": "object",
+          "properties": {
+            "next": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "next"
+          ]
+        },
+        "GetWalletsResponse": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/WalletDto"
+              }
+            },
+            "paging": {
+              "$ref": "#/components/schemas/Paging"
+            }
+          },
+          "required": [
+            "data"
+          ]
+        },
+        "EnableWalletDto": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "example": true
+            }
+          },
+          "required": [
+            "enabled"
+          ]
+        },
+        "AccountDto": {
+          "type": "object",
+          "properties": {
+            "accountId": {
+              "type": "number",
+              "example": 0
+            },
+            "walletId": {
+              "type": "string",
+              "example": "550e8400-e29b-41d4-a716-446655440000"
+            }
+          },
+          "required": [
+            "accountId",
+            "walletId"
+          ]
+        },
+        "GetAccountsResponse": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AccountDto"
+              }
+            },
+            "paging": {
+              "$ref": "#/components/schemas/Paging"
+            }
+          },
+          "required": [
+            "data"
+          ]
+        },
+        "AssetResponseDto": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "symbol": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "decimals": {
+              "type": "number"
+            },
+            "networkProtocol": {
+              "type": "string"
+            },
+            "testnet": {
+              "type": "boolean"
+            },
+            "hasFee": {
+              "type": "boolean"
+            },
+            "type": {
+              "type": "string"
+            },
+            "baseAsset": {
+              "type": "string"
+            },
+            "ethNetwork": {
+              "type": "number"
+            },
+            "ethContractAddress": {
+              "type": "string"
+            },
+            "issuerAddress": {
+              "type": "string"
+            },
+            "blockchainSymbol": {
+              "type": "string"
+            },
+            "deprecated": {
+              "type": "boolean"
+            },
+            "coinType": {
+              "type": "number"
+            },
+            "tenantIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "blockchain": {
+              "type": "string"
+            },
+            "configuration": {
+              "type": "object"
+            },
+            "assetInfo": {
+              "type": "object"
+            },
+            "blockchainDisplayName": {
+              "type": "string"
+            },
+            "blockchainId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "symbol",
+            "name",
+            "decimals",
+            "networkProtocol",
+            "testnet",
+            "hasFee",
+            "type",
+            "baseAsset",
+            "coinType",
+            "tenantIds",
+            "blockchain"
+          ]
+        },
+        "GetAssetsResponse": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AssetResponseDto"
+              }
+            },
+            "paging": {
+              "$ref": "#/components/schemas/Paging"
+            }
+          },
+          "required": [
+            "data"
+          ]
+        },
+        "AddressDetails": {
+          "type": "object",
+          "properties": {
+            "accountName": {
+              "type": "string"
+            },
+            "accountId": {
+              "type": "string",
+              "example": 0
+            },
+            "asset": {
+              "type": "string",
+              "example": "ETH"
+            },
+            "address": {
+              "type": "string",
+              "example": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+            },
+            "addressType": {
+              "type": "string"
+            },
+            "addressDescription": {
+              "type": "string"
+            },
+            "tag": {
+              "type": "string"
+            },
+            "addressIndex": {
+              "type": "number"
+            },
+            "change": {
+              "type": "number"
+            },
+            "coinType": {
+              "type": "number"
+            },
+            "customerRefId": {
+              "type": "string"
+            },
+            "addressFormat": {
+              "type": "string"
+            },
+            "legacyAddress": {
+              "type": "string"
+            },
+            "paymentAddress": {
+              "type": "string"
+            },
+            "userDefined": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "accountName",
+            "accountId",
+            "asset",
+            "address",
+            "addressType",
+            "addressDescription",
+            "tag"
+          ]
+        },
+        "AllocatedAssetBalance": {
+          "type": "object",
+          "properties": {
+            "allocationId": {
+              "type": "string"
+            },
+            "total": {
+              "type": "string"
+            },
+            "available": {
+              "type": "string"
+            },
+            "pending": {
+              "type": "string"
+            },
+            "frozen": {
+              "type": "string"
+            },
+            "locked": {
+              "type": "string"
+            }
+          }
+        },
+        "AssetBalance": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "total": {
+              "type": "string"
+            },
+            "balance": {
+              "type": "string"
+            },
+            "available": {
+              "type": "string"
+            },
+            "pending": {
+              "type": "string"
+            },
+            "frozen": {
+              "type": "string"
+            },
+            "lockedAmount": {
+              "type": "string"
+            },
+            "totalStakedCPU": {
+              "type": "string"
+            },
+            "totalStakedNetwork": {
+              "type": "string"
+            },
+            "selfStakedCPU": {
+              "type": "string"
+            },
+            "selfStakedNetwork": {
+              "type": "string"
+            },
+            "pendingRefundCPU": {
+              "type": "string"
+            },
+            "pendingRefundNetwork": {
+              "type": "string"
+            },
+            "rewardInfo": {
+              "type": "object",
+              "properties": {
+                "pendingRewards": {
+                  "type": "string"
+                }
+              }
+            },
+            "blockHeight": {
+              "type": "string"
+            },
+            "allocatedBalances": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AllocatedAssetBalance"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "rewardInfo"
+          ]
+        },
+        "GetAddressesResponse": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/AddressDetails"
+              }
+            },
+            "paging": {
+              "$ref": "#/components/schemas/Paging"
+            }
+          },
+          "required": [
+            "data"
+          ]
+        },
+        "DeviceDto": {
+          "type": "object",
+          "properties": {
+            "deviceId": {
+              "type": "string",
+              "example": "9ee1bff0-6dba-4f0c-9b75-03fe90e66fa3"
+            },
+            "enabled": {
+              "type": "boolean",
+              "example": false
+            }
+          },
+          "required": [
+            "deviceId",
+            "enabled"
+          ]
+        },
+        "EnableDeviceDto": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ]
+        },
+        "RpcResultDto": {
+          "type": "object",
+          "properties": {
+            "result": {
+              "type": "object",
+              "example": "{ ... }"
+            }
+          },
+          "required": [
+            "result"
+          ]
+        },
+        "RpcErrorDto": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "number"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": [
+            "error"
+          ]
+        },
+        "RpcRequestDto": {
+          "type": "object",
+          "properties": {
+            "payload": {
+              "type": "string",
+              "example": "{\"method\":\"request_mpc_setup\",\"params\":[{\"algorithms\":[\"MPC_CMP_ECDSA_SECP256K1\",\"MPC_EDDSA_ED25519\"]}],\"headers\":{\"sdkVersion\":1}}"
+            }
+          },
+          "required": [
+            "payload"
+          ]
+        },
+        "LatestBackupKey": {
+          "type": "object",
+          "properties": {
+            "deviceId": {
+              "type": "string",
+              "example": "550e8400-e29b-41d4-a716-446655440000"
+            },
+            "publicKey": {
+              "type": "string"
+            },
+            "keyId": {
+              "type": "string",
+              "example": "550e8400-e29b-41d4-a716-446655440000"
+            },
+            "algorithm": {
+              "type": "string",
+              "enum": [
+                "MPC_CMP_ECDSA_SECP256K1",
+                "MPC_EDDSA_ED25519"
+              ]
+            }
+          },
+          "required": [
+            "deviceId",
+            "publicKey",
+            "keyId",
+            "algorithm"
+          ]
+        },
+        "LatestBackupResponse": {
+          "type": "object",
+          "properties": {
+            "passphraseId": {
+              "type": "string",
+              "example": "550e8400-e29b-41d4-a716-446655440000"
+            },
+            "createdAt": {
+              "type": "number",
+              "example": 1707673441529
+            },
+            "keys": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/LatestBackupKey"
+              }
+            }
+          },
+          "required": [
+            "passphraseId",
+            "createdAt",
+            "keys"
+          ]
+        },
+        "KeySetup": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "algorithmName": {
+              "type": "string"
+            },
+            "confirmed": {
+              "type": "boolean"
+            },
+            "backedUp": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "status",
+            "algorithmName",
+            "confirmed",
+            "backedUp"
+          ]
+        },
+        "DeviceSetupStatus": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "setupStatus": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/KeySetup"
+              }
+            },
+            "deviceId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "setupStatus",
+            "deviceId"
+          ]
+        },
+        "WalletSetupStatusResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "deviceSetupStatus": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/DeviceSetupStatus"
+              }
+            }
+          },
+          "required": [
+            "status",
+            "deviceSetupStatus"
+          ]
+        },
+        "DeviceKeySetupResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "setupStatus": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/KeySetup"
+              }
+            },
+            "deviceId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "setupStatus"
+          ]
+        }
+      }
+    }
+  }

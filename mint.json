@@ -37,6 +37,10 @@
     {
       "name": "Fireblock API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "NCW API Reference",
+      "url": "ncw-api-reference"
     }
   ],
   "anchors": [
@@ -1223,8 +1227,6 @@
             "api-reference/cosigners-beta/get-all-api-keys",
             "api-reference/cosigners-beta/get-api-key"
           ]
-        }
-      ]
     },
     {
       "group": "Ncw Api",
