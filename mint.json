@@ -61,9 +61,6 @@
     }
   ],
  "navigation": [
-    {
-      "group": "",
-      "pages": [
         {
           "group": "Introduction",
           "pages": "/introduction"
@@ -116,8 +113,6 @@
           "group": "Vulnerability Disclosure Program",
           "pages": "/vulnerability-disclosure-program"
         }
-      ]
-    }
   ],
   "footerSocials": {
     "x": "https://x.com/mintlify",
