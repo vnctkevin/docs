@@ -62,21 +62,21 @@
   ],
   "navigation": [
     {
-      "group": null,
+      "group": "",
       "pages": [
-        "null/introduction",
-        "null/install",
-        "null/review-code",
-        "null/write-code",
-        "null/issue-implementation-plans",
-        "null/reports",
-        "null/ask",
-        "null/dockerfile",
-        "null/configure",
-        "null/rest-api",
-        "null/security-&-privacy",
-        "null/contact",
-        "null/vulnerability-disclosure-program"
+        "/introduction",
+        "/install",
+        "/review-code",
+        "/write-code",
+        "/issue-implementation-plans",
+        "/reports",
+        "/ask",
+        "/dockerfile",
+        "/configure",
+        "/rest-api",
+        "/security-&-privacy",
+        "/contact",
+        "/vulnerability-disclosure-program"
       ]
     }
   ],
