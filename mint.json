@@ -60,59 +60,90 @@
       "url": "https://mintlify.com/blog"
     }
   ],
- "navigation": [
+  "navigation": [
+    {
+      "group": "",
+      "pages": [
         {
           "group": "Introduction",
-          "pages": "/introduction"
+          "pages": [
+            "/introduction"
+          ]
         },
         {
           "group": "Install",
-          "pages": "/install"
+          "pages": [
+            "/install"
+          ]
         },
         {
           "group": "Review code",
-          "pages": "/review-code"
+          "pages": [
+            "/review-code"
+          ]
         },
         {
           "group": "Write code",
-          "pages": "/write-code"
+          "pages": [
+            "/write-code"
+          ]
         },
         {
           "group": "Issue implementation plans",
-          "pages": "/issue-implementation-plans"
+          "pages": [
+            "/issue-implementation-plans"
+          ]
         },
         {
           "group": "Reports",
-          "pages": "/reports"
+          "pages": [
+            "/reports"
+          ]
         },
         {
           "group": "Ask",
-          "pages": "/ask"
+          "pages": [
+            "/ask"
+          ]
         },
         {
           "group": "Dockerfile",
-          "pages": "/dockerfile"
+          "pages": [
+            "/dockerfile"
+          ]
         },
         {
           "group": "Configure",
-          "pages": "/configure"
+          "pages": [
+            "/configure"
+          ]
         },
         {
           "group": "REST API",
-          "pages": "/rest-api"
+          "pages": [
+            "/rest-api"
+          ]
         },
         {
           "group": "Security & Privacy",
-          "pages": "/security-&-privacy"
+          "pages": [
+            "/security-&-privacy"
+          ]
         },
         {
           "group": "Contact",
-          "pages": "/contact"
+          "pages": [
+            "/contact"
+          ]
         },
         {
           "group": "Vulnerability Disclosure Program",
-          "pages": "/vulnerability-disclosure-program"
+          "pages": [
+            "/vulnerability-disclosure-program"
+          ]
         }
+      ]
+    }
   ],
   "footerSocials": {
     "x": "https://x.com/mintlify",
