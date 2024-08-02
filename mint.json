@@ -28,7 +28,7 @@
   "tabs": [
     {
       "name": "Introduction",
-      "url": "introduction"
+      "url": "/introduction"
     },
     {
       "name": "API Overview",
@@ -62,84 +62,84 @@
   ],
   "navigation": [
     {
-      "group": "Home",
+      "group": "Index",
       "pages": [
         {
           "group": "Introduction",
           "pages": [
-            "/introduction"
+            "introduction"
           ]
         },
         {
           "group": "Install",
           "pages": [
-            "/install"
+            "install"
           ]
         },
         {
           "group": "Review code",
           "pages": [
-            "/review-code"
+            "review-code"
           ]
         },
         {
           "group": "Write code",
           "pages": [
-            "/write-code"
+            "write-code"
           ]
         },
         {
           "group": "Issue implementation plans",
           "pages": [
-            "/issue-implementation-plans"
+            "issue-implementation-plans"
           ]
         },
         {
           "group": "Reports",
           "pages": [
-            "/reports"
+            "reports"
           ]
         },
         {
           "group": "Ask",
           "pages": [
-            "/ask"
+            "ask"
           ]
         },
         {
           "group": "Dockerfile",
           "pages": [
-            "/dockerfile"
+            "dockerfile"
           ]
         },
         {
           "group": "Configure",
           "pages": [
-            "/configure"
+            "configure"
           ]
         },
         {
           "group": "REST API",
           "pages": [
-            "/rest-api"
+            "rest-api"
           ]
         },
         {
           "group": "Security & Privacy",
           "pages": [
-            "/security-&-privacy"
+            "security-&-privacy"
           ]
         },
         {
           "group": "Contact",
           "pages": [
-            "/contact"
+            "contact"
           ]
         },
         {
           "group": "Vulnerability Disclosure Program",
           "pages": [
-            "/vulnerability-disclosure-program"
+            "vulnerability-disclosure-program"
           ]
         }
       ]
