@@ -1,0 +1,56 @@
+*   Security & Privacy
+
+On this page
+
+# Security & Privacy
+
+<Info>
+
+TLDR;
+
+Ellipsis is SOC 2 Type 1 certified, and it never stores your code or uses your code for model training.
+
+
+
+</Info>
+### [General​](#null)
+
+Ellipsis takes the security of your code very seriously.
+
+Our services are hosted on AWS. The security model of AWS is extensively documented [here](https://aws.amazon.com/security).
+
+Our LLM providers (OpenAI/Azure OpenAI) do not use data from API requests to train models. You can find their policies here: [OpenAI](https://openai.com/enterprise-privacy), [Azure OpenAI](https://learn.microsoft.com/en-us/legal/cognitive-services/openai/data-privacy).
+
+We use [PromptLayer](https://promptlayer.com) for logging LLM requests to allow our engineers to provide production support.
+
+### [SOC 2 Type 1 Certification​](#null)
+
+Ellipsis is SOC 2 Type 1 compliant.
+
+For reference, [SOC 2](https://www.aicpa-cima.com/topic/audit-assurance/audit-and-assurance-greater-than-soc-2) is an industry standard for security compliance. It requires organizations to establish extensive security guidelines and policies, and obtain certification through a thorough third-party audit.
+
+To request a copy of our report, please [contact us](/contact).
+
+### [Opting out of logging​](#null)
+
+If you want to opt out of **all** logging (internal and to PromptLayer), you can disable it in the `Settings` page of [app.ellipsis.dev](https://app.ellipsis.dev/), or add the following line to your `ellipsis.yaml` configuration:
+
+```
+version: 1.3  
+settings:  
+third\_party\_logging\_enabled: false
+```
+
+Note that this will restrict our ability to provide you support.
+
+### [On-premise deployments​](#null)
+
+[Contact us](/contact) if you are interested in deploying Ellipsis in your own AWS, GCP, or Azure account.
+
+### [Code generation​](#null)
+
+For code generation workflows with a Dockerfile, Ellipsis checks out your project on our servers in AWS, where code is automatically deleted when workflows are completed, and never persisted between workflows. Our servers run in a private VPC with security group rules that prevent unwanted access.
+
+### [Vulnerability Disclosure Program​](#null)
+
+For reporting vulnerabilities, please see our [vulnerability disclosure program](/vdp).

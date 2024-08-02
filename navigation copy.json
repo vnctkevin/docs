@@ -1,0 +1,22 @@
+{
+  "navigation": [
+    {
+      "group": null,
+      "pages": [
+        "null/introduction",
+        "null/install",
+        "null/review-code",
+        "null/write-code",
+        "null/issue-implementation-plans",
+        "null/reports",
+        "null/ask",
+        "null/dockerfile",
+        "null/configure",
+        "null/rest-api",
+        "null/security-&-privacy",
+        "null/contact",
+        "null/vulnerability-disclosure-program"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,253 @@
+*   Configure
+
+On this page
+
+# Configure
+
+<Info>
+
+TLDR:
+
+Use an `ellipsis.yaml` file to customize how Ellipsis behaves. This will override any global settings you have configured via the web UI.
+
+
+
+</Info>
+## [Organization config​](#null)
+
+In the web app at [https://app.ellipsis.dev](https://app.ellipsis.dev), you can configure these default settings across your entire organization:
+
+*   **Automatically review PRs** (default `true`): Should we review pull requests when published and on each new commit?
+*   **Automatically summarize PRs** (default `true`): Should we summarize pull requests when published and on each new commit?
+*   **Quiet mode** (default `false`): Should Ellipsis skip commenting 'Looks good to me!' when there are no issues found?
+*   **Automatically add implementation plans to issues** (default `false`): See [plan](/plan).
+
+## [Repository config​](#null)
+
+Use an `ellipsis.yaml` file in your repository root to customize how Ellipsis behaves. This will override any global settings you have configured via the web UI.
+
+### [Getting Started​](#null)
+
+Here is a small example you can copy/paste. Be sure to update it for your repository!
+
+```
+version: 1.3  
+  
+pr\_review:  
+confidence\_threshold: 0.7  
+rules:  
+\- "Code should be DRY (Dont Repeat Yourself)"  
+\- "There should no secrets or credentials in the code"
+```
+
+Here's an example of how we configure Ellipsis on our internal repo:
+
+```
+version: 1.3  
+  
+about:  
+\- "This is a codebase for a code generation tool called Ellipsis. It can review GitHub pull requests, answer questions about code, and even generate bug fixes!"  
+\- "We're migrating away from using AWS CDK. Our infrastructure is no longer part of this repository."  
+  
+\# See: https://docs.ellipsis.dev/build  
+build:  
+file: "ellipsis.Dockerfile"  
+commands:  
+\- name: "lint\_fix"  
+description: "Lints the code in fix mode, which will fix some errors, format some files, and throw and error when there are violations."  
+command: "./scripts/lint.sh"  
+\- name: "unit\_tests"  
+description: "Runs the unit tests."  
+command: ./scripts/unit\_test.sh  
+  
+pr\_review:  
+confidence\_threshold: 0.7  
+rules:  
+\- "Code should be DRY (Dont Repeat Yourself)"  
+\- "There should no secrets or credentials in the code"  
+\- "Extremely Complicated Code Needs Comments"  
+\- "Use Descriptive Variable and Constant Names"  
+\- "API routes must have error handling, they shouldn't intentionally return a HTTP 500"  
+\- "Use retries when calling external API services"  
+\- "Don't log sensitive data"  
+\- "Follow the Single Responsibility Principle"  
+\- "Function and Method Naming Should Follow Consistent Patterns"
+```
+### [Provide general information about your repo​](#null)
+
+Use the `about` section to give Ellipsis general information and preferences about your repo, especially anything hard for Ellipsis to discover from reading your code:
+
+```
+version: 1.3  
+  
+about:  
+\- "We're in the middle of migrating from X to Y, so new components should use Y."  
+\- "Everything in \`/foo/bar\` is deprecated."
+```
+### [Ignore files​](#null)
+
+Use the `ignore` section to list files, directories, or Unix shell-style wildcards (similar to .gitignore) you want Ellipsis to ignore across all workflows.
+
+```
+version: 1.3  
+  
+ignore:  
+\- old\_README.md # ignore this file  
+\- archive/ # ignore everything in the \`archive/\` directory  
+\- data/\*.csv # ignore all .csv files in the \`data/\` directory
+```
+## [PR reviews​](#null)
+
+You can customize how Ellipsis behaves when reviewing code by modifying the `pr_review` section of your `ellipsis.yaml`. Need help? [Contact us](/contact).
+
+Here's an example of a rule that says "Don't log sensitive data": ![img alt](https://docs.ellipsis.dev/assets/images/pr_review_rules-7727b3a0f8497249e8b1bf1146f64968.png)
+
+### [Custom review rules​](#null)
+
+Rules are natural language instructions for our code review AI.
+
+For example, if you work with Tailwind, you might add a rule like "Always use an object to store Tailwind CSS properties instead of defining them inline". When no rules are provided, we use a set of sensible defaults.
+
+```
+pr\_review:  
+rules:  
+\- "Code should be DRY (Dont Repeat Yourself)"  
+\- "There should no secrets or credentials in the code"
+```
+### [Custom summary rules​](#null)
+
+Similar to review rules, you can add custom rules for your summaries.
+
+```
+pr\_review:  
+summary\_rules:  
+\- "Do not mention anything in the /deprecated directory"
+```
+### [Improve comment quality​](#null)
+
+Increasing the `confidence_threshold` will result in fewer, but higher quality comments.
+
+```
+pr\_review:  
+confidence\_threshold: 0.85
+```
+### [Quiet mode​](#null)
+
+If `quiet` mode is enabled, Ellipsis will only leave reviews when it has comments, so "Looks good to me" reviews will be skipped. This can reduce clutter.
+
+```
+pr\_review:  
+quiet: true
+```
+### [Enable/disable automatic reviews​](#null)
+
+You can also disable automatic code review using `auto_review_enabled`.
+
+```
+pr\_review:  
+auto\_review\_enabled: false
+```
+### [Enable/disable automatic summaries​](#null)
+
+You can also disable automatic code summaries using `auto_summarize_pr` .
+
+```
+pr\_review:  
+auto\_summarize\_pr: false
+```
+### [Auto-review draft PRs​](#null)
+
+You can enable auto-review on draft PRs using `auto_review_draft`.
+
+```
+pr\_review:  
+auto\_review\_draft: true
+```
+### [Ignore certain base/head branches​](#null)
+
+You can disable auto-review on particular branches by specifying names (or Unix shell-style wildcards).
+
+```
+pr\_review:  
+ignore:  
+base:  
+\- "staging" # ignore PRs into the 'staging' branch  
+head:  
+\- "test/\*" # ignore PRs on branches starting with 'test/'  
+\- "debug/\*" # ignore PRs on branches starting with 'debug/'
+```
+### [Approve PRs with no issues​](#null)
+
+You can allow Ellipsis to approve PRs using `enable_approve_prs`. Note: in common branch protection configurations, the Ellipsis approval will count towards the approval total and allow the PR to be merged when it otherwise may not be.
+
+```
+pr\_review:  
+enable\_approve\_prs: true
+```
+## [Addressing PR comments​](#null)
+
+You can choose how Ellipsis returns code it generates while addressing comments on a PR. Choose between `new_pr` or `new_commit`.
+
+```
+version: 1.3  
+pr\_address\_comments:  
+delivery: "new\_pr"
+```
+## [User specific behavior​](#null)
+
+You can add personalized configurations for each developer on the team using `user_overrides`, which is at the top level of the config. Use this if you want to try out Ellipsis before enabling it for the rest of the team.
+
+```
+pr\_review:  
+confidence\_threshold: 0.5  
+rules:  
+\- "Code should be DRY (Dont Repeat Yourself)"  
+\- "There should no secrets or credentials in the code"  
+  
+user\_overrides:  
+\- usernames: \["user1"\]  
+rules:  
+\- "All new functions should have docstrings."  
+\- usernames: \["user2", "user3"\]  
+confidence\_threshold: 0.9
+```
+
+In this example, `user1` will inherited the `confidence_threshold=0.5`, but will replace the two rules; meanwhile, `user2` and `user3` will retain the two base rules but have their own `confidence_threshold=0.9`
+
+### [Enable Ellipsis for only some users​](#null)
+
+Ellipsis calculates your active users by checking the number of seats vs. the number of users who have triggered a workflow in the last month.
+
+If you want to enable Ellipsis for only some users, you can use the `user_overrides` (see above):
+
+```
+pr\_review:  
+auto\_summarize\_pr: false  
+auto\_review\_enabled: false  
+  
+user\_overrides:  
+\- usernames: \["user1", "user2", "user3"\]  
+auto\_summarize\_pr: true  
+auto\_review\_enabled: true
+```
+
+In this example, `user1`, `user2`, and `user3` will be the only users to automatically get summaries and reviews.
+
+*   [Organization config](#organization-config)
+*   [Repository config](#repository-config)
+    *   [Getting Started](#getting-started)
+    *   [Provide general information about your repo](#provide-general-information-about-your-repo)
+    *   [Ignore files](#ignore-files)
+*   [PR reviews](#pr-reviews)
+    *   [Custom review rules](#custom-review-rules)
+    *   [Custom summary rules](#custom-summary-rules)
+    *   [Improve comment quality](#improve-comment-quality)
+    *   [Quiet mode](#quiet-mode)
+    *   [Enable/disable automatic reviews](#enabledisable-automatic-reviews)
+    *   [Enable/disable automatic summaries](#enabledisable-automatic-summaries)
+    *   [Auto-review draft PRs](#auto-review-draft-prs)
+    *   [Ignore certain base/head branches](#ignore-certain-basehead-branches)
+    *   [Approve PRs with no issues](#approve-prs-with-no-issues)
+*   [Addressing PR comments](#addressing-pr-comments)
+*   [User specific behavior](#user-specific-behavior)
+    *   [Enable Ellipsis for only some users](#enable-ellipsis-for-only-some-users)

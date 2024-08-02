@@ -1,0 +1,73 @@
+*   Dockerfile
+
+# Dockerfile
+
+<Warning>
+
+warning
+
+Dockerfile workspaces are in beta.
+
+
+
+</Warning>
+<Info>
+
+info
+
+Ellipsis can fix it's own mistakes by running your code before creating a PR.
+
+
+
+</Info>
+
+Adding a Dockerfile and commands will substantially increase the quality of the generated code. For example, if Ellipsis constantly suggests code that doesn't pass your linter, you can add a Dockerfile and a lint command (ex: `npm run lint`) and Ellipsis will run these commands before opening a PR. If the command fails, Ellipsis will fix the problem before continuing.
+
+Here's an example config file (the `description` param is optional):
+
+```
+version: 1.3  
+build:  
+file: "ellipsis.Dockerfile"  
+commands:  
+\- command: "npm run test"  
+\- command: "npm run lint"  
+description: "Linter. You should ignore warnings, only fix errors."
+```
+
+# Getting started
+
+Set up takes 5 minutes using our web UI:
+
+![test docker screenshot](https://docs.ellipsis.dev/assets/images/test-docker-2292c79d5eead2ca3214ad1eb5451f1a.png)
+
+1.  **Open the code UI**
+    
+    *   Open the [console](https://app.ellipsis.dev)
+    *   Click "code" on the sidebar
+    *   Select your repository from the drop down.
+2.  **Add environment variables**:
+    
+    *   Only required if your project needs environment variables to run the commands!
+    *   Be sure to use dev env vars, not prod
+3.  **Add commands** to your config file (left):
+    
+    *   Commands are executed from the root of the repository and can lint, build, and even run your tests. Include whichever commands you would use while developing.
+4.  **Add a Dockerfile** to your repository (right):
+    
+    *   The file should install the dependencies and copy your code into the container. We build this from the root of the repository.
+    *   The Dockerfile needs to include the [Git CLI](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
+    *   Do not include an `ENTRYPOINT` or `CMD`.
+    *   Update your `ellipsis.yaml` to point to this file by adding `file` which is under `build` (see below)
+5.  **Test it**
+    
+    *   Click "Test build and commands"
+    *   Wait
+    *   If it fails, inspect the logs and fix the issue.
+6.  **Add to repository**
+    
+    *   Once the build passes, use the "Add to repository using PR" button to send the Dockerfile and config file to your repository.
+    *   Merge the PR
+    *   Now, Ellipsis will use these commands to fix it's own mistakes before opening a PR!!
+
+If you run into problems, chat with us using the chat icon at the bottom right of your screen.

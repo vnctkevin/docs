@@ -1,0 +1,42 @@
+*   Review code
+
+On this page
+
+# Review code
+
+<Info>
+
+TLDR;
+
+Ellipsis automatically reviews and summarizes Pull Requests.
+
+
+
+</Info>
+
+![PR review summary screenshot](https://docs.ellipsis.dev/assets/images/pr_review_summary-4e3355957cec6be485d42b1e58547d02.png)
+
+Our code review AI can run and debug code, catching issues that traditional static code analysis tools can't.
+
+Ellipsis will also add a summary to a pull request, meaning you don't have to spend time writing one yourself. If you upgrade to a paid plan, Ellipsis will update this summary on every commit. Otherwise, this'll run on the first commit in a pull request.
+
+*   Ellipsis will automatically review any pull request that is published as or opened in the "ready to review" state.
+*   You can customize the code review using a [config file](/config)
+*   Ellipsis will automatically update the title of a pull request if the initial title is `...` (an ellipsis!), so feel free to be lazy.
+
+## [Give Ellipsis Feedback​](#null)
+
+Ellipsis can learn from your feedback in order to improve, simply add 👍/👎 emojis to rate review comments. You can also optionally reply in the thread to be specific (no need to tag Ellipsis) - but remember to give 👍/👎 too. Ellipsis will take this into account in all future reviews (on this PR and on others).
+
+![Feedback screenshot](https://docs.ellipsis.dev/assets/images/ellipsis-give-feedback-ignore-experimental-dir-e3f3eb95fd8b2d09128c7423e2dd3906.png)
+
+## [Hide previous reviews​](#null)
+
+On long-running PRs, lots of reviews can accumulate and cause clutter. While you can individually click on reviews to `hide` them, you can also have Ellipsis do it in bulk. If you ask Ellipsis something like "hide your old comments", it'll hide all its previous reviews to give you a clean slate.
+
+For other ways to reduce clutter, see [config options](/config).
+
+![Feedback screenshot](https://docs.ellipsis.dev/assets/images/ellipsis-hide-old-reviews-bdb023e78c5a48261d65a95a5c92ba54.png)
+
+*   [Give Ellipsis Feedback](#give-ellipsis-feedback)
+*   [Hide previous reviews](#hide-previous-reviews)

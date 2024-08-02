@@ -1,0 +1,23 @@
+*   Issue implementation plans
+
+# Issue implementation plans
+
+Ellipsis can add implementation plans to your GitHub/Linear issues. Many dev tasks aren’t hard, but are tedious to figure out exactly where a change has to be made, especially in large codebases. You just want to dive into coding.
+
+You can tag `@ellipsis-dev` (or `@ellipsis`) in an issue comment, or [enable auto-plan](/config) to get a plan for every issue when it’s created.
+
+Ellipsis has full context of your codebase (and historical PRs) and will search for related code and best practices. Here’s an example issue that’s sparse on details, but Ellipsis is able to figure out exactly was meant:
+
+![example auto-plan](https://docs.ellipsis.dev/assets/images/example_plan_retries_to_linear_client-f1b83871f5919341cb925db3987b4a5b.png)
+
+Sometimes Ellipsis gets confused and can’t find what you’re looking for - it’ll post what it found along with open questions. You can ask it to replan in natural language:
+
+![example replan](https://docs.ellipsis.dev/assets/images/replan-example-1ea8c819a4975c5454e756bd9f9b3da2.png)
+
+Ellipsis can handle large, complex issues too (see full size image [here](https://app.ellipsis.dev/plan-issue__complex__full-size.png)):
+
+![big complicated plan](https://docs.ellipsis.dev/assets/images/plan-issue__complex__tiny-size-cd1d404315b7816ac898f9dea3b19b8a.png)
+
+You can ask Ellipsis to implement a plan, and it'll generate a PR:
+
+![implement the plan](https://docs.ellipsis.dev/assets/images/ask-ellipsis-to-implement-plan-18c32a81237d361a28e65e956b12e900.png)
