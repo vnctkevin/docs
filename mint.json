@@ -60,23 +60,62 @@
       "url": "https://mintlify.com/blog"
     }
   ],
-  "navigation": [
+ "navigation": [
     {
       "group": "",
       "pages": [
-        "/introduction",
-        "/install",
-        "/review-code",
-        "/write-code",
-        "/issue-implementation-plans",
-        "/reports",
-        "/ask",
-        "/dockerfile",
-        "/configure",
-        "/rest-api",
-        "/security-&-privacy",
-        "/contact",
-        "/vulnerability-disclosure-program"
+        {
+          "group": "Introduction",
+          "pages": "/introduction"
+        },
+        {
+          "group": "Install",
+          "pages": "/install"
+        },
+        {
+          "group": "Review code",
+          "pages": "/review-code"
+        },
+        {
+          "group": "Write code",
+          "pages": "/write-code"
+        },
+        {
+          "group": "Issue implementation plans",
+          "pages": "/issue-implementation-plans"
+        },
+        {
+          "group": "Reports",
+          "pages": "/reports"
+        },
+        {
+          "group": "Ask",
+          "pages": "/ask"
+        },
+        {
+          "group": "Dockerfile",
+          "pages": "/dockerfile"
+        },
+        {
+          "group": "Configure",
+          "pages": "/configure"
+        },
+        {
+          "group": "REST API",
+          "pages": "/rest-api"
+        },
+        {
+          "group": "Security & Privacy",
+          "pages": "/security-&-privacy"
+        },
+        {
+          "group": "Contact",
+          "pages": "/contact"
+        },
+        {
+          "group": "Vulnerability Disclosure Program",
+          "pages": "/vulnerability-disclosure-program"
+        }
       ]
     }
   ],
