@@ -1,0 +1,46 @@
+---
+title: "Cluster Configuration"
+---
+
+# Cluster Configuration[#](#cluster-configuration "Permanent link")
+
+## Introduction[#](#introduction "Permanent link")
+
+Whether you run Hopsworks on-premise, or on the cloud using [managed.hopsworks.ai](https://managed.hopsworks.ai), it is possible to change a variety of configurations on the cluster, changing its default behaviour. This section is not going into detail for every setting, since every Hopsworks cluster comes with a robust default setup. However, this guide is to explain where to find the configurations and if necessary, how to change them.
+
+Note
+
+In most cases you will be only be prompted to change these configurations by a Hopsworks Solutions Engineer or similar.
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+An administrator account on a Hopsworks cluster.
+
+### Step 1: The configuration page[#](#step-1-the-configuration-page "Permanent link")
+
+You can find the configuration page by navigating in the UI:
+
+1.  Click on your user name in the top right corner, then select _Cluster Settings_.
+2.  Among the cluster settings, you will find a tab _Configuration_
+
+![Configuration Settings](../../assets/images/admin/variables/configuration.png)
+
+Configuration settings
+
+### Step 2: Editing existing configurations[#](#step-2-editing-existing-configurations "Permanent link")
+
+To edit an existing configuration, simply find the property using the search field, then click the _edit_ button to change the value of the setting or its visibility. Once you have made the change, don't forget to click _save_ to persist the changes.
+
+#### Visibility[#](#visibility "Permanent link")
+
+The visibility setting indicates whether a setting can be read only by **Hops Admins** or also by simple **Hops Users**, that is everyone. Additionally, you can also allow to read the setting even when **not authenticated**. If the setting contains a password or sensitive information, you can also hide the value so it's not shown in the UI.
+
+### Step 3: Adding a new configuration[#](#step-3-adding-a-new-configuration "Permanent link")
+
+In rare cases it might be necessary to add additional configurations.
+
+To do so, click on _New Variable_, where you can then configure the new setting with a key, value and visibility. Once you have set the desired properties, you can persist them by clicking _Create Configuration_
+
+![Adding a new configuration property](../../assets/images/admin/variables/new-variable.png)
+
+Adding a new configuration property

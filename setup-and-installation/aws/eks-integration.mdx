@@ -1,0 +1,282 @@
+---
+title: "EKS Integration"
+---
+
+# Integration with Amazon EKS[#](#integration-with-amazon-eks "Permanent link")
+
+This guide shows how to create a cluster in [managed.hopsworks.ai](https://managed.hopsworks.ai) with integrated support for Amazon Elastic Kubernetes Service (EKS). So that Hopsworks can launch Python jobs, Jupyter servers, and ML model servings on top of Amazon EKS.
+
+Warning
+
+In the current version, we don't support sharing EKS clusters between Hopsworks clusters. That is, an EKS cluster can be only used by one Hopsworks cluster.
+
+## Step 1: Create an EKS cluster on AWS[#](#step-1-create-an-eks-cluster-on-aws "Permanent link")
+
+If you have an existing EKS cluster, skip this step and go directly to Step 2.
+
+Amazon provides two getting started guides using [AWS management console](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html) or [`eksctl`](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html) to help you create an EKS cluster. The easiest way is to use the eksctl command.
+
+### Step 1.1: Installing eksctl, aws, and kubectl[#](#step-11-installing-eksctl-aws-and-kubectl "Permanent link")
+
+Follow the prerequisites section in [getting started with `eksctl`](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html) to install aws, eksctl, and kubectl.
+
+### Step 1.2: Create an EKS cluster using eksctl[#](#step-12-create-an-eks-cluster-using-eksctl "Permanent link")
+
+You can create a sample EKS cluster with the name _my-eks-cluster_ using Kubernetes version _1.20_ with _2_ managed nodes in the _us-east-2_ region by running the following command. For more details on the eksctl usage, check the [`eksctl` documentation](https://eksctl.io/usage/creating-and-managing-clusters/).
+
+<pre><span></span><code>eksctl<span class="w"> </span>create<span class="w"> </span>cluster<span class="w"> </span>--name<span class="w"> </span>my-eks-cluster<span class="w"> </span>--version<span class="w"> </span><span class="m">1</span>.20<span class="w"> </span>--region<span class="w"> </span>us-east-2<span class="w"> </span>--nodegroup-name<span class="w"> </span>my-nodes<span class="w"> </span>--nodes<span class="w"> </span><span class="m">2</span><span class="w"> </span>--managed
+</code></pre>
+
+Output:
+
+<pre><span></span><code><span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>eksctl<span class="w"> </span>version<span class="w"> </span><span class="m">0</span>.26.0
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>using<span class="w"> </span>region<span class="w"> </span>us-east-2
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>setting<span class="w"> </span>availability<span class="w"> </span>zones<span class="w"> </span>to<span class="w"> </span><span class="o">[</span>us-east-2b<span class="w"> </span>us-east-2a<span class="w"> </span>us-east-2c<span class="o">]</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>subnets<span class="w"> </span><span class="k">for</span><span class="w"> </span>us-east-2b<span class="w"> </span>-<span class="w"> </span>public:192.168.0.0/19<span class="w"> </span>private:192.168.96.0/19
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>subnets<span class="w"> </span><span class="k">for</span><span class="w"> </span>us-east-2a<span class="w"> </span>-<span class="w"> </span>public:192.168.32.0/19<span class="w"> </span>private:192.168.128.0/19
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>subnets<span class="w"> </span><span class="k">for</span><span class="w"> </span>us-east-2c<span class="w"> </span>-<span class="w"> </span>public:192.168.64.0/19<span class="w"> </span>private:192.168.160.0/19
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>using<span class="w"> </span>Kubernetes<span class="w"> </span>version<span class="w"> </span><span class="m">1</span>.20
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>creating<span class="w"> </span>EKS<span class="w"> </span>cluster<span class="w"> </span><span class="s2">"my-eks-cluster"</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">"us-east-2"</span><span class="w"> </span>region<span class="w"> </span>with<span class="w"> </span>managed<span class="w"> </span>nodes
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>will<span class="w"> </span>create<span class="w"> </span><span class="m">2</span><span class="w"> </span>separate<span class="w"> </span>CloudFormation<span class="w"> </span>stacks<span class="w"> </span><span class="k">for</span><span class="w"> </span>cluster<span class="w"> </span>itself<span class="w"> </span>and<span class="w"> </span>the<span class="w"> </span>initial<span class="w"> </span>managed<span class="w"> </span>nodegroup
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span><span class="k">if</span><span class="w"> </span>you<span class="w"> </span>encounter<span class="w"> </span>any<span class="w"> </span>issues,<span class="w"> </span>check<span class="w"> </span>CloudFormation<span class="w"> </span>console<span class="w"> </span>or<span class="w"> </span>try<span class="w"> </span><span class="s1">'eksctl utils describe-stacks --region=us-east-2 --cluster=my-eks-cluster'</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>CloudWatch<span class="w"> </span>logging<span class="w"> </span>will<span class="w"> </span>not<span class="w"> </span>be<span class="w"> </span>enabled<span class="w"> </span><span class="k">for</span><span class="w"> </span>cluster<span class="w"> </span><span class="s2">"my-eks-cluster"</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">"us-east-2"</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>you<span class="w"> </span>can<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>it<span class="w"> </span>with<span class="w"> </span><span class="s1">'eksctl utils update-cluster-logging --region=us-east-2 --cluster=my-eks-cluster'</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>Kubernetes<span class="w"> </span>API<span class="w"> </span>endpoint<span class="w"> </span>access<span class="w"> </span>will<span class="w"> </span>use<span class="w"> </span>default<span class="w"> </span>of<span class="w"> </span><span class="o">{</span><span class="nv">publicAccess</span><span class="o">=</span>true,<span class="w"> </span><span class="nv">privateAccess</span><span class="o">=</span>false<span class="o">}</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>cluster<span class="w"> </span><span class="s2">"my-eks-cluster"</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">"us-east-2"</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span><span class="m">2</span><span class="w"> </span>sequential<span class="w"> </span>tasks:<span class="w"> </span><span class="o">{</span><span class="w"> </span>create<span class="w"> </span>cluster<span class="w"> </span>control<span class="w"> </span>plane<span class="w"> </span><span class="s2">"my-eks-cluster"</span>,<span class="w"> </span><span class="m">2</span><span class="w"> </span>sequential<span class="w"> </span>sub-tasks:<span class="w"> </span><span class="o">{</span><span class="w"> </span>no<span class="w"> </span>tasks,<span class="w"> </span>create<span class="w"> </span>managed<span class="w"> </span>nodegroup<span class="w"> </span><span class="s2">"my-nodes"</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">}</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>building<span class="w"> </span>cluster<span class="w"> </span>stack<span class="w"> </span><span class="s2">"eksctl-my-eks-cluster-cluster"</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>deploying<span class="w"> </span>stack<span class="w"> </span><span class="s2">"eksctl-my-eks-cluster-cluster"</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>building<span class="w"> </span>managed<span class="w"> </span>nodegroup<span class="w"> </span>stack<span class="w"> </span><span class="s2">"eksctl-my-eks-cluster-nodegroup-my-nodes"</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>deploying<span class="w"> </span>stack<span class="w"> </span><span class="s2">"eksctl-my-eks-cluster-nodegroup-my-nodes"</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>waiting<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>control<span class="w"> </span>plane<span class="w"> </span>availability...
+<span class="o">[</span>✔<span class="o">]</span><span class="w">  </span>saved<span class="w"> </span>kubeconfig<span class="w"> </span>as<span class="w"> </span><span class="s2">"/Users/maism/.kube/config"</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>no<span class="w"> </span>tasks
+<span class="o">[</span>✔<span class="o">]</span><span class="w">  </span>all<span class="w"> </span>EKS<span class="w"> </span>cluster<span class="w"> </span>resources<span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="s2">"my-eks-cluster"</span><span class="w"> </span>have<span class="w"> </span>been<span class="w"> </span>created
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>nodegroup<span class="w"> </span><span class="s2">"my-nodes"</span><span class="w"> </span>has<span class="w"> </span><span class="m">2</span><span class="w"> </span>node<span class="o">(</span>s<span class="o">)</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>node<span class="w"> </span><span class="s2">"ip-192-168-21-142.us-east-2.compute.internal"</span><span class="w"> </span>is<span class="w"> </span>ready
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>node<span class="w"> </span><span class="s2">"ip-192-168-62-117.us-east-2.compute.internal"</span><span class="w"> </span>is<span class="w"> </span>ready
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>waiting<span class="w"> </span><span class="k">for</span><span class="w"> </span>at<span class="w"> </span>least<span class="w"> </span><span class="m">2</span><span class="w"> </span>node<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>to<span class="w"> </span>become<span class="w"> </span>ready<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">"my-nodes"</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>nodegroup<span class="w"> </span><span class="s2">"my-nodes"</span><span class="w"> </span>has<span class="w"> </span><span class="m">2</span><span class="w"> </span>node<span class="o">(</span>s<span class="o">)</span>
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>node<span class="w"> </span><span class="s2">"ip-192-168-21-142.us-east-2.compute.internal"</span><span class="w"> </span>is<span class="w"> </span>ready
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>node<span class="w"> </span><span class="s2">"ip-192-168-62-117.us-east-2.compute.internal"</span><span class="w"> </span>is<span class="w"> </span>ready
+<span class="o">[</span>ℹ<span class="o">]</span><span class="w">  </span>kubectl<span class="w"> </span><span class="nb">command</span><span class="w"> </span>should<span class="w"> </span>work<span class="w"> </span>with<span class="w"> </span><span class="s2">"/Users/maism/.kube/config"</span>,<span class="w"> </span>try<span class="w"> </span><span class="s1">'kubectl get nodes'</span>
+<span class="o">[</span>✔<span class="o">]</span><span class="w">  </span>EKS<span class="w"> </span>cluster<span class="w"> </span><span class="s2">"my-eks-cluster"</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">"us-east-2"</span><span class="w"> </span>region<span class="w"> </span>is<span class="w"> </span>ready
+</code></pre>
+
+Once the cluster is created, eksctl will write the cluster credentials for the newly created cluster to your local kubeconfig file (~/.kube/config). To test the cluster credentials, you can run the following command to get the list of nodes in the cluster.
+
+<pre><span></span><code>kubectl<span class="w"> </span>get<span class="w"> </span>nodes
+</code></pre>
+
+Output:
+
+<pre><span></span><code>NAME<span class="w">                                           </span>STATUS<span class="w">   </span>ROLES<span class="w">    </span>AGE<span class="w">     </span>VERSION
+ip-192-168-21-142.us-east-2.compute.internal<span class="w">   </span>Ready<span class="w">    </span>&lt;none&gt;<span class="w">   </span>2m35s<span class="w">   </span>v1.17.9-eks-4c6976
+ip-192-168-62-117.us-east-2.compute.internal<span class="w">   </span>Ready<span class="w">    </span>&lt;none&gt;<span class="w">   </span>2m34s<span class="w">   </span>v1.17.9-eks-4c6976
+</code></pre>
+
+## Step 2: Create an instance profile role on AWS[#](#step-2-create-an-instance-profile-role-on-aws "Permanent link")
+
+You need to add permission to [the instance profile you use for instances deployed by managed.hopsworks.ai](../getting_started/#step-3-creating-instance-profile) to give them access to EKS. Go to the [_IAM service_](https://console.aws.amazon.com/iam) in the _AWS management console_, click _Roles_, search for your role, and click on it. Click on _Add inline policy_. Go to the _JSON_ tab and replace the existing JSON permissions with the JSON permissions below..
+
+<pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowDescirbeEKS"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eks:DescribeCluster"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:eks:*:*:cluster/*"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+Click on _Review policy_. Give a name to your policy and click on _Create policy_.
+
+Copy the _Role ARN_ of your profile (not to be confused with the _Instance Profile ARNs_ two lines bellow).
+
+![Copy the Role ARN](../../../assets/images/setup_installation/managed/aws/instance-profile-arn.png)
+
+Copy the \*Role ARN\*
+
+## Step 3: Allow your role to use your EKS cluster[#](#step-3-allow-your-role-to-use-your-eks-cluster "Permanent link")
+
+You need to configure your EKS cluster to accept connections from the role you created above. This is done by using the following kubectl command. For more details, check [Managing users or IAM roles for your cluster](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html).
+
+Note
+
+The kubectl edit command uses the _vi_ editor by default, however, you can [override this behavior by setting _KUBE\_EDITOR_ to your preferred editor](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#editing-resources).
+
+<pre><span></span><code><span class="nv">KUBE_EDITOR</span><span class="o">=</span><span class="s2">"vi"</span><span class="w"> </span>kubectl<span class="w"> </span>edit<span class="w"> </span>configmap<span class="w"> </span>aws-auth<span class="w"> </span>-n<span class="w"> </span>kube-system
+</code></pre>
+
+Output:
+
+<pre><span></span><code><span class="c1"># Please edit the object below. Lines beginning with a '#' will be ignored,</span>
+<span class="c1"># and an empty file will abort the edit. If an error occurs while saving this file will be</span>
+<span class="c1"># reopened with the relevant failures.</span>
+<span class="c1">#</span>
+apiVersion:<span class="w"> </span>v1
+data:
+mapRoles:<span class="w"> </span><span class="p">|</span>
+<span class="w">    </span>-<span class="w"> </span>groups:
+<span class="w">        </span>-<span class="w"> </span>system:bootstrappers
+<span class="w">        </span>-<span class="w"> </span>system:nodes
+<span class="w">        </span>rolearn:<span class="w"> </span>arn:aws:iam::xxxxxxxxxxxx:role/eksctl-my-eks-cluster-nodegroup-m-NodeInstanceRole-FQ7L0HQI4NCC
+<span class="w">        </span>username:<span class="w"> </span>system:node:<span class="o">{{</span>EC2PrivateDNSName<span class="o">}}</span>
+kind:<span class="w"> </span>ConfigMap
+metadata:
+creationTimestamp:<span class="w"> </span><span class="s2">"2020-08-24T07:42:31Z"</span>
+name:<span class="w"> </span>aws-auth
+namespace:<span class="w"> </span>kube-system
+resourceVersion:<span class="w"> </span><span class="s2">"770"</span>
+selfLink:<span class="w"> </span>/api/v1/namespaces/kube-system/configmaps/aws-auth
+uid:<span class="w"> </span>c794b2d8-9f10-443d-9072-c65d0f2eb552
+</code></pre>
+
+Follow the example below (lines 13-16) to add your role to _mapRoles_ and assign the _system:masters_ group to your role. Make sure to replace 'YOUR ROLE RoleARN' with the _Role ARN_ you copied in the previous step before saving.
+
+Warning
+
+Make sure to keep the same formatting as in the example below. The configuration format is sensitive to indentation and copy-pasting does not always keep the correct indentation.
+
+<pre><span></span><code><span class="c1"># Please edit the object below. Lines beginning with a '#' will be ignored,</span>
+<span class="c1"># and an empty file will abort the edit. If an error occurs while saving this file will be</span>
+<span class="c1"># reopened with the relevant failures.</span>
+<span class="c1">#</span>
+apiVersion:<span class="w"> </span>v1
+data:
+<span class="w">  </span>mapRoles:<span class="w"> </span><span class="p">|</span>
+<span class="w">    </span>-<span class="w"> </span>groups:
+<span class="w">      </span>-<span class="w"> </span>system:bootstrappers
+<span class="w">      </span>-<span class="w"> </span>system:nodes
+<span class="w">      </span>rolearn:<span class="w"> </span>arn:aws:iam::xxxxxxxxxxxx:role/eksctl-my-eks-cluster-nodegroup-m-NodeInstanceRole-FQ7L0HQI4NCC
+<span class="w">      </span>username:<span class="w"> </span>system:node:<span class="o">{{</span>EC2PrivateDNSName<span class="o">}}</span>
+<span class="hll"><span class="w">    </span>-<span class="w"> </span>groups:
+</span><span class="hll"><span class="w">      </span>-<span class="w"> </span>system:masters
+</span><span class="hll"><span class="w">      </span>rolearn:<span class="w"> </span>&lt;YOUR<span class="w"> </span>ROLE<span class="w"> </span>RoleARN&gt;
+</span><span class="hll"><span class="w">      </span>username:<span class="w"> </span>hopsworks
+</span>kind:<span class="w"> </span>ConfigMap
+metadata:
+creationTimestamp:<span class="w"> </span><span class="s2">"2020-08-24T07:42:31Z"</span>
+name:<span class="w"> </span>aws-auth
+namespace:<span class="w"> </span>kube-system
+resourceVersion:<span class="w"> </span><span class="s2">"770"</span>
+selfLink:<span class="w"> </span>/api/v1/namespaces/kube-system/configmaps/aws-auth
+uid:<span class="w"> </span>c794b2d8-9f10-443d-9072-c65d0f2eb552
+</code></pre>
+
+Once you are done with editing the configmap, save it and exit the editor. The output should be:
+
+<pre><span></span><code>configmap/aws-auth<span class="w"> </span>edited
+</code></pre>
+
+## Step 4: Setup network connectivity[#](#step-4-setup-network-connectivity "Permanent link")
+
+For Hopsworks to be able to start containers in the EKS cluster and for these containers to be able to use Hopsworks we need to establish network connectivity between Hopsworks and EKS. For this, we have two solutions. The first option (_A_) is to run Hopsworks and EKS in the same virtual network and security group. The second option (_B_) is to pair the EKS and Hopsworks virtual networks. If you choose this option, make sure to create the peering before starting the Hopsworks cluster as it connects to EKS at startup.
+
+### Option _A_: run Hopsworks and EKS in the same virtual network.[#](#option-a-run-hopsworks-and-eks-in-the-same-virtual-network "Permanent link")
+
+Running EKS and Hopsworks in the same security group is the simplest of the two solutions when it comes to setting up the system. All you need to do is to open the ports needed by Hopsworks in the security group created by the EKS cluster. Then you can just select this security group during the Hopsworks cluster creation. We will now see how to open the ports for HTTP (80) and HTTPS (443) to allow Hopsworks to run with all its functionalities.
+
+Note
+
+It is possible not to open ports 80 and 443 at the cost of some features. See [Limiting permissions](../restrictive_permissions/#step-1-create-a-vpc) for more details.
+
+First, you need to get the name of the security group of your EKS cluster by using the following eksctl command. Notice that you need to replace _my-eks-cluster_ with the name of your cluster.
+
+<pre><span></span><code>eksctl<span class="w"> </span>utils<span class="w"> </span>describe-stacks<span class="w"> </span>--region<span class="o">=</span>us-east-2<span class="w"> </span>--cluster<span class="o">=</span>my-eks-cluster<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'OutputKey: "ClusterSecurityGroupId"'</span><span class="w"> </span>-a1
+</code></pre>
+
+Check the output for _OutputValue_, which will be the id of your EKS security group.
+
+<pre><span></span><code>ExportName:<span class="w"> </span><span class="s2">"eksctl-my-eks-cluster-cluster::ClusterSecurityGroupId"</span>,
+OutputKey:<span class="w"> </span><span class="s2">"ClusterSecurityGroupId"</span>,
+OutputValue:<span class="w"> </span><span class="s2">"YOUR_EKS_SECURITY_GROUP_ID"</span>
+</code></pre>
+
+Go to the [_Security Groups_ section of _EC2_ in the _AWS management console_](https://us-east-2.console.aws.amazon.com/ec2/v2/home?#SecurityGroups:) and search for your security group using the id obtained above. Note the _VPC ID_, you will need it when creating the Hopsworks cluster. Then, click on it then go to the _Inbound rules_ tab and click on _Edit inbound rules_. You should now see the following screen.
+
+![Edit inbound rules](../../../assets/images/setup_installation/managed/aws/eks-sg-edit-inbound-rules.png)
+
+Edit inbound rules
+
+Add two rules for HTTP and HTTPS as follows:
+
+![Edit inbound rules](../../../assets/images/setup_installation/managed/aws/eks-sg-hopsworks-inbound-rules.png)
+
+Edit inbound rules
+
+Click _Save rules_ to save the updated rules to the security group.
+
+### Option _B_: create a pairing between Hopsworks and EKS[#](#option-b-create-a-pairing-between-hopsworks-and-eks "Permanent link")
+
+To establish virtual peering between the Kubernetes cluster and Hopsworks, you need to select or create a virtual network for Hopsworks. You can create the virtual network by following the [AWS documentation steps to create the virtual private network](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-getting-started.html#getting-started-create-vpc). Make sure to configure your subnet to use an address space that does not overlap with the address space in the Kubernetes network.
+
+You then need to select or create a security group for the Hopsworks VPC. You can create the security group by following the steps in the [AWS documentation](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#creating-security-groups). Remember to open the port for HTTP (80) and HTTPS (443) to allow Hopsworks to run with all its functionalities.
+
+Note
+
+It is possible not to open ports 80 and 443 at the cost of some features. See [Limiting permissions](../restrictive_permissions/#step-1-create-a-vpc) for more details.
+
+Once the Hopsworks VPC and security group are created you need to create a peering between the Hopsworks VPC and the EKS VPC. For this follow the AWS documentation [here](https://docs.aws.amazon.com/vpc/latest/peering/create-vpc-peering-connection.html).
+
+Finally, you need to edit the security groups for the EKS cluster and for Hopsworks to allow full communication between both VPC. This can be done following the instruction in the [AWS documentation](https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-security-groups.html).
+
+You can get the name of the security group of your EKS cluster by using the following eksctl command. Notice that you need to replace _my-eks-cluster_ with the name of your cluster.
+
+<pre><span></span><code>eksctl<span class="w"> </span>utils<span class="w"> </span>describe-stacks<span class="w"> </span>--region<span class="o">=</span>us-east-2<span class="w"> </span>--cluster<span class="o">=</span>my-eks-cluster<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'OutputKey: "ClusterSecurityGroupId"'</span><span class="w"> </span>-a1
+</code></pre>
+
+Check the output for _OutputValue_, which will be the id of your EKS security group.
+
+<pre><span></span><code>ExportName:<span class="w"> </span><span class="s2">"eksctl-my-eks-cluster-cluster::ClusterSecurityGroupId"</span>,
+OutputKey:<span class="w"> </span><span class="s2">"ClusterSecurityGroupId"</span>,
+OutputValue:<span class="w"> </span><span class="s2">"YOUR_EKS_SECURITY_GROUP_ID"</span>
+</code></pre>
+
+## Step 6: Create a Hopsworks cluster with EKS support[#](#step-6-create-a-hopsworks-cluster-with-eks-support "Permanent link")
+
+In [managed.hopsworks.ai](https://managed.hopsworks.ai), follow the same instructions as in [the cluster creation guide](../cluster_creation/) except when setting _Managed Containers_, _VPC_, _Subnet_, and _Security group_.
+
+Choose **Enabled** to enable the use of Amazon EKS:
+
+![Choose Enabled](../../../assets/images/setup_installation/managed/aws/eks-hopsworks-create-cluster-2.png)
+
+Choose Enabled
+
+Add your EKS cluster name, then click Next:
+
+![Add EKS cluster name](../../../assets/images/setup_installation/managed/aws/eks-hopsworks-create-cluster-3.png)
+
+Add EKS cluster name
+
+If you followed option _A_ when setting up the network Choose the VPC of your EKS cluster. Its name should have the form _eksctl-YOUR-CLUSTER-NAME-cluster_ (click on the refresh button if the VPC is not in the list).
+
+If you followed option _B_ choose the VPC you created during [Step 4](#step-4-setup-network-connectivity).
+
+![Choose VPC](../../../assets/images/setup_installation/managed/aws/eks-hopsworks-create-cluster-4.png)
+
+Choose VPC
+
+Choose any of the subnets in the VPC, then click Next.
+
+Note
+
+Avoid private subnets if you want to enjoy [all the Hopsworks features](../restrictive_permissions/).
+
+![Choose Subnet](../../../assets/images/setup_installation/managed/aws/eks-hopsworks-create-cluster-5.png)
+
+Choose Subnet
+
+Choose the security group that you have updated/created in [Step 4](#step-4-setup-network-connectivity), then click Next:
+
+Note
+
+If you followed option _A_ select the Security Group with the same id as in [Step 4](#step-4-setup-network-connectivity) and NOT the ones containing ControlPlaneSecurity or ClusterSharedNode in their name.
+
+![Choose Security Group](../../../assets/images/setup_installation/managed/aws/eks-hopsworks-create-cluster-6.png)
+
+Choose Security Group
+
+Click _Review and submit_, then Create. Once the cluster is created, Hopsworks will use EKS to launch Python jobs, Jupyter servers, and ML model servings.

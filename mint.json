@@ -61,89 +61,269 @@
     }
   ],
   "navigation": [
-    {
-      "group": "Index",
-      "pages": [
-        {
-          "group": "Introduction",
+      {
+          "group": "Concepts",
           "pages": [
-            "introduction"
+              {
+                  "group": "Hopsworks Platform",
+                  "pages": [
+                      "Concepts/hopsworks-platform",
+                      "/Concepts/hopsworks-platform/standalone-feature-store",
+                      "/Concepts/hopsworks-platform/model-management",
+                      "/Concepts/hopsworks-platform/vector-db",
+                      "/Concepts/hopsworks-platform/governance",
+                      "/Concepts/hopsworks-platform/data-science-platform"
+                  ]
+              },
+              {
+                  "group": "MLOps Dictionary \u2197",
+                  "pages": [
+                      "Concepts/mlops-dictionary--"
+                  ]
+              },
+              {
+                  "group": "Feature Store",
+                  "pages": [
+                      "Concepts/feature-store",
+                      "/Concepts/feature-store/feature-groups",
+                      "/Concepts/feature-store/feature-views"
+                  ]
+              },
+              {
+                  "group": "Projects",
+                  "pages": [
+                      "Concepts/projects",
+                      "/Concepts/projects/governance",
+                      "/Concepts/projects/data-storage-sharing",
+                      "/Concepts/projects/tags-search-lineage",
+                      "/Concepts/projects/ci-cd"
+                  ]
+              },
+              {
+                  "group": "MLOps",
+                  "pages": [
+                      "Concepts/mlops",
+                      "/Concepts/mlops/prediction-services",
+                      "/Concepts/mlops/model-training",
+                      "/Concepts/mlops/model-registry",
+                      "/Concepts/mlops/model-serving",
+                      "/Concepts/mlops/vector-database",
+                      "/Concepts/mlops/bi-tools"
+                  ]
+              },
+              {
+                  "group": "Development",
+                  "pages": [
+                      "Concepts/development",
+                      "/Concepts/development/outside-hopsworks",
+                      "/Concepts/development/inside-hopsworks"
+                  ]
+              }
           ]
-        },
-        {
-          "group": "Install",
+      },
+      {
+          "group": "Guides",
           "pages": [
-            "install"
+              {
+                  "group": "Feature Store",
+                  "pages": [
+                      "Guides/feature-store",
+                      "/Guides/feature-store/storage-connector",
+                      "/Guides/feature-store/feature-group",
+                      "/Guides/feature-store/feature-view",
+                      "/Guides/feature-store/vector-similarity-search",
+                      "/Guides/feature-store/compute-engines",
+                      "/Guides/feature-store/client-integrations",
+                      "/Guides/feature-store/sharing",
+                      "/Guides/feature-store/tags",
+                      "/Guides/feature-store/provenance",
+                      "/Guides/feature-store/feature-monitoring"
+                  ]
+              },
+              {
+                  "group": "Projects",
+                  "pages": [
+                      "Guides/projects",
+                      "/Guides/projects/authentication",
+                      "/Guides/projects/projects",
+                      "/Guides/projects/python",
+                      "/Guides/projects/jupyter",
+                      "/Guides/projects/jobs",
+                      "/Guides/projects/airflow",
+                      "/Guides/projects/opensearch",
+                      "/Guides/projects/kafka",
+                      "/Guides/projects/git",
+                      "/Guides/projects/secrets",
+                      "/Guides/projects/api-keys",
+                      "/Guides/projects/aws-iam-roles"
+                  ]
+              },
+              {
+                  "group": "MLOps",
+                  "pages": [
+                      "Guides/mlops",
+                      "/Guides/mlops/model-registry",
+                      "/Guides/mlops/model-serving",
+                      "/Guides/mlops/vector-database"
+                  ]
+              },
+              {
+                  "group": "Migration",
+                  "pages": [
+                      "Guides/migration",
+                      "/Guides/migration/2-x-to-3-0"
+                  ]
+              }
           ]
-        },
-        {
-          "group": "Review code",
+      },
+      {
+          "group": "Setup and Installation",
           "pages": [
-            "review-code"
+              {
+                  "group": "Client Installation",
+                  "pages": [
+                      "Setup and Installation/client-installation"
+                  ]
+              },
+              {
+                  "group": "AWS",
+                  "pages": [
+                      "Setup and Installation/aws",
+                      "/Setup and Installation/aws/getting-started",
+                      "/Setup and Installation/aws/cluster-creation",
+                      "/Setup and Installation/aws/eks-integration",
+                      "/Setup and Installation/aws/limiting-permissions",
+                      "/Setup and Installation/aws/custom-domain",
+                      "/Setup and Installation/aws/cluster-upgrade",
+                      "/Setup and Installation/aws/troubleshooting"
+                  ]
+              },
+              {
+                  "group": "Azure",
+                  "pages": [
+                      "Setup and Installation/azure",
+                      "/Setup and Installation/azure/getting-started",
+                      "/Setup and Installation/azure/cluster-creation",
+                      "/Setup and Installation/azure/aks-integration",
+                      "/Setup and Installation/azure/limiting-permissions",
+                      "/Setup and Installation/azure/cluster-upgrade"
+                  ]
+              },
+              {
+                  "group": "GCP",
+                  "pages": [
+                      "Setup and Installation/gcp",
+                      "/Setup and Installation/gcp/getting-started",
+                      "/Setup and Installation/gcp/cluster-creation",
+                      "/Setup and Installation/gcp/limiting-permissions",
+                      "/Setup and Installation/gcp/gke-integration"
+                  ]
+              },
+              {
+                  "group": "Common",
+                  "pages": [
+                      "Setup and Installation/common",
+                      "/Setup and Installation/common/the-dashboard",
+                      "/Setup and Installation/common/settings",
+                      "/Setup and Installation/common/services",
+                      "/Setup and Installation/common/adding-and-removing-workers",
+                      "/Setup and Installation/common/autoscaling",
+                      "/Setup and Installation/common/backup",
+                      "/Setup and Installation/common/scaling-up",
+                      "/Setup and Installation/common/user-management",
+                      "/Setup and Installation/common/managed-rondb",
+                      "/Setup and Installation/common/arrowflight-server-with-duckdb",
+                      "/Setup and Installation/common/single-sign-on",
+                      "/Setup and Installation/common/api-key",
+                      "/Setup and Installation/common/terraform"
+                  ]
+              },
+              {
+                  "group": "On-Prem",
+                  "pages": [
+                      "Setup and Installation/on-prem",
+                      "/Setup and Installation/on-prem/hopsworks-installer",
+                      "/Setup and Installation/on-prem/external-kafka-cluster"
+                  ]
+              }
           ]
-        },
-        {
-          "group": "Write code",
+      },
+      {
+          "group": "Administration",
           "pages": [
-            "write-code"
+              {
+                  "group": "Cluster Configuration",
+                  "pages": [
+                      "Administration/cluster-configuration"
+                  ]
+              },
+              {
+                  "group": "User Management",
+                  "pages": [
+                      "Administration/user-management"
+                  ]
+              },
+              {
+                  "group": "Project Management",
+                  "pages": [
+                      "Administration/project-management"
+                  ]
+              },
+              {
+                  "group": "Configure Alerts",
+                  "pages": [
+                      "Administration/configure-alerts"
+                  ]
+              },
+              {
+                  "group": "Manage Services",
+                  "pages": [
+                      "Administration/manage-services"
+                  ]
+              },
+              {
+                  "group": "IAM Role Chaining",
+                  "pages": [
+                      "Administration/iam-role-chaining"
+                  ]
+              },
+              {
+                  "group": "Monitoring",
+                  "pages": [
+                      "Administration/monitoring",
+                      "/Administration/monitoring/services-dashboards",
+                      "/Administration/monitoring/export-metrics",
+                      "/Administration/monitoring/services-logs"
+                  ]
+              },
+              {
+                  "group": "Authentication",
+                  "pages": [
+                      "Administration/authentication",
+                      "/Administration/authentication/configure-authentication",
+                      "/Administration/authentication/configure-oauth2",
+                      "/Administration/authentication/configure-ldap-kerberos"
+                  ]
+              },
+              {
+                  "group": "High availability / Disaster Recovery",
+                  "pages": [
+                      "Administration/high-availability---disaster-recovery",
+                      "/Administration/high-availability---disaster-recovery/overview",
+                      "/Administration/high-availability---disaster-recovery/high-availability",
+                      "/Administration/high-availability---disaster-recovery/disaster-recovery"
+                  ]
+              },
+              {
+                  "group": "Audit",
+                  "pages": [
+                      "Administration/audit",
+                      "/Administration/audit/access-audit-logs",
+                      "/Administration/audit/export-audit-logs"
+                  ]
+              }
           ]
-        },
-        {
-          "group": "Issue implementation plans",
-          "pages": [
-            "issue-implementation-plans"
-          ]
-        },
-        {
-          "group": "Reports",
-          "pages": [
-            "reports"
-          ]
-        },
-        {
-          "group": "Ask",
-          "pages": [
-            "ask"
-          ]
-        },
-        {
-          "group": "Dockerfile",
-          "pages": [
-            "dockerfile"
-          ]
-        },
-        {
-          "group": "Configure",
-          "pages": [
-            "configure"
-          ]
-        },
-        {
-          "group": "REST API",
-          "pages": [
-            "rest-api"
-          ]
-        },
-        {
-          "group": "Security & Privacy",
-          "pages": [
-            "security-&-privacy"
-          ]
-        },
-        {
-          "group": "Contact",
-          "pages": [
-            "contact"
-          ]
-        },
-        {
-          "group": "Vulnerability Disclosure Program",
-          "pages": [
-            "vulnerability-disclosure-program"
-          ]
-        }
-      ]
-    }
+      }
   ],
   "footerSocials": {
     "x": "https://x.com/mintlify",

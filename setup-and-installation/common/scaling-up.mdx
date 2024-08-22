@@ -1,0 +1,82 @@
+---
+title: "Scaling Up"
+---
+
+# Scaling up[#](#scaling-up "Permanent link")
+
+If you run into limitations due to the instance types you chose during a cluster creation it is possible to scale up the instances to overcome these limitations.
+
+## Scaling up the workers[#](#scaling-up-the-workers "Permanent link")
+
+If spark jobs are not starting in your cluster it may come from the fact that you don't have worker resources to run them. As workers are stateless the best way to solve this problem is to [add new workers](../adding_removing_workers/) with enough resources to handle your job. Or to [configure autoscalling](../autoscaling/) to automatically add the workers when needed.
+
+## Scaling up the head node[#](#scaling-up-the-head-node "Permanent link")
+
+You may run into the need to scale up the head node for different reasons. For example:
+
+*   You are running a cluster without [dedicated RonDB nodes](../../aws/cluster_creation/#step-12-managed-rondb) and have a workload with a high demand on the online feature store.
+*   You are running a cluster without [managed containers](../../aws/cluster_creation/#step-7-managed-containers) and want to run an important number of jupyter notebooks simultaneously.
+
+While we are working on implementing a solution to add these features to an existing cluster you can use the following approach to run your head node on an instance with more vcores and memory to handle more load.
+
+To scale up the head node you first have to stop your cluster.
+
+![Stop the cluster](../../../assets/images/setup_installation/managed/common/stop_cluster.png)
+
+Stop the cluster
+
+Once the cluster is stopped you can go to the _Details_ tab and click on the head node _instance type_.
+
+![Go to details tab an click on the head node instance type](../../../assets/images/setup_installation/managed/common/details_tab.png)
+
+Go to details tab an click on the head node instance type
+
+This will open a new window. Select the type of instance you want to change to and click on _Review and submit_
+
+![Select the new instance type for the heade node](../../../assets/images/setup_installation/managed/common/node_type_selection.png)
+
+Select the new instance type for the heade node
+
+Verify your choice and click on _Modify_
+
+Note
+
+If you set up your account with AWS in a period predating the introduction of this feature you may need to add the indicated permission to your [managed.hopsworks.ai](https://managed.hopsworks.ai) role.
+
+![Validate your choice](../../../assets/images/setup_installation/managed/common/validate_node_type.png)
+
+Validate your choice
+
+You can now start your cluster. The head node will be started on an instance type of the new type you chose.
+
+## Scaling up the RonDB nodes[#](#scaling-up-the-rondb-nodes "Permanent link")
+
+If you are running a cluster with [dedicated RonDB nodes](../../aws/cluster_creation/#step-12-managed-rondb) and have a workload with a high demand on the online feature store you may need to scale up the RonDB _Datanodes_ and _MySQLd_ nodes. For this stop the cluster.
+
+![Stop the cluster](../../../assets/images/setup_installation/managed/common/stop_cluster.png)
+
+Stop the cluster
+
+Once the cluster is stopped you can go to the _RonDB_ tab. To scale MySQLd or API nodes, click on the _instance type_ for the node you want to scale up. To scale all datanodes, click on the _Change_ button over their instance types. Datanodes cannot be scaled individually.
+
+![Go to RonDB tab an click on the instance type you want to change](../../../assets/images/setup_installation/managed/common/rondb_tab.png)
+
+Go to RonDB tab and click on the instance type you want to change or, for datanodes, click on the Change button
+
+This will open a new window. Select the type of instance you want to change to and click on _Review and submit_
+
+![Select the new instance type for the heade node](../../../assets/images/setup_installation/managed/common/node_type_selection.png)
+
+Select the new instance type for the heade node
+
+Verify your choice and click on _Modify_
+
+Note
+
+If you set up your account with AWS in a period predating the introduction of this feature you may need to add the indicated permission to your [managed.hopsworks.ai](https://managed.hopsworks.ai) role.
+
+![Validate your choice](../../../assets/images/setup_installation/managed/common/validate_node_type.png)
+
+Validate your choice
+
+You can now start your cluster. The nodes will be started on an instance type of the new type you chose.

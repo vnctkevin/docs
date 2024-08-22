@@ -1,0 +1,339 @@
+---
+title: "Getting Started"
+---
+
+# Getting started with managed.hopsworks.ai (AWS)[#](#getting-started-with-managedhopsworksai-aws "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) is our managed platform for running Hopsworks and the Feature Store in the cloud. It integrates seamlessly with third-party platforms such as Databricks, SageMaker and KubeFlow. This guide shows how to set up [managed.hopsworks.ai](https://managed.hopsworks.ai) with your organization's AWS account.
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+To run the commands in this guide, you must have the AWS CLI installed and configured and your user must have at least the set of permission listed below. See the [Getting started guide](https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-install.html) in the AWS CLI User Guide for more information about installing and configuring the AWS CLI.
+
+<pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">"iam:CreateInstanceProfile"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"iam:PassRole"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"iam:CreateRole"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"iam:PutRolePolicy"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"iam:AddRoleToInstanceProfile"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"ec2:ImportKeyPair"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"ec2:CreateKeyPair"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"s3:CreateBucket"</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+All the commands have unix-like quotation rules. These commands will need to be adapted to your terminal's quoting rules. See [Using quotation marks with strings](https://docs.aws.amazon.com/cli/v1/userguide/cli-usage-parameters-quoting-strings.html) in the AWS CLI User Guide.
+
+All the commands use the default AWS profile. Add the _\--profile_ parameter to use another profile.
+
+## Step 1: Connecting your AWS account[#](#step-1-connecting-your-aws-account "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) deploys Hopsworks clusters to your AWS account. To enable this you have to permit us to do so. This is done using an AWS cross-account role.
+
+<iframe title="Azure information video" style="width:700px; height: 370px;" src="https://www.youtube.com/embed/DLMBdA8d9nU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+In [managed.hopsworks.ai](https://managed.hopsworks.ai/) click on _Connect to AWS_ or go to _Settings_ and click on _Configure_ next to _AWS_. This will direct you to a page with the instructions needed to create the Cross account role and set up the connection. Follow the instructions.
+
+Note
+
+it is possible to limit the permissions that are set up during this phase. For more details see [restrictive-permissions](../restrictive_permissions/).
+
+![Screenshot of the instruction to create the cross account role](../../../assets/images/setup_installation/managed/aws/create-role-instructions.png)
+
+Instructions to create the cross account role
+
+## Step 2: Creating storage[#](#step-2-creating-storage "Permanent link")
+
+Note
+
+If you prefer using terraform, you can skip this step and the remaining steps, and instead, follow [this guide](../../common/terraform/#getting-started-with-aws).
+
+The Hopsworks clusters deployed by [managed.hopsworks.ai](https://managed.hopsworks.ai) store their data in an S3 bucket in your AWS account.
+
+To create the bucket run the following command, replacing _BUCKET\_NAME_ with the name you want for your bucket and setting the region to the aws region in which you want to run your cluster.
+
+Warning
+
+The bucket must be in the same region as the hopsworks cluster you are going to run
+
+<pre><span></span><code>aws<span class="w"> </span>s3<span class="w"> </span>mb<span class="w"> </span>s3://BUCKET_NAME<span class="w"> </span>--region<span class="w"> </span>us-east-2
+</code></pre>
+
+## Step 3: Creating Instance profile[#](#step-3-creating-instance-profile "Permanent link")
+
+Hopsworks cluster nodes need access to certain resources such as the S3 bucket you created above, an ecr repository, and CloudWatch.
+
+First, create an instance profile by running:
+
+<pre><span></span><code>aws<span class="w"> </span>iam<span class="w"> </span>create-instance-profile<span class="w"> </span>--instance-profile-name<span class="w"> </span>hopsworksai-instances
+</code></pre>
+
+We will now create a role with the needed permissions for this instance profile. Start by creating a file named _assume-role-policy.json_ containing the following:
+
+<pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">"Service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ec2.amazonaws.com"</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sts:AssumeRole"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+Run the following to create the role:
+
+<pre><span></span><code>aws<span class="w"> </span>iam<span class="w"> </span>create-role<span class="w"> </span>--role-name<span class="w"> </span>hopsworksai-instances<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--description<span class="w"> </span><span class="s2">"Role for the hopsworks cluster instances"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--assume-role-policy-document<span class="w"> </span>file://assume-role-policy.json
+</code></pre>
+
+Create a file called _instances-policy.json_ containing the following permissions. Replace the following placeholders with their appropiate values
+
+*   _BUCKET\_NAME_ - S3 bucket name
+*   _REGION_ - region where the cluster is deployed
+*   _ECR\_AWS\_ACCOUNT\_ID_ - AWS account id for ECR repositories
+
+Note
+
+Some of these permissions can be removed. Refer to [this guide](../restrictive_permissions/#limiting-the-instance-profile-permissions) for more information.
+
+<pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hopsworksaiInstanceProfile"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"S3:PutObject"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:ListBucket"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:GetObject"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:DeleteObject"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:AbortMultipartUpload"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:ListBucketMultipartUploads"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:PutLifecycleConfiguration"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:GetLifecycleConfiguration"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:PutBucketVersioning"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:GetBucketVersioning"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:ListBucketVersions"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"S3:DeleteObjectVersion"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"arn:aws:s3:::BUCKET_NAME/*"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:s3:::BUCKET_NAME"</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowPullImagesFromHopsworkAi"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"ecr:GetDownloadUrlForLayer"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:BatchGetImage"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:822623301872:repository/filebeat"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:822623301872:repository/base"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:822623301872:repository/onlinefs"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:822623301872:repository/airflow"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:822623301872:repository/git"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:822623301872:repository/testconnector"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:822623301872:repository/flyingduck"</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowCreateRespositry"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ecr:CreateRepository"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowPushandPullImagesToUserRepo"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"ecr:GetDownloadUrlForLayer"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:BatchGetImage"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:CompleteLayerUpload"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:UploadLayerPart"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:InitiateLayerUpload"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:BatchCheckLayerAvailability"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:PutImage"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:ListImages"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:BatchDeleteImage"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:GetLifecyclePolicy"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:PutLifecyclePolicy"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ecr:TagResource"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:ECR_AWS_ACCOUNT_ID:repository/*/filebeat"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:ECR_AWS_ACCOUNT_ID:repository/*/base"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:ECR_AWS_ACCOUNT_ID:repository/*/onlinefs"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:ECR_AWS_ACCOUNT_ID:repository/*/airflow"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:ECR_AWS_ACCOUNT_ID:repository/*/git"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:ECR_AWS_ACCOUNT_ID:repository/*/testconnector"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"arn:aws:ecr:REGION:ECR_AWS_ACCOUNT_ID:repository/*/flyingduck"</span>
+<span class="w">      </span><span class="p">]</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowGetAuthToken"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ecr:GetAuthorizationToken"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"cloudwatch:PutMetricData"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ec2:DescribeVolumes"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ec2:DescribeTags"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:PutLogEvents"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:DescribeLogStreams"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:DescribeLogGroups"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:CreateLogStream"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:CreateLogGroup"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"ssm:GetParameter"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+Attach the permission to the role by running:
+
+<pre><span></span><code>aws<span class="w"> </span>iam<span class="w"> </span>put-role-policy<span class="w"> </span>--role-name<span class="w"> </span>hopsworksai-instances<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--policy-name<span class="w"> </span>hopsworksai-instances<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--policy-document<span class="w"> </span>file://instances-policy.json
+</code></pre>
+
+Finally, attach the role to the instance profile by running:
+
+<pre><span></span><code>aws<span class="w"> </span>iam<span class="w"> </span>add-role-to-instance-profile<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--role-name<span class="w"> </span>hopsworksai-instances<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--instance-profile-name<span class="w"> </span>hopsworksai-instances
+</code></pre>
+
+## Step 4: Create an SSH key[#](#step-4-create-an-ssh-key "Permanent link")
+
+When deploying clusters, [managed.hopsworks.ai](https://managed.hopsworks.ai) installs an ssh key on the cluster's instances so that you can access them if necessary. For this purpose, you need to add an ssh key to your AWS EC2 environment. This can be done in two ways: [creating a new key pair](#step-31-create-a-new-key-pair) or [importing an existing key pair](#step-32-import-a-key-pair).
+
+### Step 4.1: Create a new key pair[#](#step-41-create-a-new-key-pair "Permanent link")
+
+To create a new key pair run the following command replacing REGION by the region in which you want to run the hopsworks cluster.
+
+<pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>create-key-pair<span class="w"> </span>--key-name<span class="w"> </span>hopsworksai<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--region<span class="w"> </span>REGION
+</code></pre>
+
+The output is an ASCII version of the private key and key fingerprint. You need to save the key to a file.
+
+### Step 4.2: Import a key pair[#](#step-42-import-a-key-pair "Permanent link")
+
+To import an existing key pair run the following command replacing _PATH\_TO\_PUBLIC\_KEY_ by the path to the public key on your machine and REGION by the region in which you want to run the hopsworks cluster.
+
+<pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>import-key-pair<span class="w"> </span>--key-name<span class="w"> </span>hopsworskai<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--public-key-material<span class="w"> </span>fileb://PATH_TO_PUBLIC_KEY<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--region<span class="w"> </span>REGION
+</code></pre>
+
+## Step 5: Deploying a Hopsworks cluster[#](#step-5-deploying-a-hopsworks-cluster "Permanent link")
+
+In [managed.hopsworks.ai](https://managed.hopsworks.ai), select _Create cluster_:
+
+![Create a Hopsworks cluster](../../../assets/images/setup_installation/managed/common/create-instance.png)
+
+Create a Hopsworks cluster
+
+Select the _Region_ in which you want your cluster to run (1), name your cluster (2).
+
+Select the _Instance type_ (3) and _Local storage_ (4) size for the cluster _Head node_.
+
+Check if you want to _Enable EBS encryption_ (5)
+
+Enter the name of the _S3 bucket_ (6) you created in [step 2](#step-2-creating-storage).
+
+Note
+
+The S3 bucket you are using must be empty.
+
+Make sure that the _ECR AWS Account Id_ (7) is correct. It is set by default to the AWS account id where you set the cross-account role and need to match the permissions you set in [step 3](#step-3-creating-instance-profile). Press _Next_:
+
+![Create a Hopsworks cluster, general Information](../../../assets/images/setup_installation/managed/aws/create-instance-general.png)
+
+Create a Hopsworks cluster, general information
+
+Select the number of workers you want to start the cluster with (2). Select the _Instance type_ (3) and _Local storage_ size (4) for the _worker nodes_.
+
+Note
+
+It is possible to [add or remove workers](../../common/adding_removing_workers/) or to [enable autoscaling](../../common/autoscaling/) once the cluster is running.
+
+Press _Next_:
+
+![Create a Hopsworks cluster, static workers configuration](../../../assets/images/setup_installation/managed/common/create-instance-workers-static.png)
+
+Create a Hopsworks cluster, static workers configuration
+
+Select the _SSH key_ you created in [step 4](#step-4-create-an-ssh-key):
+
+![Choose SSH key](../../../assets/images/setup_installation/managed/aws/connect-aws-ssh.png)
+
+Choose SSH key
+
+Select the _Instance Profile_ that you created in [step 3](#step-3-creating-instance-profile):
+
+![Choose the instance profile](../../../assets/images/setup_installation/managed/aws/connect-aws-profile.png)
+
+Choose the instance profile
+
+To backup the S3 bucket data when taking a cluster backup we need to set a retention policy for S3. You can deactivate the retention policy by setting this value to 0 but this will block you from taking any backup of your cluster. Choose the retention period in days and click on _Review and submit_:
+
+![Choose the backup retention policy](../../../assets/images/setup_installation/managed/azure/connect-azure-backup.png)
+
+Choose the backup retention policy
+
+Review all information and select _Create_:
+
+![Review cluster information](../../../assets/images/setup_installation/managed/aws/connect-aws-review.png)
+
+Review cluster information
+
+The cluster will start. This will take a few minutes:
+
+![Booting Hopsworks cluster](../../../assets/images/setup_installation/managed/common/booting.png)
+
+Booting Hopsworks cluster
+
+As soon as the cluster has started, you will be able to log in to your new Hopsworks cluster. You will also be able to stop, restart, or terminate the cluster.
+
+![Running Hopsworks cluster](../../../assets/images/setup_installation/managed/common/running.png)
+
+Running Hopsworks cluster
+
+## Step 6: Next steps[#](#step-6-next-steps "Permanent link")
+
+Check out our other guides for how to get started with Hopsworks and the Feature Store:
+
+*   Make Hopsworks services [accessible from outside services](../../common/services/)
+*   Get started with the [Hopsworks Feature Store](https://colab.research.google.com/github/logicalclocks/hopsworks-tutorials/blob/master/quickstart.ipynb)
+*   Follow one of our [tutorials](../../../tutorials/)
+*   Follow one of our [Guide](../../../user_guides/)
+*   Code examples and notebooks: [hops-examples](https://github.com/logicalclocks/hops-examples)

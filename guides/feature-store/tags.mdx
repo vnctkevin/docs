@@ -1,0 +1,121 @@
+---
+title: "Tags"
+---
+
+# Tags[#](#tags "Permanent link")
+
+## Introduction[#](#introduction "Permanent link")
+
+Hopsworks feature store enables users to attach tags to artifacts, such as feature groups, feature views or training datasets.
+
+A tag is a `{key: value}` pair which provides additional information about the data managed by Hopsworks. Tags allow you to design custom metadata for your artifacts. For example, you could design a tag schema that encodes governance rules for your feature store, such as classifying data as personally identifiable, defining a data retention period for the data, and defining who signed off on the creation of some feature.
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+Tags have a schema. Before you can attach a tag to an artifact and fill in the tag values, you first need to select an existing tag schema or create a new tag schema.
+
+Tag schemas can be defined by Hopsworks administrator in the `Cluster settings` section of the platform. Schemas are defined globally across all projects. When users attach tags to an artifact, the tag will be validated against a specific schema. This allows tags to be consistent no matter the project or the team generating them.
+
+Immutable
+
+Tag schemas are immutable. Once defined, a tag schema cannot be edited nor deleted.
+
+## Step 1: Define a tag schema[#](#step-1-define-a-tag-schema "Permanent link")
+
+Tag schemas can be defined using the UI wizard in the `Cluster settings` > `Tag schemas` section. Tag schemas have a name, the name is used to uniquely identify the schema. You can also provide an optional description.
+
+You can define a schema by using the UI tool or by providing the schema in JSON format. If you use the UI tool, you should provide the name of the property in the schema, the type of the property, whether or not the property is required and an optional description.
+
+![UI tag schema definition](../../../../assets/images/guides/tags/tags_schema_simple.png)
+
+UI tag schema definition
+
+The UI tool allows you to define simple not-nested schemas. For more advanced use cases, more complex schemas (e.g. nested schemas) might be required to fully express the content of a given artifact. In such cases it is possible to provide the schema directly as JSON string. The JSON should follow the standard [https://json-schema.org](https://json-schema.org). An example of complex schema is the following:
+
+<pre><span></span><code>{
+  "type" : "object",
+  "properties" :
+  {
+    "first_name" : { "type" : "string" },
+    "last_name" : { "type" : "string" },
+    "age" : { "type" : "integer" },
+    "hobbies" : {
+        "type" : "array",
+        "items" : { "type" : "string" }
+    }
+  },
+  "required" : ["first_name", "last_name", "age"],
+  "additionalProperties": false
+}
+</code></pre>
+
+Additionally it is also possible to define a single property as tag. You can achieve this by defining a JSON schema like the following:
+
+<pre><span></span><code>{ "type" : "string" }
+</code></pre>
+
+Where the type is a valid primitive type: `string`, `boolean`, `integer`, `number`.
+
+## Step 2: Attach a tag to an artifact[#](#step-2-attach-a-tag-to-an-artifact "Permanent link")
+
+Once the tag schema has been created, you can attach a tag with that schema to a feature group, feature view or training datasets either using the feature store APIs, or by using the UI.
+
+### Using the API[#](#using-the-api "Permanent link")
+
+You can attach tags to feature groups and feature views by using the `add_tag()` method of the feature store APIs:
+
+[Python](#__tabbed_1_1)
+
+<pre><span></span><code><span class="c1"># Retrieve the feature group</span>
+<span class="n">fg</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">get_feature_group</span><span class="p">(</span><span class="s2">"transactions_4h_aggs_fraud_batch_fg"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Define the tag</span>
+<span class="n">tag</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'business_unit'</span><span class="p">:</span> <span class="s1">'Fraud'</span><span class="p">,</span>
+    <span class="s1">'data_owner'</span><span class="p">:</span> <span class="s1">'email@hopsworks.ai'</span><span class="p">,</span>
+    <span class="s1">'pii'</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+
+<span class="c1"># Attach the tag</span>
+<span class="n">fg</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="s2">"data_privacy"</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span> 
+</code></pre>
+
+You can see the list of tags attached to a given artifact by using the `get_tags()` method:
+
+[Python](#__tabbed_2_1)
+
+<pre><span></span><code><span class="c1"># Retrieve the feature group</span>
+<span class="n">fg</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">get_feature_group</span><span class="p">(</span><span class="s2">"transactions_4h_aggs_fraud_batch_fg"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Retrieve the tags for this feature group </span>
+<span class="n">fg</span><span class="o">.</span><span class="n">get_tags</span><span class="p">()</span>
+</code></pre>
+
+Finally you can remove a tag from a given artifact by calling the `delete_tag()` method:
+
+[Python](#__tabbed_3_1)
+
+<pre><span></span><code><span class="c1"># Retrieve the feature group</span>
+<span class="n">fg</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">get_feature_group</span><span class="p">(</span><span class="s2">"transactions_4h_aggs_fraud_batch_fg"</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Retrieve the tags for this feature group </span>
+<span class="n">fg</span><span class="o">.</span><span class="n">delete_tag</span><span class="p">(</span><span class="s2">"data_privacy"</span><span class="p">)</span>
+</code></pre>
+
+The same APIs work for feature views and training dataset alike.
+
+### Using the UI[#](#using-the-ui "Permanent link")
+
+You can attach tags to feature groups and feature views directly from the UI. You can navigate on the artifact page and click on the `Add tags` button. From there you can select the tag schema of the tag you want to attach and populate the values as shown in the gif below.
+
+![Attach tag to a feature group](../../../../assets/images/guides/tags/tags_ui.gif)
+
+Attach tag to a feature group
+
+## Step 3: Search[#](#step-3-search "Permanent link")
+
+Hopsworks indexes the tags attached to feature groups, feature views and training datasets. The tags will then be searchable using the free text search box located at the top of the UI.
+
+![Search for tags in the feature store](../../../../assets/images/guides/tags/search_ui.gif)
+
+Search for tags in the feature store

@@ -1,0 +1,89 @@
+---
+title: "Export Metrics"
+---
+
+# Exporting Hopsworks metrics[#](#exporting-hopsworks-metrics "Permanent link")
+
+## Introduction[#](#introduction "Permanent link")
+
+Hopsworks services produce metrics which are centrally gathered by [Prometheus](https://prometheus.io/) and visualized in [Grafana](../grafana). Although the system is self-contained, it is possible to export these metrics to third-party services or another Prometheus instance.
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+In order to configure Prometheus to export metrics you need `root` SSH access to either Hopsworks or to the target server depending on the export method you choose below.
+
+## Exporting metrics[#](#exporting-metrics "Permanent link")
+
+Prometheus can be configured to export metrics to another Prometheus instance (cross-service federation) or to a custom service which knows how to handle them.
+
+### Prometheus federation[#](#prometheus-federation "Permanent link")
+
+Prometheus servers can be federated to scale better or to just clone all metrics (cross-service federation). Prometheus federation is well [documented](https://prometheus.io/docs/prometheus/latest/federation/#cross-service-federation) but there are some specificities to Hopsworks.
+
+In the guide below we assume **Prometheus A** is the service running in Hopsworks and **Prometheus B** is the server you want to clone metrics to.
+
+#### Step 1[#](#step-1 "Permanent link")
+
+**Prometheus B** needs to be able to connect to TCP port `9089` of **Prometheus B** to scrape metrics. If you have any firewall (or Security Group) in place, allow ingress for that port.
+
+#### Step 2[#](#step-2 "Permanent link")
+
+SSH into **Prometheus B** server, edit Prometheus configuration file and add the following under the `scrape_configs`
+
+Note
+
+Replace IP\_ADDRESS with the actual address of Hopsworks server
+
+<pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">'federate'</span>
+<span class="w">    </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15s</span>
+
+<span class="w">    </span><span class="nt">honor_labels</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">metrics_path</span><span class="p">:</span><span class="w"> </span><span class="s">'/federate'</span>
+
+<span class="w">    </span><span class="nt">params</span><span class="p">:</span>
+<span class="w">      </span><span class="s">'match[]'</span><span class="p p-Indicator">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'{job="airflow"}'</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'{job="pushgateway"}'</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'{job="hadoop"}'</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'{job="hopsworks"}'</span>
+
+<span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'IP_ADDRESS:9089'</span>
+</code></pre>
+
+These are the basic labels gathered by Hopsworks.
+
+*   If your Hopsworks cluster runs **without** Kubernetes append `'{job="cadvisor"}'` to `match[]` list
+    
+*   If your Hopsworks cluster runs **with** Kubernetes append the following labels to `match[]`
+    
+    *   `'{job=~"knative.+"}'`
+    *   `'{job="kubernetes-cadvisor"}'`
+    *   `'{job="istio-envoy"}'`
+    *   `'{job="kube-state-metrics"}'`
+    *   `'{job="cadvisor"}'`
+    *   `'{job="cadvisor"}'`
+    *   `'{job="cadvisor"}'`
+
+#### Step 3[#](#step-3 "Permanent link")
+
+Finally restart Prometheus service with `sudo systemctl restart prometheus`
+
+### Custom service[#](#custom-service "Permanent link")
+
+Prometheus can push metrics to another custom resource via HTTP. The custom service is responsible for handling the received metrics. To push metrics with this method we use the `remote_write` configuration.
+
+We will only give a sample configuration as `remote_write` is extensively documented in Prometheus [documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write) In the example below we push metrics to a custom service listening on port 9096 which transforms the metrics and forwards them.
+
+<pre><span></span><code><span class="nt">remote_write</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="s">"http://localhost:9096"</span>
+<span class="w">    </span><span class="nt">queue_config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">capacity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000</span>
+<span class="w">      </span><span class="nt">max_samples_per_send</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
+<span class="w">      </span><span class="nt">batch_send_deadline</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60s</span>
+</code></pre>
+
+## Conclusion[#](#conclusion "Permanent link")
+
+In this guide we showed how you can push metrics outside of Hopsworks cluster using two methods, (a) federated Prometheus or (b) remote write to a custom service. This configuration is useful if you already have a centralized monitoring system with alerts already configured.

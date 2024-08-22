@@ -1,0 +1,430 @@
+---
+title: "Limiting Permissions"
+---
+
+# Limiting AWS permissions[#](#limiting-aws-permissions "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) requires a set of permissions to be able to manage resources in the user’s AWS account. By default, [these permissions](#default-permissions) are set to easily allow a wide range of different configurations and allow us to automate as many steps as possible. While we ensure to never access resources we shouldn’t, we do understand that this might not be enough for your organization or security policy. This guide explains how to lock down AWS permissions following the IT security policy principle of least privilege allowing [managed.hopsworks.ai](https://managed.hopsworks.ai) to only access resources in a specific VPC.
+
+## Default permissions[#](#default-permissions "Permanent link")
+
+This is the list of default permissions that are required by [managed.hopsworks.ai](https://managed.hopsworks.ai). If you prefer to limit these permissions, then proceed to the [next section](#limiting-the-cross-account-role-permissions).
+
+<pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ListResources"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeInstances"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeVpcs"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeVolumes"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeSubnets"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeKeyPairs"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeInstanceStatus"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"iam:ListInstanceProfiles"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeSecurityGroups"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeVpcAttribute"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeRouteTables"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"iam:GetInstanceProfile"</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IAMPassRoleToInstance"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iam:PassRole"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowInstanceActions"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="s2">"ec2:RunInstances"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:StopInstances"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:TerminateInstances"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:StartInstances"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:CreateTags"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:AssociateIamInstanceProfile"</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowNetworkRessourcesCreation"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="s2">"ec2:CreateVpc"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:ModifyVpcAttribute"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:CreateInternetGateway"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:AttachInternetGateway"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:CreateSubnet"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:CreateSecurityGroup"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:CreateRouteTable"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:CreateRoute"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:AssociateRouteTable"</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowNetworkRessourcesDeletion"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="s2">"ec2:DeleteSubnet"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DeleteRouteTable"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DeleteInternetGateway"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DeleteRoute"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DetachInternetGateway"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DisassociateRouteTable"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DeleteSecurityGroup"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DeleteVpc"</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowOpeningPorts"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="s2">"ec2:AuthorizeSecurityGroupIngress"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:RevokeSecurityGroupIngress"</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowTestingOfInstanceRole"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="s2">"iam:SimulatePrincipalPolicy"</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HopsworksAIBackup"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="s2">"ec2:RegisterImage"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DeregisterImage"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeImages"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:CreateSnapshot"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DeleteSnapshot"</span><span class="p">,</span>
+<span class="w">              </span><span class="s2">"ec2:DescribeSnapshots"</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"HopsworksAIModifyInstanceType"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">              </span><span class="s2">"ec2:ModifyInstanceAttribute"</span>
+<span class="w">          </span><span class="p">],</span>
+<span class="w">          </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ManageLoadBalancersForExternalAccess"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:CreateLoadBalancer"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:CreateListener"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:CreateTargetGroup"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:RegisterTargets"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:AddTags"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:DescribeTargetGroups"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:DeleteLoadBalancer"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:DeleteTargetGroup"</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+## Limiting the cross-account role permissions[#](#limiting-the-cross-account-role-permissions "Permanent link")
+
+### Step 1: Create a VPC[#](#step-1-create-a-vpc "Permanent link")
+
+To restrict [managed.hopsworks.ai](https://managed.hopsworks.ai) from accessing resources outside of a specific VPC, you need to create a new VPC connected to an Internet Gateway. This can be achieved in the AWS Management Console following this guide: [Create the VPC](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html#Create-VPC). Follow the steps of `Create a VPC, subnets, and other VPC resources`, naming your vpc and changing the `Number of Availability Zones` to 1 are the only changes you need to make to the default configuration. Alternatively, an existing VPC such as the default VPC can be used and [managed.hopsworks.ai](https://managed.hopsworks.ai) will be restricted to this VPC. Note the VPC ID of the VPC you want to use for the following steps.
+
+Note
+
+Make sure you enable `DNS hostnames` for your VPC
+
+Note
+
+If you use VPC endpoints to managed access to services such as S3 and ECR you need to ensure that the endpoints provide the same permissions as set in the [instance profile](../getting_started/#step-3-creating-instance-profile)
+
+After you have created the VPC either [Create a Security Group](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#CreatingSecurityGroups) or use VPC's default. Make sure that the VPC allow the following traffic.
+
+#### Inbound traffic[#](#inbound-traffic "Permanent link")
+
+It is _**imperative**_ that the [Security Group](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#AddRemoveRules) allows Inbound traffic from any Instance within the same Security Group in any (TCP) port. All VMs of the Cluster should be able to communicate with each other. It is also recommended to open TCP port `80` to sign the certificates. If you do not open port `80` you will have to use a self-signed certificate in your Hopsworks cluster. This can be done by checking the `Continue with self-signed certificate` check box in the `Security Group` step of the cluster creation.
+
+We recommend configuring the [Network ACLs](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html#Rules) to be open to all inbound traffic and let the security group handle the access restriction. But if you want to set limitations at the Network ACLs level, they must be configured so that at least the TCP ephemeral port `32768 - 65535` are open to the internet (this is so that outbound trafic can receive answers). It is also recommended to open TCP port `80` to sign the certificates. If you do not open port `80` you will have to use a self-signed certificate in your Hopsworks cluster. This can be done by checking the `Continue with self-signed certificate` check box in the `Security Group` step of the cluster creation.
+
+#### Outbound traffic[#](#outbound-traffic "Permanent link")
+
+Clusters created on [managed.hopsworks.ai](https://managed.hopsworks.ai) need to be able to send http requests to _api.hopsworks.ai_. The _api.hopsworks.ai_ domain use a content delivery network for better performance. This result in the impossibility to predict which IP the request will be sent to. If you require a list of static IPs to allow outbound traffic from your security group, use the _static IPs_ option during [cluster creation](../cluster_creation/#limiting-outbound-traffic-to-hopsworksai).
+
+Similar to Inbound traffic, the Security Group in place _**must**_ allow Outbound traffic in any (TCP) port towards any VM withing the same Security Group.
+
+Note
+
+If you intend to use the managed users option on your Hopsworks cluster you should also allow outbound traffic to [cognito-idp.us-east-2.amazonaws.com](https://cognito-idp.us-east-2.amazonaws.com) and [managedhopsworks-prod.auth.us-east-2.amazoncognito.com](https://managedhopsworks-prod.auth.us-east-2.amazoncognito.com).
+
+### Step 2: Create an instance profile[#](#step-2-create-an-instance-profile "Permanent link")
+
+You need to create an instance profile that will identify all instances started by [managed.hopsworks.ai](https://managed.hopsworks.ai). Follow this guide to create a role to be used by EC2 with no permissions attached: [Creating a Role for an AWS Service (Console)](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-service.html). Take note of the ARN of the role you just created.
+
+You will need to add permissions to the instance profile to give access to the S3 bucket where Hopsworks will store its data. For more details about these permissions check [our guide here](../getting_started/#step-3-creating-instance-profile). Check [bellow](#limiting-the-instance-profile-permissions) for more information on restricting the permissions given the instance profile.
+
+### Step 3: Set permissions of the cross-account role[#](#step-3-set-permissions-of-the-cross-account-role "Permanent link")
+
+During the account setup for [managed.hopsworks.ai](https://managed.hopsworks.ai), you were asked to create and provide a cross-account role. If you don’t remember which role you used then you can find it in Settings/Account Settings in [managed.hopsworks.ai](https://managed.hopsworks.ai). Edit this role in the AWS Management Console and overwrite the existing inline policy with the following policy.
+
+Note that you have to replace `[INSTANCE_PROFILE_NAME]` and `[VPC_ID]` for multiple occurrences in the given policy.
+
+If you want to learn more about how this policy works check out: [How to Help Lock Down a User’s Amazon EC2 Capabilities to a Single VPC](https://aws.amazon.com/blogs/security/how-to-help-lock-down-a-users-amazon-ec2-capabilities-to-a-single-vpc/).
+
+<pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NonResourceBasedPermissions"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeInstances"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeVpcs"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeVolumes"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeSubnets"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeKeyPairs"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeInstanceStatus"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"iam:ListInstanceProfiles"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeSecurityGroups"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeVpcAttribute"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeRouteTables"</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IAMPassRoleToInstance"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"iam:PassRole"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:iam::*:role/[INSTANCE_PROFILE_NAME]"</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EC2RunInstancesOnlyWithGivenRole"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ec2:RunInstances"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:ec2:*:*:instance/*"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"ArnLike"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"ec2:InstanceProfile"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:iam::*:instance-profile/[INSTANCE_PROFILE_NAME]"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EC2RunInstancesOnlyInGivenVpc"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ec2:RunInstances"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:ec2:*:*:subnet/*"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"ArnLike"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"ec2:vpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:ec2:*:*:vpc/[VPC_ID]"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AllowInstanceActions"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">"ec2:StopInstances"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:TerminateInstances"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:StartInstances"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:CreateTags"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:AssociateIamInstanceProfile"</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:ec2:*:*:instance/*"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"ArnLike"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"ec2:InstanceProfile"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:iam::*:instance-profile/[INSTANCE_PROFILE_NAME]"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RemainingRunInstancePermissions"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ec2:RunInstances"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">"arn:aws:ec2:*:*:volume/*"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"arn:aws:ec2:*::image/*"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"arn:aws:ec2:*::snapshot/*"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"arn:aws:ec2:*:*:network-interface/*"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"arn:aws:ec2:*:*:key-pair/*"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"arn:aws:ec2:*:*:security-group/*"</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EC2VpcNonResourceSpecificActions"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">"ec2:AuthorizeSecurityGroupIngress"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:RevokeSecurityGroupIngress"</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"ArnLike"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"ec2:vpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:ec2:*:*:vpc/[VPC_ID]"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EC2BackupCreation"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">"ec2:RegisterImage"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DeregisterImage"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeImages"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:CreateSnapshot"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DeleteSnapshot"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeSnapshots"</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+</code></pre>
+
+### Step 4: Create your Hopsworks instance[#](#step-4-create-your-hopsworks-instance "Permanent link")
+
+You can now create a new Hopsworks instance in [managed.hopsworks.ai](https://managed.hopsworks.ai) by selecting the configured instance profile, VPC and security group during instance configuration. Selecting any other VPCs or instance profiles will result in permissions errors.
+
+### Step 5: Supporting multiple VPCs[#](#step-5-supporting-multiple-vpcs "Permanent link")
+
+The policy can be extended to give [managed.hopsworks.ai](https://managed.hopsworks.ai) access to multiple VPCs. See: [Creating a Condition with Multiple Keys or Values](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_multi-value-conditions.html).
+
+### Other removable permissions[#](#other-removable-permissions "Permanent link")
+
+There are other permissions that are required by Hopsworks to provide certain product capabilities to the users. In this section, we go through these permissions and what are the implication or removing them.
+
+#### Backup permissions[#](#backup-permissions "Permanent link")
+
+The following permissions are only needed for the backup feature. You can remove them if you are not going to create backups or if you do not have access to this Enterprise feature.
+
+<pre><span></span><code><span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EC2BackupCreation"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">"ec2:RegisterImage"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DeregisterImage"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeImages"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:CreateSnapshot"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DeleteSnapshot"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeSnapshots"</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+<span class="w">      </span><span class="p">}</span>
+</code></pre>
+
+#### Early warnings if VPC is not configured correctly[#](#early-warnings-if-vpc-is-not-configured-correctly "Permanent link")
+
+The following permissions are needed to give an early warning if your VPC and security groups are badly configured. You can remove them if you don't need it.
+
+<pre><span></span><code><span class="w">          </span><span class="s2">"ec2:DescribeVpcAttribute"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:DescribeRouteTables"</span>
+</code></pre>
+
+#### Open and close ports from within Hopsworks.ai[#](#open-and-close-ports-from-within-hopsworksai "Permanent link")
+
+The following permissions are used to let you close and open ports on your cluster from hopswork.ai, you can remove them if you do not want to open ports on your cluster or if you want to manually open ports in EC2.
+
+<pre><span></span><code><span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EC2VpcNonResourceSpecificActions"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="s2">"ec2:AuthorizeSecurityGroupIngress"</span><span class="p">,</span>
+<span class="w">          </span><span class="s2">"ec2:RevokeSecurityGroupIngress"</span><span class="p">,</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">"ArnLike"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"ec2:vpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:ec2:*:*:vpc/[VPC_ID]"</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+</code></pre>
+
+#### Non resource based permissions used for listing[#](#non-resource-based-permissions-used-for-listing "Permanent link")
+
+If you are using terraform, then you can also remove most of the _Describe_ permissions in `NonResourceBasedPermissions` and use the following permissions instead
+
+<pre><span></span><code><span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NonResourceBasedPermissions"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">"ec2:DescribeInstances"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"ec2:DescribeVolumes"</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">"ec2:DescribeSecurityGroups"</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">        </span><span class="p">},</span>
+</code></pre>
+
+#### Load balancers permissions for external access[#](#load-balancers-permissions-for-external-access "Permanent link")
+
+If you plan to access your Hopsworks cluster from an external python environment, especially if you plan to use the [ArrowFlight with DuckDB](../../common/arrow_flight_duckdb), then it is required to create a network load balancer that forward requests to the ArrowFlight server(s) co-located with the RonDB MySQL Server(s). If you are not planning to use ArrowFlight server(s) or multiple mysql server(s), you can skip adding the following permissions. If you still wish to use the ArrowFlight server(s) but without adding the following permissions to your cross account role, check [this advanced terraform example for more details](https://github.com/logicalclocks/terraform-provider-hopsworksai/tree/main/examples/complete/aws/advanced/arrowflight-no-loadbalancer-permissions).
+
+<pre><span></span><code><span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ManageLoadBalancersForExternalAccess"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:CreateLoadBalancer"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:CreateListener"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:CreateTargetGroup"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:RegisterTargets"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:AddTags"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:DescribeTargetGroups"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:DeleteLoadBalancer"</span><span class="p">,</span>
+<span class="w">            </span><span class="s2">"elasticloadbalancing:DeleteTargetGroup"</span>
+<span class="w">        </span><span class="p">],</span>
+<span class="w">        </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre>
+
+## Limiting the instance profile permissions[#](#limiting-the-instance-profile-permissions "Permanent link")
+
+### Backups[#](#backups "Permanent link")
+
+If you do not intend to take backups or if you do not have access to this Enterprise feature you can remove the permissions that are only used by the backup feature when [configuring instance profile permissions](../getting_started/#step-3-creating-instance-profile) . For this remove the following permissions from the instance profile:
+
+<pre><span></span><code><span class="w">      </span><span class="s2">"S3:PutLifecycleConfiguration"</span><span class="p">,</span><span class="w"> </span>
+<span class="w">      </span><span class="s2">"S3:GetLifecycleConfiguration"</span><span class="p">,</span><span class="w"> </span>
+<span class="w">      </span><span class="s2">"S3:PutBucketVersioning"</span><span class="p">,</span><span class="w"> </span>
+<span class="w">      </span><span class="s2">"S3:ListBucketVersions"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"S3:DeleteObjectVersion"</span><span class="p">,</span>
+</code></pre>
+
+### CloudWatch Logs[#](#cloudwatch-logs "Permanent link")
+
+Hopsworks put its logs in Amazon CloudWatch so that you can access them without having to ssh into the machine. If you are not interested in this feature you can remove the following from your instance profile policy:
+
+<pre><span></span><code><span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"cloudwatch:PutMetricData"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ec2:DescribeVolumes"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"ec2:DescribeTags"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:PutLogEvents"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:DescribeLogStreams"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:DescribeLogGroups"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:CreateLogStream"</span><span class="p">,</span>
+<span class="w">        </span><span class="s2">"logs:CreateLogGroup"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"ssm:GetParameter"</span>
+<span class="w">      </span><span class="p">],</span>
+<span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre>

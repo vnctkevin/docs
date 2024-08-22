@@ -1,0 +1,132 @@
+---
+title: "Limiting Permissions"
+---
+
+# Limiting GCP permissions[#](#limiting-gcp-permissions "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) requires a set of permissions to be able to manage resources in the user’s GCP project. By default, these permissions are set to easily allow a wide range of different configurations and allow us to automate as many steps as possible. While we ensure to never access resources we shouldn’t, we do understand that this might not be enough for your organization or security policy. This guide explains how to lock down access permissions following the IT security policy principle of least privilege.
+
+## Default permissions[#](#default-permissions "Permanent link")
+
+This is the list of default permissions that are required by [managed.hopsworks.ai](https://managed.hopsworks.ai). If you prefer to limit these permissions, then proceed to the [next section](#limiting-the-account-service-account-permissions).
+
+<pre><span></span><code><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Hopsworks AI</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Role that allows Hopsworks AI to manage resources</span>
+<span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GA</span>
+<span class="nt">includedPermissions</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.disks.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.disks.createSnapshot</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.delete</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.setLabels</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.useReadOnly</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.firewalls.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.firewalls.delete</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.firewalls.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.firewalls.list</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.firewalls.update</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.globalOperations.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.delete</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.setLabels</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.setMetadata</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.setServiceAccount</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.start</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.stop</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.setMachineType</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.networks.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.networks.delete</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.networks.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.networks.list</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.networks.updatePolicy</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.projects.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.subnetworks.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.subnetworks.delete</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.subnetworks.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.subnetworks.list</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.subnetworks.use</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.subnetworks.useExternalIp</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.zoneOperations.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">iam.serviceAccounts.actAs</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">iam.serviceAccounts.list</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resourcemanager.projects.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">iam.roles.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resourcemanager.projects.getIamPolicy</span>
+</code></pre>
+
+## Limiting the Account Service Account permissions[#](#limiting-the-account-service-account-permissions "Permanent link")
+
+Some of the permissions set up when connection your GCP account to [managed.hopsworks.ai](https://managed.hopsworks.ai) ([here](../getting_started/#step-1-connecting-your-gcp-account)) can be removed under certain conditions.
+
+### Backup permissions[#](#backup-permissions "Permanent link")
+
+The following permissions are only needed for the backup feature. If you are not going to create backups or if you do not have access to this Enterprise feature, you can limit the permission of the Service Account by removing them.
+
+<pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.disks.createSnapshot</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.delete</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.setLabels</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.snapshots.useReadOnly</span>
+</code></pre>
+
+### Instance type modification permissions[#](#instance-type-modification-permissions "Permanent link")
+
+The following permission is only needed to be able to change the head node and RonDB nodes instance type on an existing cluster ([documentation](../../common/scalingup/)). If you are not going to use this feature, you can limit the permission of the Service Account by removing it.
+
+<pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.instances.setMachineType</span>
+</code></pre>
+
+### Instance Service account check[#](#instance-service-account-check "Permanent link")
+
+The following permissions are only needed to check that the service account you select for your cluster has the proper permissions. If you remove them the check will be skipped. This may result in your cluster taking more time to detect the error if the service account does not have the proper permissions
+
+<pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">iam.roles.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resourcemanager.projects.getIamPolicy</span>
+</code></pre>
+
+### Create a VPC permissions[#](#create-a-vpc-permissions "Permanent link")
+
+The following permissions are only needed if you want [managed.hopsworks.ai](https://managed.hopsworks.ai) to create VPC and subnet for you.
+
+<pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.networks.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.networks.delete</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.networks.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.subnetworks.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.subnetworks.delete</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.subnetworks.get</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.firewalls.create</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.firewalls.delete</span>
+</code></pre>
+
+You can remove these permissions by creating your own VPC, subnet, and firewalls and selecting them during cluster creation. For the VPC to be accepted you will need to associate it with firewall rules with the following constraints:
+
+*   One firewall rule associated with the VPC must allow ingress communication on all ports for communication between sources with the [service account you will attach to the cluster nodes](../getting_started/#step-3-creating-a-service-account-for-your-cluster-instances) (source and target). To create such a rule, run the following command replacing _$NETWORK_ with the name of your VPC, _$SERVICE\_ACCOUNT_ with the email of your service account, and _$PROJECT\_ID_ with the id of your project:
+
+<pre><span></span><code>gcloud<span class="w"> </span>compute<span class="w"> </span>firewall-rules<span class="w"> </span>create<span class="w"> </span>nodetonode<span class="w"> </span>--network<span class="o">=</span><span class="nv">$NETWORK</span><span class="w"> </span>--allow<span class="o">=</span>all<span class="w"> </span>--direction<span class="o">=</span>INGRESS<span class="w"> </span>--target-service-accounts<span class="o">=</span><span class="nv">$SERVICE_ACCOUNT</span><span class="w"> </span>--source-service-accounts<span class="o">=</span><span class="nv">$SERVICE_ACCOUNT</span><span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span>
+</code></pre>
+
+*   We recommend that you have a firewall rule associated with the VPC allowing TCP ingress communication to ports 443 and 80. If you don't have a rule opening port 443 the cluster will not be accessible from the internet. If you don't have a rule opening port 80 your cluster will be created with a self-signed certificate. You will have to acknowledge it by checking the _Continue with self-signed certificate_ check box during [subnet selection](../cluster_creation/#step-6-vpc-and-subnet-selection). Depending on your firewall rules setup at cluster creation [managed.hopsworks.ai](https://managed.hopsworks.ai) may not be able to manage services port at run time. In such a case you will have to open and close the ports yourself in the cluster provider. To create this rule, run the following command replacing _$NETWORK_ with the name of your VPC, _$SERVICE\_ACCOUNT_ with the email of your service account and _$PROJECT\_ID_ with the id of your project:
+
+<pre><span></span><code>gcloud<span class="w"> </span>compute<span class="w"> </span>firewall-rules<span class="w"> </span>create<span class="w"> </span>inbound<span class="w"> </span>--network<span class="o">=</span><span class="nv">$NETWORK</span><span class="w"> </span>--allow<span class="o">=</span>all<span class="w"> </span>--direction<span class="o">=</span>INGRESS<span class="w"> </span>--target-service-accounts<span class="o">=</span><span class="nv">$SERVICE_ACCOUNT</span><span class="w"> </span>--allow<span class="o">=</span>tcp:80,tcp:443<span class="w"> </span>--source-ranges<span class="o">=</span><span class="s2">"0.0.0.0/0"</span><span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span>
+</code></pre>
+
+### Update Firewall[#](#update-firewall "Permanent link")
+
+The following permission is only needed to open and close service ports on the cluster. If you are not intending to open and close these ports from [managed.hopsworks.ai](https://managed.hopsworks.ai) you can remove the permission.
+
+<pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">compute.firewalls.update</span>
+</code></pre>
+
+## Limiting the Instances Service Account permissions[#](#limiting-the-instances-service-account-permissions "Permanent link")
+
+Some of the permissions set up for the instances service account used during cluster creation ([here](../cluster_creation/#step-4-select-the-service-account)) can be removed under certain conditions.
+
+### Backups[#](#backups "Permanent link")
+
+If you do not intend to take backups or if you do not have access to this Enterprise feature you can remove the permissions that are only used by the backup feature when configuring your instances service account. For this remove the following permission from [your instances service account](../getting_started/#step-21-creating-a-custom-role-for-accessing-storage):
+
+<pre><span></span><code><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">storage.buckets.update</span>
+</code></pre>

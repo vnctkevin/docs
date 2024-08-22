@@ -1,0 +1,52 @@
+---
+title: "AKS Integration"
+---
+
+# Integration with Azure AKS[#](#integration-with-azure-aks "Permanent link")
+
+This guide shows how to create a cluster in [managed.hopsworks.ai](https://managed.hopsworks.ai) with integrated support for Azure Kubernetes Service (AKS). This enables Hopsworks to launch Python jobs, Jupyter servers, and serve models on top of AKS.
+
+This guide provides an example setup with a private AKS cluster.
+
+Note
+
+If you prefer to use Terraform over command lines you can refer to our Terraform example [here](https://github.com/logicalclocks/terraform-provider-hopsworksai/tree/main/examples/complete/azure/aks).
+
+## Step 1: Create a Virtual network and a subnet[#](#step-1-create-a-virtual-network-and-a-subnet "Permanent link")
+
+First, you need to create the virtual network and the subnet in which Hopsworks and the AKS nodes will run. To do this run the following commands, replacing _$RESOURCE\_GROUP_ with the resource group in which you will run your cluster.
+
+<pre><span></span><code>az<span class="w"> </span>network<span class="w"> </span>vnet<span class="w"> </span>create<span class="w"> </span>--resource-group<span class="w"> </span><span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--name<span class="w"> </span>hopsworks-vnet<span class="w"> </span>--address-prefixes<span class="w"> </span><span class="m">172</span>.18.0.0/16
+az<span class="w"> </span>network<span class="w"> </span>vnet<span class="w"> </span>subnet<span class="w"> </span>create<span class="w"> </span>--resource-group<span class="w"> </span><span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--name<span class="w"> </span>hopsworks-subnet<span class="w"> </span>--vnet-name<span class="w"> </span>hopsworks-vnet<span class="w"> </span>--address-prefixes<span class="w"> </span><span class="m">172</span>.18.0.0/24
+</code></pre>
+
+## Step 2: Create the AKS cluster.[#](#step-2-create-the-aks-cluster "Permanent link")
+
+Run the following command to create the AKS cluster. Replace _$RESOURCE\_GROUP_ with the resource group in which you will run your cluster and _$SUBSCRIPTION\_ID_ .
+
+<pre><span></span><code><span class="nv">aksidentity</span><span class="o">=</span><span class="k">$(</span>az<span class="w"> </span>aks<span class="w"> </span>create<span class="w"> </span>--resource-group<span class="w"> </span><span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--name<span class="w"> </span>hopsworks-aks<span class="w"> </span>--network-plugin<span class="w"> </span>azure<span class="w"> </span>--enable-private-cluster<span class="w"> </span>--enable-managed-identity<span class="w"> </span>--vnet-subnet-id<span class="w"> </span>/subscriptions/<span class="nv">$SUBSCRIPTION_ID</span>/resourceGroups/<span class="nv">$RESOURCE_GROUP</span>/providers/Microsoft.Network/virtualNetworks/hopsworks-vnet/subnets/hopsworks-subnet<span class="w"> </span>--query<span class="w"> </span>identityProfile.kubeletidentity.objectId<span class="w"> </span>-o<span class="w"> </span>tsv<span class="k">)</span>
+</code></pre>
+
+## Step 3: Add permissions to the managed identity[#](#step-3-add-permissions-to-the-managed-identity "Permanent link")
+
+You need to add permission to [the managed identity you will assign to your Hopsworks cluster](../getting_started/#step-4-create-a-managed-identity) to access the AKS cluster. To do it run the following command, replacing _$RESOURCE\_GROUP_ with the resource group in which you will run your cluster and $identityId with the _id_ of the identity you will assign to your Hopsworks cluster.
+
+<pre><span></span><code>az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>create<span class="w"> </span>--scope<span class="w"> </span>/subscriptions/<span class="nv">$SUBSCRIPTION_ID</span>/resourceGroups/<span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--role<span class="w"> </span><span class="s2">"Azure Kubernetes Service Cluster User Role"</span><span class="w"> </span>--assignee<span class="w"> </span><span class="nv">$identityId</span>
+</code></pre>
+
+You also need to grant permission to pull images from the [ACR](../getting_started/#step-3-create-an-acr-container-registry) to the AKS nodes. To do it run the following command, replacing _$RESOURCE\_GROUP_ with the resource group in which you will run your cluster
+
+<pre><span></span><code>az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>create<span class="w"> </span>--scope<span class="w"> </span>/subscriptions/<span class="nv">$SUBSCRIPTION_ID</span>/resourceGroups/<span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--role<span class="w"> </span><span class="s2">"AcrPull"</span><span class="w"> </span>--assignee<span class="w"> </span><span class="nv">$aksidentity</span>
+</code></pre>
+
+## Step 4: Create the Hopsworks cluster[#](#step-4-create-the-hopsworks-cluster "Permanent link")
+
+Create the hopsworks cluster by following the same steps as in the [getting started](../getting_started/#step-6-deploy-a-hopsworks-cluster) until the backup tab. Then click on _next_ to get to the _Managed containers_ tab. Set _Use Azure AKS_ as enabled. One new field will pop up. Fill it with the name of the AKS you created above (hopsworks-aks). Click _next_ and in the _Virtual Network_ tab select the virtual network we created above (hopsworks-vnet). Finally, click _next_ and select the subnet we created above (hopsworks-subnet) in the _Subnet_ tab. You can now click on _Review and Submit_ and create your cluster.
+
+![](../../../assets/images/setup_installation/managed/azure/aks-hops-config.png)
+
+Hopsworks AKS configuration
+
+## Going further[#](#going-further "Permanent link")
+
+You can also deploy the AKS cluster and the Hopsworks cluster in two different virtual networks by using network peering. For this we recommend to use our [terraform provider](../../common/terraform/) and to refer to our [example](https://github.com/logicalclocks/terraform-provider-hopsworksai/tree/main/examples/complete/azure/advanced/aks-with-peering)

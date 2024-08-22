@@ -1,0 +1,115 @@
+---
+title: "Custom Domain"
+---
+
+# Deploy in a VPC with a custom domain name[#](#deploy-in-a-vpc-with-a-custom-domain-name "Permanent link")
+
+Some organizations follow network patterns which impose a specific domain name for Instances. In that case, the instance's hostname instead of `ip-10-0-0-175.us-east-2.compute.internal` would be `ip-10-0-0-175.bar.foo`
+
+The control plane at [managed.hopsworks.ai](https://managed.hopsworks.ai) needs to be aware of such case in order to properly initialize the Cluster.
+
+Note
+
+This feature is enabled **only** upon request. If you want this feature to be enable for your account please contact [sales](mailto:sales@logicalclocks.com)
+
+There are multiple ways to use custom domain names in your organization which are beyond the scope of this guide. We assume your cloud/network team has already setup the infrastructure.
+
+If you are using a resolver such as [Amazon Route 53](https://aws.amazon.com/route53/), it is advised to update the record sets automatically. See our guide below for more information.
+
+## Set cluster domain name[#](#set-cluster-domain-name "Permanent link")
+
+If this feature is enabled for your account, then in the [VPC selection](../cluster_creation/#step-8-vpc-selection) step you will have the option to specify the custom domain name as shown in the figure below.
+
+![Custom domain name](../../../assets/images/setup_installation/managed/aws/vpc-custom-domain-name.png)
+
+VPC with custom domain name
+
+In this case, the hostname of the Instance would be `INSTANCE_ID.dev.hopsworks.domain`
+
+Hostnames **must** be resolvable by all Virtual Machines in the cluster. For that reason we suggest, if possible, to automatically register the hostnames with your DNS.
+
+In the following section we present an example of automatic name registration in Amazon Route 53
+
+## Auto registration with Amazon Route 53[#](#auto-registration-with-amazon-route-53 "Permanent link")
+
+It is quite common for organizations in AWS to use Route 53 for DNS or for hosted zones. You can configure a cluster in [managed.hopsworks.ai](https://managed.hopsworks.ai) to execute some custom initialization script **before** any other action. This script will be executed on all nodes of the cluster.
+
+Since the hostname of the VM is in the form of `INSTANCE_ID.DOMAIN_NAME` it is easy to automate the zone update. The script below creates an A record in a configured Route 53 hosted zone.
+
+Warning
+
+If you want the VM to register itself with Route 53 you **must** amend the [Instance Profile](../cluster_creation) with the following permissions
+
+<pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Route53RecordSet"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"route53:ChangeResourceRecordSets"</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:route53:::hostedzone/YOUR_HOSTED_ZONE_ID"</span>
+<span class="p">},</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Route53GetChange"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">"route53:GetChange"</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:route53:::change/*"</span>
+<span class="p">}</span>
+</code></pre>
+
+The following script will get the instance ID from the EC2 metadata server and add an A record to the hosted zone in Route53. **Update** the `YOUR_HOSTED_ZONE_ID` and `YOUR_CUSTOM_DOMAIN_NAME` to match yours.
+
+<pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="nb">set</span><span class="w"> </span>-e
+
+<span class="nv">HOSTED_ZONE_ID</span><span class="o">=</span>YOUR_HOSTED_ZONE_ID
+<span class="nv">ZONE</span><span class="o">=</span>YOUR_CUSTOM_DOMAIN_NAME
+
+<span class="nv">record_set_file</span><span class="o">=</span>/tmp/record_set.json
+
+<span class="nv">instance_id</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>http://169.254.169.254/2016-09-02/meta-data/instance-id<span class="k">)</span>
+
+<span class="nv">domain_name</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">instance_id</span><span class="si">}</span><span class="s2">.</span><span class="si">${</span><span class="nv">ZONE</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="nv">local_ip</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>--silent<span class="w"> </span>http://169.254.169.254/2016-09-02/meta-data/local-ipv4<span class="k">)</span>
+
+cat<span class="w"> </span><span class="s">&lt;&lt; EOC | tee $record_set_file</span>
+<span class="s">{</span>
+<span class="s">    "Changes": [</span>
+<span class="s">        {</span>
+<span class="s">            "Action": "UPSERT",</span>
+<span class="s">            "ResourceRecordSet": {</span>
+<span class="s">                "Name": "${domain_name}",</span>
+<span class="s">                "Type": "A",</span>
+<span class="s">                "TTL": 60,</span>
+<span class="s">                "ResourceRecords": [</span>
+<span class="s">                    {</span>
+<span class="s">                        "Value": "${local_ip}"</span>
+<span class="s">                    }</span>
+<span class="s">                ]</span>
+<span class="s">            }</span>
+<span class="s">        }</span>
+<span class="s">    ]</span>
+<span class="s">}</span>
+<span class="s">EOC</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Adding A record </span><span class="si">${</span><span class="nv">domain_name</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">${</span><span class="nv">local_ip</span><span class="si">}</span><span class="s2"> to Hosted Zone </span><span class="si">${</span><span class="nv">HOSTED_ZONE_ID</span><span class="si">}</span><span class="s2">"</span>
+<span class="nv">change_resource_id</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>route53<span class="w"> </span>change-resource-record-sets<span class="w"> </span>--hosted-zone-id<span class="w"> </span><span class="si">${</span><span class="nv">HOSTED_ZONE_ID</span><span class="si">}</span><span class="w"> </span>--change-batch<span class="w"> </span>file://<span class="si">${</span><span class="nv">record_set_file</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">'.ChangeInfo.Id'</span><span class="k">)</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Change resource ID: </span><span class="si">${</span><span class="nv">change_resource_id</span><span class="si">}</span><span class="s2">"</span>
+aws<span class="w"> </span>route53<span class="w"> </span><span class="nb">wait</span><span class="w"> </span>resource-record-sets-changed<span class="w"> </span>--id<span class="w"> </span><span class="si">${</span><span class="nv">change_resource_id</span><span class="si">}</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"Added resource record set"</span>
+
+rm<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">record_set_file</span><span class="si">}</span>
+</code></pre>
+
+## Set VM initialization script[#](#set-vm-initialization-script "Permanent link")
+
+As a final step you need to configure the Cluster to use the script above during VM creation with the [user init script](../cluster_creation/#step-14-add-an-init-script-to-your-instances) option.
+
+Paste the script to the text box and **make sure** you select this script to be executed before anything else on the VM.
+
+![Automatic domain name registration](../../../assets/images/setup_installation/managed/aws/custom-domain-name-route53-script.png)
+
+Automatic domain name registration with Route53

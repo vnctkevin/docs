@@ -1,0 +1,48 @@
+---
+title: "API Key"
+---
+
+# Managed.hopsworks.ai API Key[#](#managedhopsworksai-api-key "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) allows users to generate an API Key that can be used to authenticate and access the [managed.hopsworks.ai](https://managed.hopsworks.ai) REST APIs.
+
+## Generate an API Key[#](#generate-an-api-key "Permanent link")
+
+First, login to your [managed.hopsworks.ai](https://managed.hopsworks.ai) account, then click on the Settings tab as shown below:
+
+![Click on Settings](../../../assets/images/setup_installation/managed/common/api_key/api-key-1.png)
+
+Click on the Settings tab
+
+Click on the API Key tab, and then click on the _Generate API Key_ button:
+
+![Generate API Key](../../../assets/images/setup_installation/managed/common/api_key/api-key-2.png)
+
+Generate an API Key
+
+Copy the generated API Key and store it in a secure location.
+
+Warning
+
+Make sure to copy your API Key now. You won’t be able to see it again. However, you can always delete it and generate a new one.
+
+![Copy API Key](../../../assets/images/setup_installation/managed/common/api_key/api-key-3.png)
+
+Copy the generated API Key
+
+## Use the API Key[#](#use-the-api-key "Permanent link")
+
+To access the [managed.hopsworks.ai](https://managed.hopsworks.ai) REST APIs, you should pass the API key as a header **x-api-key** when executing requests on [managed.hopsworks.ai](https://managed.hopsworks.ai) as shown below:
+
+<pre><span></span><code>curl<span class="w"> </span>-XGET<span class="w"> </span>-H<span class="w"> </span><span class="s2">"x-api-key: &lt;YOUR API KEY&gt;"</span><span class="w"> </span>https://api.hopsworks.ai/api/clusters
+</code></pre>
+
+Alternatively, you can use your API Key with the [Hopsworks.ai terraform provider](https://registry.terraform.io/providers/logicalclocks/hopsworksai/latest) to manage your Hopsworks clusters using [terraform](https://www.terraform.io/).
+
+## Delete your API Key[#](#delete-your-api-key "Permanent link")
+
+First, login to your [managed.hopsworks.ai](https://managed.hopsworks.ai) account, click on the Settings tab, then click on the API Key tab, and finally click on _Delete API Key_ as shown below:
+
+![Delete API Key](../../../assets/images/setup_installation/managed/common/api_key/api-key-4.png)
+
+Delete your API Key

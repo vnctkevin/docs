@@ -1,0 +1,65 @@
+---
+title: "Export Audit Logs"
+---
+
+# Export Audit Logs[#](#export-audit-logs "Permanent link")
+
+## Introduction[#](#introduction "Permanent link")
+
+Audit logs can be exported to your storage of preference. In case audit logs have not been configured yet in your Hopsworks cluster, please see [Access Audit Logs](../audit-logs/).
+
+Note
+
+<pre><span></span><code><span class="k">As</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">example</span><span class="p">,</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">guide</span><span class="w"> </span><span class="n">we</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="k">show</span><span class="w"> </span><span class="n">how</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">export</span><span class="w"> </span><span class="n">audit</span><span class="w"> </span><span class="k">logs</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">BigQuery</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n n-Quoted">`</span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">bq</span><span class="n n-Quoted n-Quoted-Escape">``</span><span class="n n-Quoted">`</span><span class="w"> </span><span class="n">command</span><span class="o">-</span><span class="n">line</span><span class="w"> </span><span class="n">tool</span><span class="p">.</span>
+</code></pre>
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+In order to export audit logs you need SSH access to the Hopsworks cluster.
+
+## Step 1: Create a BigQuery Table[#](#step-1-create-a-bigquery-table "Permanent link")
+
+Create a dataset and a table in [BigQuery](https://cloud.google.com/bigquery/docs/datasets#console).
+
+The table schema is shown below.
+
+<pre><span></span><code>fullname          mode      type        description
+pathInfo          NULLABLE  STRING  
+methodName        NULLABLE  STRING  
+caller            NULLABLE  RECORD  
+dateTime          NULLABLE  TIMESTAMP   bq-datetime
+userAgent         NULLABLE  STRING  
+clientIp          NULLABLE  STRING  
+outcome           NULLABLE  STRING  
+parameters        NULLABLE  STRING  
+className         NULLABLE  STRING  
+caller.userId     NULLABLE  STRING  
+caller.email      NULLABLE  STRING  
+caller.username   NULLABLE  STRING
+</code></pre>
+
+## Step 2: Export Audit Logs to the BigQuery Table[#](#step-2-export-audit-logs-to-the-bigquery-table "Permanent link")
+
+Audit logs can be exported in different formats. For instance, to export audit logs in JSON format set `audit_log_file_type=io.hops.hopsworks.audit.helper.JSONLogFormatter`.
+
+Info
+
+<pre><span></span><code><span class="n">For</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">information</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">how</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">configure</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">audit</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="n">see</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="err">```</span><span class="n">audit_log_file_type</span><span class="err">```</span><span class="w"> </span><span class="n">configuration</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="n">Audit</span><span class="w"> </span><span class="n">logs</span><span class="p">](..</span><span class="o">/</span><span class="n">audit</span><span class="o">/</span><span class="n">audit</span><span class="o">-</span><span class="n">logs</span><span class="p">.</span><span class="n">md</span><span class="err">#</span><span class="n">step</span><span class="mi">-1</span><span class="o">-</span><span class="n">configure</span><span class="o">-</span><span class="n">audit</span><span class="o">-</span><span class="n">logs</span><span class="p">).</span>
+</code></pre>
+
+To export the audit logs to the BigQuery table created in the previous step, run the following command.
+
+<pre><span></span><code>bq<span class="w"> </span>load<span class="w"> </span>--project_id<span class="w"> </span>&lt;projectId&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--source_format<span class="o">=</span>NEWLINE_DELIMITED_JSON<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>&lt;DATASET.TABLE&gt;<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>/srv/hops/domains/domain1/logs/audit/server_audit_log0.log
+</code></pre>
+
+Tip
+
+<pre><span></span><code>This command can be configured to run periodically on a given schedule by setting up a cronjob.
+</code></pre>
+
+## Conclusion[#](#conclusion "Permanent link")
+
+In this guide you showed how you can export audit logs in your Hopsworks cluster to a BigQuery table.

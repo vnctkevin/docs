@@ -1,0 +1,590 @@
+---
+title: "Terraform"
+---
+
+# Hopsworks.ai Terraform Provider[#](#hopsworksai-terraform-provider "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) allows users to create and manage their clusters using the [Hopsworks.ai terraform provider](https://registry.terraform.io/providers/logicalclocks/hopsworksai/latest). In this guide, we first provide brief description on how to get started on AWS, AZURE, and GCP, then we show how to import an existing cluster to be managed by terraform.
+
+## Getting Started with AWS[#](#getting-started-with-aws "Permanent link")
+
+Complete the following steps to start using Hopsworks.ai Terraform Provider on AWS.
+
+1.  Create a [managed.hopsworks.ai](https://managed.hopsworks.ai) API KEY as described in details [here](../api_key/), and export the API KEY as follows
+    
+    <pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">HOPSWORKSAI_API_KEY</span><span class="o">=</span>&lt;YOUR_API_KEY&gt;
+    </code></pre>
+    
+2.  Download the proper Terraform CLI for your os from [here](https://www.terraform.io/downloads.html).
+3.  Install the [AWS CLI](https://aws.amazon.com/cli/) and run `aws configurre` to configure your AWS credentials.
+
+### Example[#](#example "Permanent link")
+
+In this section, we provide a simple example to create a Hopsworks cluster on AWS along with all its required resources (ssh key, S3 bucket, and instance profile with the required permissions).
+
+1.  In your terminal, run the following to create a demo directory and cd to it
+    
+    <pre><span></span><code>mkdir<span class="w"> </span>demo
+    <span class="nb">cd</span><span class="w"> </span>demo
+    </code></pre>
+    
+2.  In this empty directory, create an empty file `main.tf`. Open the file and paste the following configurations to it then save it.
+    
+    <pre><span></span><code><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="nb">aws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">"hashicorp/aws"</span>
+    <span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"4.16.0"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">    </span><span class="nb">hopsworksai</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"logicalclocks/hopsworksai"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kr">variable</span><span class="w"> </span><span class="nv">"region"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">type</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
+    <span class="w">  </span><span class="na">default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"us-east-2"</span>
+    <span class="p">}</span>
+    
+    <span class="kr">provider</span><span class="w"> </span><span class="nv">"aws"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">var.region</span>
+    <span class="p">}</span>
+    
+    <span class="kr">provider</span><span class="w"> </span><span class="nv">"hopsworksai"</span><span class="w"> </span><span class="p">{</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># Create the required aws resources, an ssh key, an s3 bucket, and an instance profile with the required Hopsworks permissions</span>
+    <span class="kr">module</span><span class="w"> </span><span class="nv">"aws"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">"logicalclocks/helpers/hopsworksai//modules/aws"</span>
+    <span class="w">  </span><span class="na">region</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nv">var.region</span>
+    <span class="w">  </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"2.3.0"</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># Create a cluster with no workers</span>
+    <span class="kr">resource</span><span class="w"> </span><span class="nc">"hopsworksai_cluster"</span><span class="w"> </span><span class="nv">"cluster"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">name</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s2">"tf-hopsworks-cluster"</span>
+    <span class="w">  </span><span class="na">ssh_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">module.aws.ssh_key_pair_name</span>
+    
+    <span class="w">  </span><span class="nb">head</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">instance_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"m5.2xlarge"</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">aws_attributes</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">region</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="nv">var.region</span>
+    <span class="w">    </span><span class="na">instance_profile_arn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">module.aws.instance_profile_arn</span>
+    <span class="w">    </span><span class="nb">bucket</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">module.aws.bucket_name</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">rondb</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="nb">single_node</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">instance_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"t3a.xlarge"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">autoscale</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="nb">non_gpu_workers</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">instance_type</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s2">"m5.2xlarge"</span>
+    <span class="w">      </span><span class="na">disk_size</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="m">256</span>
+    <span class="w">      </span><span class="na">min_workers</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>
+    <span class="w">      </span><span class="na">max_workers</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="m">5</span>
+    <span class="w">      </span><span class="na">standby_workers</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nv">0.5</span>
+    <span class="w">      </span><span class="na">downscale_wait_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">300</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">open_ports</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">ssh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
+    <span class="w">  </span><span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kr">output</span><span class="w"> </span><span class="nv">"hopsworks_cluster_url"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">hopsworksai_cluster.cluster.url</span>
+    <span class="p">}</span>
+    </code></pre>
+    
+3.  Initialize the terraform directory by running the following command
+    
+    <pre><span></span><code>terraform<span class="w"> </span>init<span class="w"> </span>
+    </code></pre>
+    
+4.  Now you can apply the changes to create all required resources
+    
+    <pre><span></span><code>terraform<span class="w"> </span>apply<span class="w"> </span>
+    </code></pre>
+    
+5.  Once terraform finishes creating the resources, it will output the url to the newly created cluster. Notice that for now, you have to navigate to your [managed.hopsworks.ai dashboard](https://managed.hopsworks.ai/dashboard) to get your login credentials.
+    
+6.  After you finish working with the cluster, you can terminate it along with the other AWS resources using the following command
+    
+    <pre><span></span><code>terraform<span class="w"> </span>destroy<span class="w"> </span>
+    </code></pre>
+    
+
+## Getting Started with AZURE[#](#getting-started-with-azure "Permanent link")
+
+Complete the following steps to start using Hopsworks.ai Terraform Provider on AZURE.
+
+1.  Create a [managed.hopsworks.ai](https://managed.hopsworks.ai) API KEY as described in details [here](../api_key/), and export the API KEY as follows
+    
+    <pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">HOPSWORKSAI_API_KEY</span><span class="o">=</span>&lt;YOUR_API_KEY&gt;
+    </code></pre>
+    
+2.  Download the proper Terraform CLI for your os from [here](https://www.terraform.io/downloads.html).
+3.  Install the [AZURE CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) and run `az login` to configure your AZURE credentials.
+
+### Example[#](#example_1 "Permanent link")
+
+In this section, we provide a simple example to create a Hopsworks cluster on AZURE along with all its required resources (ssh key, storage account, acr registry, and user assigned managed identity with the required permissions).
+
+1.  In your terminal, run the following to create a demo directory and cd to it
+    
+    <pre><span></span><code>mkdir<span class="w"> </span>demo
+    <span class="nb">cd</span><span class="w"> </span>demo
+    </code></pre>
+    
+2.  In this empty directory, create an empty file `main.tf`. Open the file and paste the following configurations to it then save it.
+    
+    <pre><span></span><code><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="nb">azurerm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">"hashicorp/azurerm"</span>
+    <span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"3.8.0"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">    </span><span class="nb">hopsworksai</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"logicalclocks/hopsworksai"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kr">variable</span><span class="w"> </span><span class="nv">"resource_group"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">type</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
+    <span class="p">}</span>
+    
+    <span class="kr">provider</span><span class="w"> </span><span class="nv">"azurerm"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="nb">features</span><span class="w"> </span><span class="p">{}</span>
+    <span class="w">  </span><span class="na">skip_provider_registration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
+    <span class="p">}</span>
+    
+    <span class="kr">provider</span><span class="w"> </span><span class="nv">"hopsworksai"</span><span class="w"> </span><span class="p">{</span>
+    <span class="p">}</span>
+    
+    <span class="kr">data</span><span class="w"> </span><span class="nc">"azurerm_resource_group"</span><span class="w"> </span><span class="nv">"rg"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">var.resource_group</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># Create the required azure resources, an ssh key, a storage account, and an user assigned managed identity with the required Hopsworks permissions</span>
+    <span class="kr">module</span><span class="w"> </span><span class="nv">"azure"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">source</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s2">"logicalclocks/helpers/hopsworksai//modules/azure"</span>
+    <span class="w">  </span><span class="na">resource_group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">var.resource_group</span>
+    <span class="w">  </span><span class="na">version</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="s2">"2.3.0"</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># Create an ACR registry </span>
+    <span class="kr">resource</span><span class="w"> </span><span class="nc">"azurerm_container_registry"</span><span class="w"> </span><span class="nv">"acr"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">name</span><span class="w">                </span><span class="o">=</span><span class="w"> </span><span class="nf">replace</span><span class="p">(</span><span class="nv">module.azure.storage_account_name</span><span class="p">,</span><span class="w"> </span><span class="s2">"storageaccount", "acr"</span><span class="p">)</span>
+    <span class="w">  </span><span class="na">resource_group_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">module.azure.resource_group</span>
+    <span class="w">  </span><span class="na">location</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="nv">module.azure.location</span>
+    <span class="w">  </span><span class="na">sku</span><span class="w">                 </span><span class="o">=</span><span class="w"> </span><span class="s2">"Premium"</span>
+    <span class="w">  </span><span class="na">admin_enabled</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="no">false</span>
+    <span class="w">  </span><span class="nb">retention_policy</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
+    <span class="w">    </span><span class="na">days</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="m">7</span>
+    <span class="w">  </span><span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># Create a cluster with no workers</span>
+    <span class="kr">resource</span><span class="w"> </span><span class="nc">"hopsworksai_cluster"</span><span class="w"> </span><span class="nv">"cluster"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">name</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s2">"tf-hopsworks-cluster"</span>
+    <span class="w">  </span><span class="na">ssh_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">module.azure.ssh_key_pair_name</span>
+    
+    <span class="w">  </span><span class="nb">head</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">instance_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Standard_D8_v3"</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w"> </span><span class="nb">azure_attributes</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">location</span><span class="w">                       </span><span class="o">=</span><span class="w"> </span><span class="nv">module.azure.location</span>
+    <span class="w">    </span><span class="na">resource_group</span><span class="w">                 </span><span class="o">=</span><span class="w"> </span><span class="nv">module.azure.resource_group</span>
+    <span class="w">    </span><span class="na">user_assigned_managed_identity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">module.azure.user_assigned_identity_name</span>
+    <span class="w">    </span><span class="nb">container</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">storage_account</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">module.azure.storage_account_name</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">    </span><span class="na">acr_registry_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">azurerm_container_registry.acr.name</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">rondb</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="nb">single_node</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">instance_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Standard_D4s_v4"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">autoscale</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="nb">non_gpu_workers</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">instance_type</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s2">"Standard_D8_v3"</span>
+    <span class="w">      </span><span class="na">disk_size</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="m">256</span>
+    <span class="w">      </span><span class="na">min_workers</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>
+    <span class="w">      </span><span class="na">max_workers</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="m">5</span>
+    <span class="w">      </span><span class="na">standby_workers</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nv">0.5</span>
+    <span class="w">      </span><span class="na">downscale_wait_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">300</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">open_ports</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">ssh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
+    <span class="w">  </span><span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kr">output</span><span class="w"> </span><span class="nv">"hopsworks_cluster_url"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">hopsworksai_cluster.cluster.url</span>
+    <span class="p">}</span>
+    </code></pre>
+    
+3.  Initialize the terraform directory by running the following command
+    
+    <pre><span></span><code>terraform<span class="w"> </span>init<span class="w"> </span>
+    </code></pre>
+    
+4.  Now you can apply the changes to create all required resources. Replace the placeholders with your Azure resource group
+    
+    <pre><span></span><code>terraform<span class="w"> </span>apply<span class="w"> </span>-var<span class="o">=</span><span class="s2">"resource_group=&lt;YOUR_RESOURCE_GROUP&gt;"</span>
+    </code></pre>
+    
+5.  Once terraform finishes creating the resources, it will output the url to the newly created cluster. Notice that for now, you have to navigate to your [managed.hopsworks.ai dashboard](https://managed.hopsworks.ai/dashboard) to get your login credentials.
+    
+6.  After you finish working with the cluster, you can terminate it along with the other AZURE resources using the following command
+    
+    <pre><span></span><code>terraform<span class="w"> </span>destroy<span class="w"> </span>-var<span class="o">=</span><span class="s2">"resource_group=&lt;YOUR_RESOURCE_GROUP&gt;"</span>
+    </code></pre>
+    
+
+## Getting Started with GCP[#](#getting-started-with-gcp "Permanent link")
+
+Complete the following steps to start using Hopsworks.ai Terraform Provider on GCP.
+
+1.  Create a [managed.hopsworks.ai](https://managed.hopsworks.ai) API KEY as described in details [here](../api_key/), and export the API KEY as follows
+    
+    <pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">HOPSWORKSAI_API_KEY</span><span class="o">=</span>&lt;YOUR_API_KEY&gt;
+    </code></pre>
+    
+2.  Download the proper Terraform CLI for your os from [here](https://www.terraform.io/downloads.html).
+3.  Install the [Google Cloud CLI](https://cloud.google.com/sdk/docs/install-sdk) and run `gcloud init` to configure your GCP credentials.
+
+### Example[#](#example_2 "Permanent link")
+
+In this section, we provide a simple example to create a Hopsworks cluster on GCP along with all its required resources (Google storage bucket and service account with the required permissions).
+
+1.  In your terminal, run the following to create a demo directory and cd to it
+    
+    <pre><span></span><code>mkdir<span class="w"> </span>demo
+    <span class="nb">cd</span><span class="w"> </span>demo
+    </code></pre>
+    
+2.  In this empty directory, create an empty file `main.tf`. Open the file and paste the following configurations to it then save it.
+    
+    <pre><span></span><code><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">required_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"&gt;= 0.14.0"</span>
+    
+    <span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="nb">google</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">"hashicorp/google"</span>
+    <span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"5.13.0"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">    </span><span class="nb">hopsworksai</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"logicalclocks/hopsworksai"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">    </span><span class="nb">time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">"hashicorp/time"</span>
+    <span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"0.10.0"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kr">variable</span><span class="w"> </span><span class="nv">"region"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">type</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
+    <span class="w">  </span><span class="na">default</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"europe-north1"</span>
+    <span class="p">}</span>
+    
+    <span class="kr">variable</span><span class="w"> </span><span class="nv">"project"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
+    <span class="p">}</span>
+    
+    <span class="kr">provider</span><span class="w"> </span><span class="nv">"google"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">region</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nv">var.region</span>
+    <span class="w">  </span><span class="na">project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">var.project</span>
+    <span class="p">}</span>
+    
+    <span class="kr">provider</span><span class="w"> </span><span class="nv">"hopsworksai"</span><span class="w"> </span><span class="p">{</span>
+    <span class="p">}</span>
+    
+    <span class="kr">provider</span><span class="w"> </span><span class="nv">"time"</span><span class="w"> </span><span class="p">{</span>
+    
+    <span class="p">}</span>
+    
+    <span class="c1"># Create required google resources, a storage bucket and an service account with the required hopsworks permissions</span>
+    <span class="kr">data</span><span class="w"> </span><span class="nc">"hopsworksai_gcp_service_account_custom_role_permissions"</span><span class="w"> </span><span class="nv">"service_account"</span><span class="w"> </span><span class="p">{</span>
+    
+    <span class="p">}</span>
+    
+    <span class="kr">resource</span><span class="w"> </span><span class="nc">"google_project_iam_custom_role"</span><span class="w"> </span><span class="nv">"service_account_role"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">role_id</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"tf.HopsworksAIInstances"</span>
+    <span class="w">  </span><span class="na">title</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s2">"Hopsworks AI Instances"</span>
+    <span class="w">  </span><span class="na">description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Role that allows Hopsworks AI Instances to access resources"</span>
+    <span class="w">  </span><span class="na">permissions</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">data.hopsworksai_gcp_service_account_custom_role_permissions.service_account.permissions</span>
+    <span class="p">}</span>
+    
+    <span class="kr">resource</span><span class="w"> </span><span class="nc">"google_service_account"</span><span class="w"> </span><span class="nv">"service_account"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">account_id</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s2">"tf-hopsworks-ai-instances"</span>
+    <span class="w">  </span><span class="na">display_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Hopsworks AI instances"</span>
+    <span class="w">  </span><span class="na">description</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">"Service account for Hopsworks AI instances"</span>
+    <span class="p">}</span>
+    
+    <span class="kr">resource</span><span class="w"> </span><span class="nc">"google_project_iam_binding"</span><span class="w"> </span><span class="nv">"service_account_role_binding"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">var.project</span>
+    <span class="w">  </span><span class="na">role</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nv">google_project_iam_custom_role.service_account_role.id</span>
+    
+    <span class="w">  </span><span class="na">members</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+    <span class="w">    </span><span class="nv">google_service_account.service_account.member</span>
+    <span class="w">  </span><span class="p">]</span>
+    <span class="p">}</span>
+    
+    <span class="kr">resource</span><span class="w"> </span><span class="nc">"google_storage_bucket"</span><span class="w"> </span><span class="nv">"bucket"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">name</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="s2">"tf-hopsworks-bucket"</span>
+    <span class="w">  </span><span class="na">location</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="nv">var.region</span>
+    <span class="w">  </span><span class="na">force_destroy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
+    <span class="p">}</span>
+    
+    <span class="kr">resource</span><span class="w"> </span><span class="nc">"time_sleep"</span><span class="w"> </span><span class="nv">"wait_60_seconds"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">depends_on</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nv">google_project_iam_binding.service_account_role_binding</span><span class="p">]</span>
+    <span class="w">  </span><span class="na">create_duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"60s"</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># Create a simple cluster with two workers with two different configuration</span>
+    <span class="kr">data</span><span class="w"> </span><span class="nc">"google_compute_zones"</span><span class="w"> </span><span class="nv">"available"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">var.region</span>
+    <span class="p">}</span>
+    
+    <span class="nb">locals</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">zone</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">data.google_compute_zones.available.names.0</span>
+    <span class="p">}</span>
+    
+    <span class="kr">resource</span><span class="w"> </span><span class="nc">"hopsworksai_cluster"</span><span class="w"> </span><span class="nv">"cluster"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"tf-cluster"</span>
+    
+    <span class="w">  </span><span class="nb">head</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">instance_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"e2-standard-8"</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">gcp_attributes</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">project_id</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="nv">var.project</span>
+    <span class="w">    </span><span class="na">region</span><span class="w">                </span><span class="o">=</span><span class="w"> </span><span class="nv">var.region</span>
+    <span class="w">    </span><span class="na">zone</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="nv">local.zone</span>
+    <span class="w">    </span><span class="na">service_account_email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">google_service_account.service_account.email</span>
+    <span class="w">    </span><span class="nb">bucket</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">google_storage_bucket.bucket.name</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">rondb</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="nb">single_node</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">instance_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"e2-highmem-4"</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">autoscale</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="nb">non_gpu_workers</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">      </span><span class="na">instance_type</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s2">"e2-standard-8"</span>
+    <span class="w">      </span><span class="na">disk_size</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="m">256</span>
+    <span class="w">      </span><span class="na">min_workers</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>
+    <span class="w">      </span><span class="na">max_workers</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="m">5</span>
+    <span class="w">      </span><span class="na">standby_workers</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nv">0.5</span>
+    <span class="w">      </span><span class="na">downscale_wait_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">300</span>
+    <span class="w">    </span><span class="p">}</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="w">  </span><span class="nb">open_ports</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">    </span><span class="na">ssh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
+    <span class="w">  </span><span class="p">}</span>
+    
+    <span class="c1">  # waiting for 60 seconds after service account permissions has been granted </span>
+    <span class="c1">  # to avoid permissions validation failure on hopsworks when creating the cluster </span>
+    <span class="w">  </span><span class="na">depends_on</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nv">time_sleep.wait_60_seconds</span><span class="p">]</span>
+    <span class="p">}</span>
+    
+    <span class="kr">output</span><span class="w"> </span><span class="nv">"hopsworks_cluster_url"</span><span class="w"> </span><span class="p">{</span>
+    <span class="w">  </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">hopsworksai_cluster.cluster.url</span>
+    <span class="p">}</span>
+    </code></pre>
+    
+3.  Initialize the terraform directory by running the following command
+    
+    <pre><span></span><code>terraform<span class="w"> </span>init<span class="w"> </span>
+    </code></pre>
+    
+4.  Now you can apply the changes to create all required resources. Replace the placeholders with your GCP project id
+    
+    <pre><span></span><code>terraform<span class="w"> </span>apply<span class="w"> </span>-var<span class="o">=</span><span class="s2">"project=&lt;YOUR_PROJECT_ID&gt;"</span>
+    </code></pre>
+    
+5.  Once terraform finishes creating the resources, it will output the url to the newly created cluster. Notice that for now, you have to navigate to your [managed.hopsworks.ai dashboard](https://managed.hopsworks.ai/dashboard) to get your login credentials.
+    
+6.  After you finish working with the cluster, you can terminate it along with the other GCP resources using the following command
+    
+    <pre><span></span><code>terraform<span class="w"> </span>destroy<span class="w"> </span>-var<span class="o">=</span><span class="s2">"project=&lt;YOUR_PROJECT_ID&gt;"</span>
+    </code></pre>
+    
+
+## Importing an existing cluster to terraform[#](#importing-an-existing-cluster-to-terraform "Permanent link")
+
+In this section, we show how to use `terraform import` to manage your existing Hopsworks cluster.
+
+*   **Step 1**: In your [managed.hopsworks.ai dashboard](https://managed.hopsworks.ai/dashboard), choose the cluster you want to import to terraform, then go to the _Details_ tab and copy the _Id_ as shown in the figure below
+
+![Details tab](../../../assets/images/setup_installation/managed/common/get-cluster-id.png)
+
+Click on the Details tab and copy the Id
+
+*   **Step 2**: In your terminal, create an empty directory and cd to it.
+    
+    <pre><span></span><code>mkdir<span class="w"> </span>import-demo
+    <span class="nb">cd</span><span class="w"> </span>import-demo
+    </code></pre>
+    
+*   **Step 3**: In this empty directory, create an empty file `versions.tf`. Open the file and paste the following configurations.
+    
+
+Note
+
+Notice that you need to change these configurations depending on your cluster, in this example, the Hopsworks cluster reside in region `us-east-2` on AWS.
+
+<pre><span></span><code><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">aws</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">"hashicorp/aws"</span>
+<span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"4.16.0"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nb">hopsworksai</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"logicalclocks/hopsworksai"</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">"aws"</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">region</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">us-east-</span><span class="m">2</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">"hopsworksai"</span><span class="w"> </span><span class="p">{</span>
+<span class="p">}</span>
+</code></pre>
+
+*   **Step 4**: Initialize the terraform directory by running the following command
+    
+    <pre><span></span><code>terraform<span class="w"> </span>init<span class="w"> </span>
+    </code></pre>
+    
+*   **Step 5**: Create another file `main.tf`. Open the file and paste the following configuration.
+    
+    <pre><span></span><code><span class="kr">resource</span><span class="w"> </span><span class="nc">"hopsworksai_cluster"</span><span class="w"> </span><span class="nv">"cluster"</span><span class="w"> </span><span class="p">{</span>
+    <span class="p">}</span>
+    </code></pre>
+    
+*   **Step 6**: Import the cluster state using `terraform import`, in this step you need the cluster id from Step 1 (33ae7ae0-d03c-11eb-84e2-af555fb63565).
+    
+    <pre><span></span><code>terraform<span class="w"> </span>import<span class="w"> </span>hopsworksai_cluster.cluster<span class="w"> </span>33ae7ae0-d03c-11eb-84e2-af555fb63565
+    </code></pre>
+    
+
+The output should be similar to the following snippet
+
+<pre><span></span><code>hopsworksai_cluster.cluster:<span class="w"> </span>Importing<span class="w"> </span>from<span class="w"> </span>ID<span class="w"> </span><span class="s2">"33ae7ae0-d03c-11eb-84e2-af555fb63565"</span>...
+hopsworksai_cluster.cluster:<span class="w"> </span>Import<span class="w"> </span>prepared!
+<span class="w">  </span>Prepared<span class="w"> </span>hopsworksai_cluster<span class="w"> </span><span class="k">for</span><span class="w"> </span>import
+hopsworksai_cluster.cluster:<span class="w"> </span>Refreshing<span class="w"> </span>state...<span class="w"> </span><span class="o">[</span><span class="nv">id</span><span class="o">=</span>33ae7ae0-d03c-11eb-84e2-af555fb63565<span class="o">]</span>
+
+Import<span class="w"> </span>successful!
+
+The<span class="w"> </span>resources<span class="w"> </span>that<span class="w"> </span>were<span class="w"> </span>imported<span class="w"> </span>are<span class="w"> </span>shown<span class="w"> </span>above.<span class="w"> </span>These<span class="w"> </span>resources<span class="w"> </span>are<span class="w"> </span>now<span class="w"> </span><span class="k">in</span>
+your<span class="w"> </span>Terraform<span class="w"> </span>state<span class="w"> </span>and<span class="w"> </span>will<span class="w"> </span>henceforth<span class="w"> </span>be<span class="w"> </span>managed<span class="w"> </span>by<span class="w"> </span>Terraform.
+</code></pre>
+
+*   **Step 7**: At that moment the local terraform state is updated, however, if we try to run `terraform plan` or `terraform apply` it will complain about missing configurations. The reason is that our local resource configuration in `main.tf` is empty, we should populate it using the terraform state commands as shown below:
+    
+    <pre><span></span><code>terraform<span class="w"> </span>show<span class="w"> </span>-no-color<span class="w"> </span>&gt;<span class="w"> </span>main.tf
+    </code></pre>
+    
+*   **Step 8**: If you try to run `terraform plan` again, the command will complain that the read-only attributes are set (Computed attributes) as shown below. The solution is to remove these attributes from the `main.tf` and retry again until you have no errors.
+    
+    <pre><span></span><code>Error:<span class="w"> </span>Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span><span class="nb">set</span>
+    
+    <span class="w">  </span>on<span class="w"> </span>main.tf<span class="w"> </span>line<span class="w"> </span><span class="m">3</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>resource<span class="w"> </span><span class="s2">"hopsworksai_cluster"</span><span class="w"> </span><span class="s2">"cluster"</span>:
+    <span class="w">   </span><span class="m">3</span>:<span class="w">     </span><span class="nv">activation_state</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="s2">"stoppable"</span>
+    
+    Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span>set,<span class="w"> </span>but<span class="w"> </span>a<span class="w"> </span>value<span class="w"> </span>was<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="s2">"activation_state"</span>.
+    
+    
+    Error:<span class="w"> </span>Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span><span class="nb">set</span>
+    
+    <span class="w">  </span>on<span class="w"> </span>main.tf<span class="w"> </span>line<span class="w"> </span><span class="m">6</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>resource<span class="w"> </span><span class="s2">"hopsworksai_cluster"</span><span class="w"> </span><span class="s2">"cluster"</span>:
+    <span class="w">   </span><span class="m">6</span>:<span class="w">     </span><span class="nv">cluster_id</span><span class="w">                     </span><span class="o">=</span><span class="w"> </span><span class="s2">"33ae7ae0-d03c-11eb-84e2-af555fb63565"</span>
+    
+    Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span>set,<span class="w"> </span>but<span class="w"> </span>a<span class="w"> </span>value<span class="w"> </span>was<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="s2">"cluster_id"</span>.
+    
+    
+    Error:<span class="w"> </span>Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span><span class="nb">set</span>
+    
+    <span class="w">  </span>on<span class="w"> </span>main.tf<span class="w"> </span>line<span class="w"> </span><span class="m">7</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>resource<span class="w"> </span><span class="s2">"hopsworksai_cluster"</span><span class="w"> </span><span class="s2">"cluster"</span>:
+    <span class="w">   </span><span class="m">7</span>:<span class="w">     </span><span class="nv">creation_date</span><span class="w">                  </span><span class="o">=</span><span class="w"> </span><span class="s2">"2021-06-18T15:51:07+02:00"</span>
+    
+    Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span>set,<span class="w"> </span>but<span class="w"> </span>a<span class="w"> </span>value<span class="w"> </span>was<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="s2">"creation_date"</span>.
+    
+    
+    Error:<span class="w"> </span>Invalid<span class="w"> </span>or<span class="w"> </span>unknown<span class="w"> </span>key
+    
+    <span class="w">  </span>on<span class="w"> </span>main.tf<span class="w"> </span>line<span class="w"> </span><span class="m">8</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>resource<span class="w"> </span><span class="s2">"hopsworksai_cluster"</span><span class="w"> </span><span class="s2">"cluster"</span>:
+    <span class="w">   </span><span class="m">8</span>:<span class="w">     </span><span class="nv">id</span><span class="w">                             </span><span class="o">=</span><span class="w"> </span><span class="s2">"33ae7ae0-d03c-11eb-84e2-af555fb63565"</span>
+    
+    
+    
+    Error:<span class="w"> </span>Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span><span class="nb">set</span>
+    
+    <span class="w">  </span>on<span class="w"> </span>main.tf<span class="w"> </span>line<span class="w"> </span><span class="m">13</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>resource<span class="w"> </span><span class="s2">"hopsworksai_cluster"</span><span class="w"> </span><span class="s2">"cluster"</span>:
+    <span class="w">  </span><span class="m">13</span>:<span class="w">     </span><span class="nv">start_date</span><span class="w">                     </span><span class="o">=</span><span class="w"> </span><span class="s2">"2021-06-18T15:51:07+02:00"</span>
+    
+    Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span>set,<span class="w"> </span>but<span class="w"> </span>a<span class="w"> </span>value<span class="w"> </span>was<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="s2">"start_date"</span>.
+    
+    
+    Error:<span class="w"> </span>Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span><span class="nb">set</span>
+    
+    <span class="w">  </span>on<span class="w"> </span>main.tf<span class="w"> </span>line<span class="w"> </span><span class="m">14</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>resource<span class="w"> </span><span class="s2">"hopsworksai_cluster"</span><span class="w"> </span><span class="s2">"cluster"</span>:
+    <span class="w">  </span><span class="m">14</span>:<span class="w">     </span><span class="nv">state</span><span class="w">                          </span><span class="o">=</span><span class="w"> </span><span class="s2">"running"</span>
+    
+    Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span>set,<span class="w"> </span>but<span class="w"> </span>a<span class="w"> </span>value<span class="w"> </span>was<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="s2">"state"</span>.
+    
+    
+    Error:<span class="w"> </span>Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span><span class="nb">set</span>
+    
+    <span class="w">  </span>on<span class="w"> </span>main.tf<span class="w"> </span>line<span class="w"> </span><span class="m">17</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>resource<span class="w"> </span><span class="s2">"hopsworksai_cluster"</span><span class="w"> </span><span class="s2">"cluster"</span>:
+    <span class="w">  </span><span class="m">17</span>:<span class="w">     </span><span class="nv">url</span><span class="w">                            </span><span class="o">=</span><span class="w"> </span><span class="s2">"https://33ae7ae0-d03c-11eb-84e2-af555fb63565.dev-cloud.hopsworks.ai/hopsworks/#!/"</span>
+    
+    Computed<span class="w"> </span>attributes<span class="w"> </span>cannot<span class="w"> </span>be<span class="w"> </span>set,<span class="w"> </span>but<span class="w"> </span>a<span class="w"> </span>value<span class="w"> </span>was<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="s2">"url"</span>.
+    </code></pre>
+    
+*   **Step 9**: Once you have fixed all the errors, you should get the following output when running `terraform plan`. With that, you can proceed as normal to manage this cluster locally using terraform.
+    
+    <pre><span></span><code>hopsworksai_cluster.cluster:<span class="w"> </span>Refreshing<span class="w"> </span>state...<span class="w"> </span><span class="o">[</span><span class="nv">id</span><span class="o">=</span>33ae7ae0-d03c-11eb-84e2-af555fb63565<span class="o">]</span>
+    
+    No<span class="w"> </span>changes.<span class="w"> </span>Infrastructure<span class="w"> </span>is<span class="w"> </span>up-to-date.
+    
+    This<span class="w"> </span>means<span class="w"> </span>that<span class="w"> </span>Terraform<span class="w"> </span>did<span class="w"> </span>not<span class="w"> </span>detect<span class="w"> </span>any<span class="w"> </span>differences<span class="w"> </span>between<span class="w"> </span>your
+    configuration<span class="w"> </span>and<span class="w"> </span>real<span class="w"> </span>physical<span class="w"> </span>resources<span class="w"> </span>that<span class="w"> </span>exist.<span class="w"> </span>As<span class="w"> </span>a<span class="w"> </span>result,<span class="w"> </span>no
+    actions<span class="w"> </span>need<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>performed.
+    </code></pre>
+    
+
+## Next Steps[#](#next-steps "Permanent link")
+
+*   Check the [Hopsworks.ai terraform provider documentation](https://registry.terraform.io/providers/logicalclocks/hopsworksai/latest/docs) for more details about the different resources and data sources supported by the provider and a description of their attributes.
+*   Check the [Hopsworks.ai terraform AWS examples](https://github.com/logicalclocks/terraform-provider-hopsworksai/tree/main/examples/complete/aws), each example contains a README file describing how to run it and more details about configuring it.
+*   Check the [Hopsworks.ai terraform AZURE examples](https://github.com/logicalclocks/terraform-provider-hopsworksai/tree/main/examples/complete/azure), each example contains a README file describing how to run it and more details about configuring it.
+*   Check the [Hopsworks.ai terraform GCP examples](https://github.com/logicalclocks/terraform-provider-hopsworksai/tree/main/examples/complete/gcp), each example contains a README file describing how to run it and more details about configuring it.

@@ -1,0 +1,103 @@
+---
+title: "GKE Integration"
+---
+
+# Integration with Goolge GKE[#](#integration-with-goolge-gke "Permanent link")
+
+This guide demonstrates the step-by-step process to create a cluster in [managed.hopsworks.ai](https://managed.hopsworks.ai) with integrated support for Google Kubernetes Engine (GKE). This enables Hopsworks to launch Python jobs, Jupyter servers, and serve models on top of GKE.
+
+Note
+
+Currently, we don't support sharing GKE clusters between Hopsworks clusters. That is, a GKE cluster can be only used by one Hopsworks cluster. Also, we only support integration with GKE in the same project as Hopsworks cluster.
+
+Note
+
+If you prefer to use Terraform over gcloud command line, then you can refer to our Terraform example [here](https://github.com/logicalclocks/terraform-provider-hopsworksai/tree/main/examples/complete/gcp/gke).
+
+## Step 1: Attach Kuberentes developer role to the service account for cluster instances[#](#step-1-attach-kuberentes-developer-role-to-the-service-account-for-cluster-instances "Permanent link")
+
+Ensure that the Hopsworks cluster has access to the GKE cluster by attaching the Kubernetes Engine Developer role to the [service account you will attach to the cluster nodes](../getting_started/#step-3-creating-a-service-account-for-your-cluster-instances). Execute the following gcloud command to attach `roles/container.developer` to the cluster service account. Replace _$PROJECT\_ID_ with your GCP project id and _$SERVICE\_ACCOUNT_ with your service account that you have created during getting started [Step 3](../getting_started/#step-3-creating-a-service-account-for-your-cluster-instances).
+
+<pre><span></span><code>gcloud<span class="w"> </span>projects<span class="w"> </span>add-iam-policy-binding<span class="w"> </span><span class="nv">$PROJECT_ID</span><span class="w"> </span>--member<span class="o">=</span><span class="nv">$SERVICE_ACCOUNT</span><span class="w"> </span>--role<span class="o">=</span><span class="s2">"roles/container.developer"</span>
+</code></pre>
+
+## Steps 2: Create a virtual network to be used by Hopsworks and GKE[#](#steps-2-create-a-virtual-network-to-be-used-by-hopsworks-and-gke "Permanent link")
+
+You need to create a virtual network and a subnet in which Hopsworks and the GKE nodes will run. To do this run the following commands, replacing _$PROJECT\_ID_ with your GCP project id in which you will run your cluster and _$SERVICE\_ACCOUNT_ with the service account that you have updated in [Step 1](#step-1-attach-kuberentes-developer-role-to-the-service-account-for-cluster-instances). In this step, we will create a virtual network `hopsworks`, a subnetwork `hopsworks-eu-north`, and 3 firewall rules to allow communication within the virtual network and allow inbound http and https traffic.
+
+<pre><span></span><code>gcloud<span class="w"> </span>compute<span class="w"> </span>networks<span class="w"> </span>create<span class="w"> </span>hopsworks<span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span><span class="w"> </span>--subnet-mode<span class="o">=</span>custom<span class="w"> </span>--mtu<span class="o">=</span><span class="m">1460</span><span class="w"> </span>--bgp-routing-mode<span class="o">=</span>regional
+
+gcloud<span class="w"> </span>compute<span class="w"> </span>networks<span class="w"> </span>subnets<span class="w"> </span>create<span class="w"> </span>hopsworks-eu-north<span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span><span class="w"> </span>--range<span class="o">=</span><span class="m">10</span>.1.0.0/24<span class="w"> </span>--stack-type<span class="o">=</span>IPV4_ONLY<span class="w"> </span>--network<span class="o">=</span>hopsworks<span class="w"> </span>--region<span class="o">=</span>europe-north1
+
+gcloud<span class="w"> </span>compute<span class="w"> </span>firewall-rules<span class="w"> </span>create<span class="w"> </span>hopsworks-nodetonode<span class="w"> </span>--network<span class="o">=</span>hopsworks<span class="w"> </span>--allow<span class="o">=</span>all<span class="w"> </span>--direction<span class="o">=</span>INGRESS<span class="w"> </span>--target-service-accounts<span class="o">=</span><span class="nv">$SERVICE_ACCOUNT</span><span class="w"> </span>--source-service-accounts<span class="o">=</span><span class="nv">$SERVICE_ACCOUNT</span><span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span>
+
+gcloud<span class="w"> </span>compute<span class="w"> </span>firewall-rules<span class="w"> </span>create<span class="w"> </span>hopsworks-inbound-http<span class="w"> </span>--network<span class="o">=</span>hopsworks<span class="w"> </span>--allow<span class="o">=</span>all<span class="w"> </span>--direction<span class="o">=</span>INGRESS<span class="w"> </span>--target-service-accounts<span class="o">=</span><span class="nv">$SERVICE_ACCOUNT</span><span class="w"> </span>--allow<span class="o">=</span>tcp:80<span class="w"> </span>--source-ranges<span class="o">=</span><span class="s2">"0.0.0.0/0"</span><span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span>
+
+gcloud<span class="w"> </span>compute<span class="w"> </span>firewall-rules<span class="w"> </span>create<span class="w"> </span>hopsworks-inbound-https<span class="w"> </span>--network<span class="o">=</span>hopsworks<span class="w"> </span>--allow<span class="o">=</span>all<span class="w"> </span>--direction<span class="o">=</span>INGRESS<span class="w"> </span>--target-service-accounts<span class="o">=</span><span class="nv">$SERVICE_ACCOUNT</span><span class="w"> </span>--allow<span class="o">=</span>tcp:443<span class="w"> </span>--source-ranges<span class="o">=</span><span class="s2">"0.0.0.0/0"</span><span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span>
+</code></pre>
+
+## Step 3: Create a GKE cluster[#](#step-3-create-a-gke-cluster "Permanent link")
+
+In this step, we create a GKE cluster and we set the cluster pod CIDR to `10.124.0.0/14`. GKE offers two different modes of operation for clusters: `Autopilot` and `Standard` clusters. Choose one of the two following options to create a GKE cluster.
+
+### Option 1: Standard cluster[#](#option-1-standard-cluster "Permanent link")
+
+Run the following gcloud command to create a zonal standard GKE cluster. Replace _$PROJECT\_ID_ with your GCP project id in which you will run your cluster.
+
+<pre><span></span><code>gcloud<span class="w"> </span>container<span class="w"> </span>clusters<span class="w"> </span>create<span class="w"> </span>hopsworks-gke<span class="w">  </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span><span class="w"> </span>--machine-type<span class="o">=</span><span class="s2">"e2-standard-8"</span><span class="w"> </span>--num-nodes<span class="o">=</span><span class="m">1</span><span class="w"> </span>--zone<span class="o">=</span><span class="s2">"europe-north1-c"</span><span class="w"> </span>--network<span class="o">=</span><span class="s2">"hopsworks"</span><span class="w"> </span>--subnetwork<span class="o">=</span><span class="s2">"hopsworks-eu-north"</span><span class="w">  </span>--cluster-ipv4-cidr<span class="o">=</span><span class="s2">"10.124.0.0/14"</span><span class="w"> </span>--cluster-version<span class="o">=</span><span class="s2">"1.27.3-gke.100"</span>
+</code></pre>
+
+Run the following gcloud command to allow all incoming traffic from the GKE cluster to Hopsworks.
+
+<pre><span></span><code>gcloud<span class="w"> </span>compute<span class="w"> </span>firewall-rules<span class="w"> </span>create<span class="w"> </span>hopsworks-allow-traffic-from-gke-pods<span class="w">  </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span><span class="w"> </span>--network<span class="o">=</span><span class="s2">"hopsworks"</span><span class="w"> </span>--direction<span class="o">=</span>INGRESS<span class="w"> </span>--priority<span class="o">=</span><span class="m">1000</span><span class="w">  </span>--action<span class="o">=</span>ALLOW<span class="w"> </span>--rules<span class="o">=</span>all<span class="w"> </span>--source-ranges<span class="o">=</span><span class="s2">"10.124.0.0/14"</span>
+</code></pre>
+
+### Option 2: Autopilot cluster[#](#option-2-autopilot-cluster "Permanent link")
+
+Run the following gcloud command to create an autopilot cluster. Replace _$PROJECT\_ID_ with your GCP project id in which you will run your cluster.
+
+<pre><span></span><code>gcloud<span class="w"> </span>container<span class="w"> </span>clusters<span class="w"> </span>create-auto<span class="w"> </span>hopsworks-gke<span class="w"> </span>--project<span class="w"> </span><span class="nv">$PROJECT_ID</span><span class="w"> </span>--region<span class="o">=</span><span class="s2">"europe-north1"</span><span class="w">  </span>--network<span class="o">=</span><span class="s2">"hopsworks"</span><span class="w"> </span>--subnetwork<span class="o">=</span><span class="s2">"hopsworks-eu-north"</span><span class="w"> </span>--cluster-ipv4-cidr<span class="o">=</span><span class="s2">"10.124.0.0/14"</span>
+</code></pre>
+
+Run the following gcloud command to allow all incoming traffic from the GKE cluster to Hopsworks.
+
+<pre><span></span><code>gcloud<span class="w"> </span>compute<span class="w"> </span>firewall-rules<span class="w"> </span>create<span class="w"> </span>hopsworks-allow-traffic-from-gke-pods<span class="w">  </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span><span class="w"> </span>--network<span class="o">=</span><span class="s2">"hopsworks"</span><span class="w"> </span>--direction<span class="o">=</span>INGRESS<span class="w"> </span>--priority<span class="o">=</span><span class="m">1000</span><span class="w">  </span>--action<span class="o">=</span>ALLOW<span class="w"> </span>--rules<span class="o">=</span>all<span class="w"> </span>--source-ranges<span class="o">=</span><span class="s2">"10.124.0.0/14"</span>
+</code></pre>
+
+## Step 4: Create a Hopsworks cluster[#](#step-4-create-a-hopsworks-cluster "Permanent link")
+
+In [managed.hopsworks.ai](https://managed.hopsworks.ai), follow the same instructions as in [the cluster creation guide](../cluster_creation/) except when setting _Region_, _Managed Containers_, _VPC_ and _Subnet_.
+
+*   On the General tab, choose the same region as what we use in [Step 2](#steps-2-create-a-virtual-network-to-be-used-by-hopsworks-and-gke) and [Step 3](#step-3-create-a-gke-cluster) (`europe-north1`)
+*   On the _Managed Containers_ tab, choose **Enabled** and input the name of the GKE cluster that we have created in [Step 3](#step-3-create-a-gke-cluster) (`hopsworks-gke`)
+*   On the VPC and Subnet tabs, choose the name of the network and subnetwork that we have created in [Step 2](#steps-2-create-a-virtual-network-to-be-used-by-hopsworks-and-gke) (`hopsworks`, `hopsworks-eu-north`).
+
+## Step 5: Configure DNS[#](#step-5-configure-dns "Permanent link")
+
+### Option 1: Standard cluster[#](#option-1-standard-cluster_1 "Permanent link")
+
+In the setup described in [Step 3](#option-1-standard-cluster), we are using the default DNS which is `kube-dns`. Hopsworks automatically configures `kube-dns` during cluster initialization, so there is no extra steps that needs to be done here.
+
+Alternatively, if you configure `Cloud DNS` while creating the standard GKE cluster, then you would need to add the following firewall rule to allow the incoming traffic from `Cloud DNS` on port `53` to Hopsworks. `35.199.192.0/19` is the ip range used by Cloud DNS to issue DNS requests, check [this guide](https://cloud.google.com/dns/docs/zones/forwarding-zones#firewall-rules) for more details.
+
+<pre><span></span><code>gcloud<span class="w"> </span>compute<span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span><span class="w"> </span>firewall-rules<span class="w"> </span>create<span class="w"> </span>hopsworks-clouddns-forward-consul<span class="w"> </span>--direction<span class="o">=</span>INGRESS<span class="w"> </span>--priority<span class="o">=</span><span class="m">1000</span><span class="w"> </span>--network<span class="o">=</span><span class="s2">"hopsworks"</span><span class="w"> </span>--action<span class="o">=</span>ALLOW<span class="w"> </span>--rules<span class="o">=</span>udp:53<span class="w"> </span>--source-ranges<span class="o">=</span><span class="s2">"35.199.192.0/19"</span>
+</code></pre>
+
+### Option 2: Autopilot cluster[#](#option-2-autopilot-cluster_1 "Permanent link")
+
+Hopsworks internally uses Consul for service discovery and we automatically forward traffic from Standard GKE clusters to the corresponding Hopsworks cluster. However, Autopilot clusters don't allow updating the DNS configurations through `kube-dns` and they use Cloud DNS by default. Therefore, in order to allow seamless communication between pods running on GKE and Hopsworks, we would need to add a [forwarding zone](https://cloud.google.com/dns/docs/zones/forwarding-zones) to Cloud DNS to forward `.consul` DNS Zone to Hopsworks head node.
+
+First, we need to get the IP of the Hopsworks head node of your cluster. Replace _$PROJECT\_ID_ with your GCP project id in which you will run your cluster, _$CLUSTER\_NAME_ with the name you gave to your Hopsworks cluster during creation in [Step 4](#step-4-create-a-hopsworks-cluster). Using the following gcloud command, we will be able to get the internal IP of Hopsworks cluster.
+
+<pre><span></span><code><span class="nv">HOPSWORKS_HEAD_IP</span><span class="o">=</span><span class="sb">`</span>gcloud<span class="w"> </span>compute<span class="w"> </span>instances<span class="w"> </span>describe<span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span><span class="w"> </span><span class="nv">$CLUSTER_NAME</span>-master<span class="w"> </span>--format<span class="o">=</span><span class="s1">'get(networkInterfaces[0].networkIP)'</span><span class="sb">`</span>
+</code></pre>
+
+Use the _$HOPSWORKS\_HEAD\_IP_ you just got from the above command to create the following forwarding zone on Cloud DNS
+
+<pre><span></span><code>gcloud<span class="w"> </span>dns<span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span><span class="w"> </span>managed-zones<span class="w"> </span>create<span class="w"> </span>hopsworks-consul<span class="w"> </span>--description<span class="o">=</span><span class="s2">"Forward .consul DNS requests to Hopsworks"</span><span class="w"> </span>--dns-name<span class="o">=</span><span class="s2">"consul."</span><span class="w"> </span>--visibility<span class="o">=</span><span class="s2">"private"</span><span class="w"> </span>--networks<span class="o">=</span><span class="s2">"hopsworks"</span><span class="w"> </span>--forwarding-targets<span class="o">=</span><span class="nv">$HOPSWORKS_HEAD_IP</span>
+</code></pre>
+
+Finally, you would need to add the following firewall rule to allow the incoming traffic from `Cloud DNS` on port `53` to Hopsworks. `35.199.192.0/19` is the IP range used by Cloud DNS to issue DNS requests, check [this guide](https://cloud.google.com/dns/docs/zones/forwarding-zones#firewall-rules) for more details.
+
+<pre><span></span><code>gcloud<span class="w"> </span>compute<span class="w"> </span>--project<span class="o">=</span><span class="nv">$PROJECT_ID</span><span class="w"> </span>firewall-rules<span class="w"> </span>create<span class="w"> </span>hopsworks-clouddns-forward-consul<span class="w"> </span>--direction<span class="o">=</span>INGRESS<span class="w"> </span>--priority<span class="o">=</span><span class="m">1000</span><span class="w"> </span>--network<span class="o">=</span><span class="s2">"hopsworks"</span><span class="w"> </span>--action<span class="o">=</span>ALLOW<span class="w"> </span>--rules<span class="o">=</span>udp:53<span class="w"> </span>--source-ranges<span class="o">=</span><span class="s2">"35.199.192.0/19"</span>
+</code></pre>

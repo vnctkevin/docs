@@ -1,0 +1,129 @@
+---
+title: "Backup"
+---
+
+# How to take, restore and manage backups in managed.hopsworks.ai[#](#how-to-take-restore-and-manage-backups-in-managedhopsworksai "Permanent link")
+
+### Introduction[#](#introduction "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) is our managed platform for running Hopsworks and the Feature Store in the cloud. When managing a cluster it is important to be able to take and restore backups to handle any failure eventuality. In this tutorial you will learn how to take, restore and manage backups in [managed.hopsworks.ai](https://managed.hopsworks.ai)
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+To follow this tutorial you need to create a cluster in [Managed.hopsworks.ai](https://managed.hopsworks.ai). During the [cluster creation](../../aws/cluster_creation/) you need to set a positive number for the maximum retention period for your backups. This is done in the [backups](../../aws/cluster_creation/#step-6-set-the-backup-retention-policy) step of the cluster creation by setting the wanted retention period in _Validity of cluster backup images_. This step is needed because the backup process relies on the cloud bucket retention policy and needs to configure it before any backup is taken.
+
+Warning
+
+This value cannot be edited later on so make sure to set the proper one.
+
+Note
+
+To be able to take backup the cluster instances need special permissions. These permissions are cloud provider specific and indicated on the cluster creation page.
+
+![Choose the backup retention policy](../../../assets/images/setup_installation/managed/aws/connect-aws-backup.png)
+
+Choose the backup retention policy
+
+## Taking a backup[#](#taking-a-backup "Permanent link")
+
+To take a backup go to the backup tab of your cluster (1) and click on _Create backup_ (2). If you wish to give a name to your backup edit the value in _New backup name_ (3) before clicking on _Create backup_.
+
+Note
+
+The cluster needs to be running to take a backup.
+
+![Create a backup](../../../assets/images/setup_installation/managed/common/backup/create_backup.png)
+
+Create a backup
+
+Taking a backup takes time and necessitates restarting the cluster. To avoid any risk of accidental restart you will be asked to confirm that you want to take a backup. To confirm check the check box and click on the _Backup_ button.
+
+Warning
+
+This will interrupt any operation currently running on the cluster. Make sure to stop them properly before taking a backup.
+
+![Confirm backup creation](../../../assets/images/setup_installation/managed/common/backup/confirm_backup.png)
+
+Confirm backup creation
+
+You can then wait until the backup is complete. The backup process being underway is indicated next to the cluster status.
+
+![Backup ongoing](../../../assets/images/setup_installation/managed/common/backup/ongoing_backup.png)
+
+Backup ongoing
+
+Once the backup is taken your cluster will be back up and running and ready to use.
+
+## Restoring a backup[#](#restoring-a-backup "Permanent link")
+
+Go to the Backup tab of the dashboard (left menu (1)) to the list of all the backups. This list is organized by cluster. For each of the clusters, you can see the state of the cluster (2) and the list of backups for this cluster (3).
+
+To be able to restore a backup the corresponding cluster needs to be [terminated](../dashboard/#terminate-the-cluster). If your cluster is not terminated go and terminate it. Once the cluster is terminated you restore a backup by clicking on the _Restore_ button (4) of the backup you want to restore.
+
+![List of backups](../../../assets/images/setup_installation/managed/common/backup/backup_list.png)
+
+List of backups
+
+Warning
+
+Restoring a backup put back the bucket in the state it was at the time of the backup. This makes it impossible to then restore a backup taken more recently.
+
+If you try to restore a backup that is not the latest backup you will be asked to confirm that you want to restore and thus delete any more recent backup.
+
+![Delete succeeding backups](../../../assets/images/setup_installation/managed/common/backup/backup_delete_succeding.png)
+
+Delete succeeding backups
+
+Once you have clicked on _Restore_ you will be brought to the [cluster creation](../../aws/cluster_creation/) menu. All the entries should be prefilled with the values corresponding to your cluster configuration. You can go through all the cluster configurations to verify (recommended) or directly click on _Review_ in the left menu and click on the _Create_ button.
+
+![Review and restore backup](../../../assets/images/setup_installation/managed/common/backup/backup_review_and_create.png)
+
+Review and restore backup
+
+A new cluster will be created and set in the state your cluster was at the time of the backup.
+
+Note
+
+Restoring a backup does not recreate the workers for this cluster. You need to [add the workers](../adding_removing_workers/) back once the cluster is created.
+
+## Managing your backups[#](#managing-your-backups "Permanent link")
+
+To manage your backups either go to the Backup tab of your cluster (1) or go to the backup tab of the dashboard (2).
+
+![Backup tabs](../../../assets/images/setup_installation/managed/common/backup/backup_tabs.png)
+
+Backup tabs
+
+If you go to the backup tab of your cluster you will see the list of backups associated with this cluster. For each of the backups, you will see their name (1), id (2), date of creation (3), and status (4). The status can be:
+
+*   **Completed**: the backup has been created and is ready to be restored.
+*   **Expired**: the backup is older than the maximum retention time set during [cluster creation](../../aws/cluster_creation/#step-6-set-the-backup-retention-policy), it will not be possible to restore it.
+*   **Failed**: the backup failed during its creation.
+*   **Running**: the backup is currently being created.
+*   **Deleting**: the backup is being deleted.
+
+![Backup info](../../../assets/images/setup_installation/managed/common/backup/backup_info.png)
+
+Backup info
+
+If you go to the dashboard backup tab you will get a view of all the backups of all the clusters. For each of the backups, you get the same information as above.
+
+To delete a backup click on the _Delete_ button on the same line as the backup name.
+
+![Delete backup](../../../assets/images/setup_installation/managed/common/backup/backup_delete.png)
+
+Delete backup
+
+Once you have clicked on the _Delete_ button, you will be asked to confirm that you want to delete it. Check the check box and click _Delete_ to confirm.
+
+![Confirm backup deletion](../../../assets/images/setup_installation/managed/common/backup/backup_delete_confirm.png)
+
+Confirm backup deletion
+
+The backup will then be deleted.
+
+## Conclusion[#](#conclusion "Permanent link")
+
+During this tutorial, you have created a backup, restored a cluster from this backup, checked the information about this backup, and finally deleted the backup.
+
+Now that you have restored a cluster you can [add workers](../adding_removing_workers/) or set up [autoscale](../autoscaling/) on it.

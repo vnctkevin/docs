@@ -1,0 +1,114 @@
+---
+title: "The Dashboard"
+---
+
+# How to manage your clusters in managed.hopsworks.ai[#](#how-to-manage-your-clusters-in-managedhopsworksai "Permanent link")
+
+### Introduction[#](#introduction "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) is our managed platform for running Hopsworks and the Feature Store in the cloud. On this page, you will get an overview of the different functionalities of the [managed.hopsworks.ai](https://managed.hopsworks.ai) dashboard.
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+If you want to navigate the to the different tabs presented in this document you will need to connect [managed.hopsworks.ai](https://managed.hopsworks.ai) and create a cluster. Instructions about this process can be found in the getting started pages ([AWS](../../aws/getting_started/), [Azure](../../azure/getting_started/), [GCP](../../gcp/getting_started/))
+
+## Dashboard overview[#](#dashboard-overview "Permanent link")
+
+The landing page of [managed.hopsworks.ai](https://managed.hopsworks.ai) can be seen in the picture below. It is composed of three main parts. At the top, you have a menu bar (1) allowing you to navigate between the dashboard and the [settings](../settings/). Bellow, you have a menu column (2) allowing you to navigate between different functionalities of the dashboard. And finally, in the middle, you find pannels representing your different clusters (3) and a button to [create new clusters](../../aws/cluster_creation/) (4).
+
+![Dashboard overview](../../../assets/images/setup_installation/managed/common/dashboard/dashboard.png)
+
+Dashboard overview
+
+The different functionalities of the dashboard are:
+
+*   **Clusters**: the landing page which we will detail below.
+*   **Members**: the place to manage the members of your organization ([doc](../user_management/)).
+*   **Backup**: the place to manage your clusters' backup ([doc](../backup/)).
+*   **Usage**: the place to get your credits consumption.
+
+## Managing your clusters in the cluster panel[#](#managing-your-clusters-in-the-cluster-panel "Permanent link")
+
+The cluster panels contain the name of the cluster (1), its state (2) a button to [terminate the cluster](#terminate-the-cluster) (3), a button to [stop the cluster](#stop-the-cluster) (4) and different tabs to manage the cluster (5). You will now learn more details about these actions and tabs.
+
+![Cluster pannel structure](../../../assets/images/setup_installation/managed/common/dashboard/cluster_pannel.png)
+
+Cluster pannel structure
+
+### Stop the cluster[#](#stop-the-cluster "Permanent link")
+
+To stop a cluster click on the **Stop** button on the top right part of the cluster panel. Stopping the cluster stop in instances it is running on and delete the workers nodes. This allows you to save credits in [managed.hopsworks.ai](https://managed.hopsworks.ai) and in your cloud provider.
+
+![Stop a cluster](../../../assets/images/setup_installation/managed/common/dashboard/stop_cluster.png)
+
+Stop a cluster
+
+### Terminate the cluster[#](#terminate-the-cluster "Permanent link")
+
+To terminate a cluster click on the **Terminate** button on the top right part of the cluster panel.
+
+![Terminate a cluster](../../../assets/images/setup_installation/managed/common/dashboard/terminate_cluster.png)
+
+Terminate a cluster
+
+Terminating the cluster will destroy it and delete all the resources that were automatically created during the cluster creation. To be sure that you are not terminating a cluster by accident you will be asked to confirm that you want to terminate the cluster. To confirm the termination, check the check box and click on **Terminate**.
+
+Note
+
+Terminating a cluster does not delete or empty the bucket associated with the cluster. This is because this bucket is needed to restore a backup. You can find more information about backups in the [backup documentation](../backup/).
+
+![Confirm a cluster termination](../../../assets/images/setup_installation/managed/common/dashboard/terminate_cluster_confirmation.png)
+
+Confirm a cluster Termination
+
+### The general tab[#](#the-general-tab "Permanent link")
+
+The General tab gives you the basic information about your cluster. If you have created a cluster with managed users it will only give you the URL of the cluster. If you have created a cluster without managed cluster it will also give you the user name and password that were set for the admin user at cluster creation.
+
+![General tab](../../../assets/images/setup_installation/managed/common/dashboard/general_tab.png)
+
+General tab
+
+### Manage the services in the services tab[#](#manage-the-services-in-the-services-tab "Permanent link")
+
+The services tab shows which service ports are open to the internet on your cluster. More details can be found in the [services documentation](../services/).
+
+![Services tab](../../../assets/images/setup_installation/managed/common/dashboard/services_tab.png)
+
+Services tab
+
+### Get information about your cluster state in the Console tab[#](#get-information-about-your-cluster-state-in-the-console-tab "Permanent link")
+
+The console tab display more detailed information about the current state of your cluster. If your cluster is running and everything is as planned it will only say "everything is ok". But, if something failed, this is where you will find more details about the error.
+
+![Console tab](../../../assets/images/setup_installation/managed/common/dashboard/console_tab.png)
+
+Console tab
+
+### Manage your backups in the Backups tab[#](#manage-your-backups-in-the-backups-tab "Permanent link")
+
+The backups tab is where you create and manage backups for your cluster. You can find more details about the backups, in the [backups documentation](../backup/).
+
+![Backups tab](../../../assets/images/setup_installation/managed/common/dashboard/backups_tab.png)
+
+Backups tab
+
+### Get more details and manage your workers in the Details tab[#](#get-more-details-and-manage-your-workers-in-the-details-tab "Permanent link")
+
+The Details tab provides you with details about your cluster setup. It is also where you can [add and remove workers](../adding_removing_workers/) or [configure the autoscaling](../autoscaling/).
+
+![Details tab](../../../assets/images/setup_installation/managed/common/dashboard/details_tab.png)
+
+Details tab
+
+### Get more details about your cluster RonDB in the RonDB tab[#](#get-more-details-about-your-cluster-rondb-in-the-rondb-tab "Permanent link")
+
+The RonDB tab provides you with details about the instances running RonDB in your cluster. This is also where you can [scale up Rondb](../scalingup/) if needed.
+
+![RonDB tab](../../../assets/images/setup_installation/managed/common/dashboard/rondb_tab.png)
+
+RonDB tab
+
+## Conclusion[#](#conclusion "Permanent link")
+
+You now have an overview of where your different cluster information can be found and how you can manage your cluster. To go further you can learn how to [add and remove workers](../adding_removing_workers/) or [configure the autoscaling](../autoscaling/) on your cluster or how to take and restore [backups](../backup/).

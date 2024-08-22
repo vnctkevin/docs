@@ -1,0 +1,72 @@
+---
+title: "Access Audit Logs"
+---
+
+# Access Audit Logs[#](#access-audit-logs "Permanent link")
+
+## Introduction[#](#introduction "Permanent link")
+
+Hopsworks collects audit logs on all URL requests to the application server. These logs are saved in Payara log directory under `<payara-log-dir>/audit` by default.
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+In order to access the audit logs you need the following:
+
+*   Administrator account on the Hopsworks cluster.
+*   SSH access to the Hopsworks cluster with a user in the `glassfish` group.
+
+## Step 1: Configure Audit logs[#](#step-1-configure-audit-logs "Permanent link")
+
+Audit logs can be configured from the _Cluster Settings_ Configuration tab. You can access the _Configuration_ page of your Hopsworks cluster by clicking on your name, in the top right corner, and choosing _Cluster Settings_ from the dropdown menu.
+
+![Audit log configuration](../../../assets/images/admin/audit/audit-log-vars.png)
+
+Audit log configuration
+
+Type _audit_ in the search box to see the configuration variables associated with audit logs. To edit a configuration variable, you can click on the edit button (), insert the new value and save changes clicking on the check mark ().
+
+Audit logs configuration variables
+
+| Name | Description |
+| --- | --- |
+| audit\_log\_count | the number of files to keep when rotating logs (java.util.logging.FileHandler.count) |
+| audit\_log\_dir | the path where audit logs are saved |
+| audit\_log\_file\_format | log file name pattern. (java.util.logging.FileHandler.pattern) |
+| audit\_log\_file\_type | the output format of the log file. Can be one of java.util.logging.SimpleFormatter (default), io.hops.hopsworks.audit.helper.JSONLogFormatter, or io.hops.hopsworks.audit.helper.HtmlLogFormatter. |
+| audit\_log\_size\_limit | the maximum number of bytes to write to any one file. (java.util.logging.FileHandler.limit) |
+| audit\_log\_date\_format | if io.hops.hopsworks.audit.helper.JSONLogFormatter is used as audit log file type, this will set the date format of the output JSON. The format should be java.text.SimpleDateFormat compatible string. |
+
+Warning
+
+Hopsworks application needs to be reloaded for any changes to be applied. For doing that, go to the Payara admin panel (`https://<your-domain>:4848`), click on _Applications_ on the side menu and reload the _hopsworks-ear_ application.
+
+## Step 2: Access the Logs[#](#step-2-access-the-logs "Permanent link")
+
+To access the audit logs, SSH into the **head node** of your Hopsworks cluster and navigate to the path set in the _audit\_log\_dir_ configuration variable.
+
+Audit logs follow the format set in the _audit\_log\_file\_type_ configuration variable.
+
+Example of audit logs using JSONLogFormatter
+
+<pre><span></span><code><span class="p">{</span><span class="nt">"className"</span><span class="p">:</span><span class="s2">"io.hops.hopsworks.api.user.AuthService"</span><span class="p">,</span><span class="nt">"methodName"</span><span class="p">:</span><span class="s2">"login"</span><span class="p">,</span><span class="nt">"parameters"</span><span class="p">:</span><span class="s2">"[admin@hopsworks.ai, org.apache.catalina.connector.ResponseFacade@2de6dd0b, org.apache.catalina.connector.RequestFacade@7a82f674]"</span><span class="p">,</span><span class="nt">"outcome"</span><span class="p">:</span><span class="s2">"200"</span><span class="p">,</span><span class="nt">"caller"</span><span class="p">:{</span><span class="nt">"username"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"admin@hopsworks.ai"</span><span class="p">,</span><span class="nt">"userId"</span><span class="p">:</span><span class="kc">null</span><span class="p">},</span><span class="nt">"clientIp"</span><span class="p">:</span><span class="s2">"10.0.2.2"</span><span class="p">,</span><span class="nt">"userAgent"</span><span class="p">:</span><span class="s2">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36"</span><span class="p">,</span><span class="nt">"pathInfo"</span><span class="p">:</span><span class="s2">"/auth/login"</span><span class="p">,</span><span class="nt">"dateTime"</span><span class="p">:</span><span class="s2">"2022-11-09 12:00:08"</span><span class="p">}</span>
+</code></pre>
+
+Regardless the format, each line in the audit logs can contain the following variables:
+
+Audit log variables
+
+| Name | Description |
+| --- | --- |
+| className | the class called by the request |
+| methodName | the method called by the request |
+| parameters | parameters sent from the client |
+| outcome | response code sent from the server |
+| caller | the logged in user that made the request. Can be username, email, or userId |
+| clientIp | the IP address of the client |
+| userAgent | the browser used by the client |
+| pathInfo | the URL path called by the client |
+| dateTime | time of the request |
+
+## Conclusion[#](#conclusion "Permanent link")
+
+In this guide we showed how you can configure audit logs in Hopsworks from the admin page and access the audit log files via SSH. To learn how to export audit logs, see [Export Audit Logs](../export-audit-logs/).

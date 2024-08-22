@@ -1,0 +1,134 @@
+---
+title: "Configure Alerts"
+---
+
+# Configure Alerts[#](#configure-alerts "Permanent link")
+
+## Introduction[#](#introduction "Permanent link")
+
+Alerts are sent from Hopsworks using Prometheus' [Alert manager](https://prometheus.io/docs/alerting/latest/alertmanager/). In order to send alerts we first need to configure the _Alert manager_.
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+Administrator account on a Hopsworks cluster.
+
+### Step 1: Go to alerts configuration[#](#step-1-go-to-alerts-configuration "Permanent link")
+
+To configure the _Alert manager_ click on your name in the top right corner of the navigation bar and choose Cluster Settings from the dropdown menu. In the Cluster Settings' Alerts tab you can configure the alert manager to send alerts via email, slack or pagerduty.
+
+![Configure alerts](../../assets/images/alerts/configure-alerts.png)
+
+Configure alerts
+
+### Step 2: Configure Email Alerts[#](#step-2-configure-email-alerts "Permanent link")
+
+To send alerts via email you need to configure an SMTP server. Click on the _Configure_ button on the left side of the **email** row and fill out the form that pops up.
+
+![Configure Email Alerts](../../assets/images/alerts/smtp-config.png)
+
+Configure Email Alerts
+
+*   _Default from_: the address used as sender in the alert email.
+*   _SMTP smarthost_: the Simple Mail Transfer Protocol (SMTP) host through which emails are sent.
+*   _Default hostname (optional)_: hostname to identify to the SMTP server.
+*   _Authentication method_: how to authenticate to the SMTP server. CRAM-MD5, LOGIN or PLAIN.
+
+Optionally cluster wide Email alert receivers can be added in _Default receiver emails_. These receivers will be available to all users when they create event triggered [alerts](../../user_guides/fs/feature_group/data_validation_best_practices#setup-alerts).
+
+### Step 3: Configure Slack Alerts[#](#step-3-configure-slack-alerts "Permanent link")
+
+Alerts can also be sent via Slack messages. To be able to send Slack messages you first need to configure a Slack webhook. Click on the _Configure_ button on the left side of the **slack** row and past in your [Slack webhook](https://api.slack.com/messaging/webhooks) in _Webhook_.
+
+![Configure slack Alerts](../../assets/images/alerts/slack-config.png)
+
+Configure slack Alerts
+
+Optionally cluster wide Slack alert receivers can be added in _Slack channel/user_. These receivers will be available to all users when they create event triggered [alerts](../../user_guides/fs/feature_group/data_validation_best_practices/#setup-alerts).
+
+### Step 4: Configure Pagerduty Alerts[#](#step-4-configure-pagerduty-alerts "Permanent link")
+
+Pagerduty is another way you can send alerts from Hopsworks. Click on the _Configure_ button on the left side of the **pagerduty** row and fill out the form that pops up.
+
+![Configure Pagerduty Alerts](../../assets/images/alerts/pagerduty-config.png)
+
+Configure Pagerduty Alerts
+
+Fill in Pagerduty URL: the URL to send API requests to.
+
+Optionally cluster wide Pagerduty alert receivers can be added in _Service key/Routing key_. By first choosing the PagerDuty integration type:
+
+*   _global event routing (routing\_key)_: when using PagerDuty integration type `Events API v2`.
+*   _service (service\_key)_: when using PagerDuty integration type `Prometheus`.
+
+Then adding the Service key/Routing key of the receiver(s). PagerDuty provides [documentation](https://www.pagerduty.com/docs/guides/prometheus-integration-guide/) on how to integrate with Prometheus' Alert manager.
+
+### Step 5: Advanced configuration[#](#step-5-advanced-configuration "Permanent link")
+
+If you are familiar with Prometheus' [Alert manager](https://prometheus.io/docs/alerting/latest/alertmanager/) you can also configure alerts by editing the _yaml/json_ file directly.
+
+![Advanced configuration](../../assets/images/alerts/advanced-config.png)
+
+Advanced configuration
+
+_Example:_ Adding the yaml snippet shown below in the global section of the alert manager configuration will have the same effect as creating the SMTP configuration as shown in [section 1](#1-email-alerts) above.
+
+<pre><span></span><code><span class="nt">global</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">smtp_smarthost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">smtp.gmail.com:587</span>
+<span class="w">    </span><span class="nt">smtp_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hopsworks@gmail.com</span>
+<span class="w">    </span><span class="nt">smtp_auth_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hopsworks@gmail.com</span>
+<span class="w">    </span><span class="nt">smtp_auth_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">XXXXXXXXX</span>
+<span class="w">    </span><span class="nt">smtp_auth_identity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hopsworks@gmail.com</span>
+<span class="w w-Error"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre>
+
+To test the alerts by creating triggers from Jobs and Feature group validations see [Alerts](../../user_guides/fs/feature_group/data_validation_best_practices/#setup-alerts).
+
+The yaml syntax in the UI is slightly different in that it does not allow double quotes (it will ignore the values but give no error). Below is an example configuration, that can be used in the UI, with both email and slack receivers configured for system alerts.
+
+<pre><span></span><code><span class="nt">global</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">smtp_smarthost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">smtp.gmail.com:587</span>
+<span class="w">    </span><span class="nt">smtp_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hopsworks@gmail.com</span>
+<span class="w">    </span><span class="nt">smtp_auth_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hopsworks@gmail.com</span>
+<span class="w">    </span><span class="nt">smtp_auth_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">XXXXXXXXX</span>
+<span class="w">    </span><span class="nt">smtp_auth_identity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hopsworks@gmail.com</span>
+<span class="w">    </span><span class="nt">resolveTimeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="nt">templates</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/srv/hops/alertmanager/alertmanager-0.17.0.linux-amd64/template/*.tmpl</span>
+<span class="nt">route</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">  </span><span class="nt">routes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email</span>
+<span class="w">      </span><span class="nt">continue</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">match</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system-alert</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack</span>
+<span class="w">      </span><span class="nt">continue</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">match</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">system-alert</span>
+<span class="w">  </span><span class="nt">groupBy</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alertname</span>
+<span class="w">  </span><span class="nt">groupWait</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
+<span class="w">  </span><span class="nt">groupInterval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
+<span class="nt">receivers</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email</span>
+<span class="w">    </span><span class="nt">emailConfigs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">someone@logicalclocks.com</span>
+<span class="w">        </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hopsworks@logicalclocks.com</span>
+<span class="w">        </span><span class="nt">smarthost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mail.hello.com</span>
+<span class="w">        </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">          </span><span class="no">summary: {{ .CommonAnnotations.summary }} description: {{</span>
+<span class="w">          </span><span class="no">.CommonAnnotations.description }}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack</span>
+<span class="w">    </span><span class="nt">slackConfigs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">apiUrl</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">          </span><span class="no">https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX</span>
+<span class="w">        </span><span class="nt">channel</span><span class="p">:</span><span class="w"> </span><span class="s">'#general'</span>
+<span class="w">        </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">          </span><span class="no">&lt;!channel&gt; summary: {{ .Annotations.summary }} description: {{</span>
+<span class="w">          </span><span class="no">.Annotations.description }}</span>
+</code></pre>
+
+## Conclusion[#](#conclusion "Permanent link")
+
+In this guide you learned how to configure alerts in Hopsworks.

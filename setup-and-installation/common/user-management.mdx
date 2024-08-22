@@ -1,0 +1,75 @@
+---
+title: "User Management"
+---
+
+# User management[#](#user-management "Permanent link")
+
+In [managed.hopsworks.ai](https://managed.hopsworks.ai) users can be grouped into _organizations_ to access the same resources. When a new user registers with [managed.hopsworks.ai](https://managed.hopsworks.ai) a new organization is created. This user later on can invite other registered users to their organization so they can share access to the same clusters.
+
+Cloud Accounts configuration is also shared among users of the same organization. So if user Alice has configured her account with her credentials, all member of her _organization_ will automatically deploy clusters in her cloud account. Credits and cluster usage are also grouped to ease reporting.
+
+## Adding members to an organization[#](#adding-members-to-an-organization "Permanent link")
+
+Organization membership can be edited by clicking **Members** on the left of [managed.hopsworks.ai](https://managed.hopsworks.ai) Dashboard page.
+
+![Organization membership](../../../assets/images/setup_installation/managed/common/members_empty.png)
+
+Organization membership
+
+To add a new member to your organization add the user's email and click **Add**. The invited user will receive an email with the invitation. You can set the user as administrator by checking the **Admin** checkbox. More details about organization administrators can be found \[here\].(#administrator-role)
+
+An invited user **must accept** the invitation to be part of the organization. An invitation will show up on the invitee's Dashboard. The invitee may have to close the **Welcome** splash screen to be able to see the invitation. In this example, Alice has invited Bob to her organization, but Bob hasn't accepted the invitation yet.
+
+![Invitation](../../../assets/images/setup_installation/managed/common/members_invited.png)
+
+Alice has sent the invitation
+
+![Accept invitation](../../../assets/images/setup_installation/managed/common/members_accept.png)
+
+Bob's dashboard
+
+## Sharing resources[#](#sharing-resources "Permanent link")
+
+Once Bob has accepted the invitation he does **not** have to configure his account, they share the same configuration. Also, he will be able to view **the same** Dashboard as Alice, so he can start, stop or terminate clusters in the organization.
+
+![Alice dashboard](../../../assets/images/setup_installation/managed/common/alice_dashboard.png)
+
+Alice's dashboard
+
+![Bob dashboard](../../../assets/images/setup_installation/managed/common/bob_dashboard.png)
+
+Bob's dashboard
+
+If Alice had existing clusters running and she had selected [Managed user management](../../aws/cluster_creation/#step-11-user-management-selection) during cluster creation, an account will be automatically created for Bob on these clusters.
+
+## Removing members from an organization[#](#removing-members-from-an-organization "Permanent link")
+
+To remove a member from your organization simply go to **Members** page and click the **Remove** button next to the user you want to remove. You will **stop** sharing any resource and the user **will be blocked** from any shared cluster.
+
+![Delete organization member](../../../assets/images/setup_installation/managed/common/members_delete.png)
+
+Delete organization member
+
+## Organization permissions[#](#organization-permissions "Permanent link")
+
+The owner and the administrators of an organization can set permissions at the organization level. For this got to the members tab, check the checkboxes in the **Member permissions** section and click on **Update**.
+
+The supported permissions are:
+
+*   **Non admin members can invite new members to the organization**. If this permission is enabled, any member of the organization will be able to invite other members to the organization. Note that only the owner and the administrators will be able to invite new members as administrators. If this permission is not enabled only the owner and the administrators can invite new members to the organization.
+*   **Non admin members can create and terminate clusters**. If this permission is enabled, any member of the organization will be able to create and terminate clusters. If it is not enabled, only the owner and the administrators will be able to create and terminate clusters.
+*   **Non admin members can open clusters ports**. If this permission is enabled, any member of the organization can open and close [services ports](../services/) on organization's clusters. If it is not enabled, only the organization owner and administrators will be able to do so.
+
+![Modify permissions](../../../assets/images/setup_installation/managed/common/members_permissions.png)
+
+Modify permissions
+
+## Administrator role[#](#administrator-role "Permanent link")
+
+Members of an organization can be set as administrators. This can be done by checking the **admin** checkbox at the time of invitation or by checking the **admin** checkbox then clicking the **Update** button next to a member email.
+
+Administrators can do all the actions described in the [Organization permissions](#organization-permissions) section of this documentation. They can also update the configuration of these permissions and set other users as administrators. Finally, administrators are automatically set as administrators on all the clusters of the organization that have [Managed user enabled](../../aws/cluster_creation/#step-11-user-management-selection) and are version **2.6.0** or above.
+
+![Set a member as admin](../../../assets/images/setup_installation/managed/common/members_set_admin.png)
+
+Set a member as admin

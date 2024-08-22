@@ -1,0 +1,274 @@
+---
+title: "Getting Started"
+---
+
+# Getting started with managed.hopsworks.ai (Azure)[#](#getting-started-with-managedhopsworksai-azure "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) is our managed platform for running Hopsworks and the Feature Store in the cloud. It integrates seamlessly with third-party platforms such as Databricks, SageMaker and KubeFlow. This guide shows how to set up [managed.hopsworks.ai](https://managed.hopsworks.ai) with your organization's Azure account.
+
+## Prerequisites[#](#prerequisites "Permanent link")
+
+To follow the instruction on this page you will need the following:
+
+*   An Azure resource group in which the Hopsworks cluster will be deployed.
+*   The [azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) installed and [logged in](https://docs.microsoft.com/en-us/cli/azure/authenticate-azure-cli).
+
+### Permissions[#](#permissions "Permanent link")
+
+To run all the commands on this page the user needs to have at least the following permissions on the Azure resource group:
+
+<pre><span></span><code><span class="err">Microso</span><span class="kc">ft</span><span class="err">.Au</span><span class="kc">t</span><span class="err">horiza</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">/roleDe</span><span class="kc">f</span><span class="err">i</span><span class="kc">n</span><span class="err">i</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span><span class="err">/wri</span><span class="kc">te</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Au</span><span class="kc">t</span><span class="err">horiza</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">/roleAssig</span><span class="kc">n</span><span class="err">me</span><span class="kc">nts</span><span class="err">/wri</span><span class="kc">te</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Compu</span><span class="kc">te</span><span class="err">/sshPublicKeys/ge</span><span class="kc">nerate</span><span class="err">KeyPair/ac</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Compu</span><span class="kc">te</span><span class="err">/sshPublicKeys/read</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Compu</span><span class="kc">te</span><span class="err">/sshPublicKeys/wri</span><span class="kc">te</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span><span class="err">Regis</span><span class="kc">tr</span><span class="err">y/regis</span><span class="kc">tr</span><span class="err">ies/opera</span><span class="kc">t</span><span class="err">io</span><span class="kc">n</span><span class="err">S</span><span class="kc">tatuses</span><span class="err">/read</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span><span class="err">Regis</span><span class="kc">tr</span><span class="err">y/regis</span><span class="kc">tr</span><span class="err">ies/read</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span><span class="err">Regis</span><span class="kc">tr</span><span class="err">y/regis</span><span class="kc">tr</span><span class="err">ies/wri</span><span class="kc">te</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Ma</span><span class="kc">na</span><span class="err">gedIde</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y/userAssig</span><span class="kc">ne</span><span class="err">dIde</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">ies/wri</span><span class="kc">te</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Resources/subscrip</span><span class="kc">t</span><span class="err">io</span><span class="kc">ns</span><span class="err">/resourcegroups/read</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.S</span><span class="kc">t</span><span class="err">orage/s</span><span class="kc">t</span><span class="err">orageAccou</span><span class="kc">nts</span><span class="err">/wri</span><span class="kc">te</span>
+</code></pre>
+
+You will also need to have a role such as _Application Administrator_ on the Azure Active Directory to be able to create the hopsworks.ai service principal.
+
+### Resource providers[#](#resource-providers "Permanent link")
+
+For [managed.hopsworks.ai](https://managed.hopsworks.ai) to deploy a cluster the following resource providers need to be registered on your Azure subscription.
+
+<pre><span></span><code><span class="err">Microso</span><span class="kc">ft</span><span class="err">.Ne</span><span class="kc">t</span><span class="err">work</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Compu</span><span class="kc">te</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.S</span><span class="kc">t</span><span class="err">orage</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Ma</span><span class="kc">na</span><span class="err">gedIde</span><span class="kc">nt</span><span class="err">i</span><span class="kc">t</span><span class="err">y</span>
+<span class="err">Microso</span><span class="kc">ft</span><span class="err">.Co</span><span class="kc">nta</span><span class="err">i</span><span class="kc">ner</span><span class="err">Regis</span><span class="kc">tr</span><span class="err">y</span>
+</code></pre>
+
+This can be done by running the following commands:
+
+Note
+
+To run these commands you need to have the following permission on your subscription: _Microsoft.Network/register/action_
+
+<pre><span></span><code>az<span class="w"> </span>provider<span class="w"> </span>register<span class="w"> </span>--namespace<span class="w"> </span><span class="s1">'Microsoft.Network'</span>
+az<span class="w"> </span>provider<span class="w"> </span>register<span class="w"> </span>--namespace<span class="w"> </span><span class="s1">'Microsoft.Compute'</span>
+az<span class="w"> </span>provider<span class="w"> </span>register<span class="w"> </span>--namespace<span class="w"> </span><span class="s1">'Microsoft.Storage'</span>
+az<span class="w"> </span>provider<span class="w"> </span>register<span class="w"> </span>--namespace<span class="w"> </span><span class="s1">'Microsoft.ManagedIdentity'</span>
+az<span class="w"> </span>provider<span class="w"> </span>register<span class="w"> </span>--namespace<span class="w"> </span><span class="s1">'Microsoft.ContainerRegistry'</span>
+</code></pre>
+
+### Other[#](#other "Permanent link")
+
+All the commands have been written for a Unix system. These commands will need to be adapted to your terminal if it is not directly compatible.
+
+All the commands use your default location. Add the _\--location_ parameter if you want to run your cluster in another location. Make sure to create the resources in the same location as you are going to run your cluster.
+
+## Step 1: Connect your Azure account[#](#step-1-connect-your-azure-account "Permanent link")
+
+[Managed.hopsworks.ai](https://managed.hopsworks.ai) deploys Hopsworks clusters to your Azure account. To enable this, you have to create a service principal and a custom role for [managed.hopsworks.ai](https://managed.hopsworks.ai) granting access to your resource group.
+
+<iframe title="Azure information video" style="width:700px; height: 370px;" src="https://www.youtube.com/embed/Pfx2b3UTt88" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+### Step 1.1: Connect your Azure account[#](#step-11-connect-your-azure-account "Permanent link")
+
+In [managed.hopsworks.ai](https://managed.hopsworks.ai/) click on _Connect to Azure_ or go to _Settings_ and click on _Configure_ next to _Azure_. This will direct you to a page with the instructions needed to create the service principal and set up the connection. Follow the instructions.
+
+Note
+
+it is possible to limit the permissions that are set up during this phase. For more details see [restrictive-permissions](../restrictive_permissions/).
+
+![Cloud account settings](../../../assets/images/setup_installation/managed/azure/connect-azure-1.png)
+
+Cloud account settings
+
+## Step 2: Create a storage[#](#step-2-create-a-storage "Permanent link")
+
+Note
+
+If you prefer using terraform, you can skip this step and the remaining steps, and instead, follow [this guide](../../common/terraform/#getting-started-with-azure).
+
+The Hopsworks clusters deployed by [managed.hopsworks.ai](https://managed.hopsworks.ai) store their data in a storage container in your Azure account. To enable this you need to create a storage account. This is done by running the following command, replacing _$RESOURCE\_GROUP_ with the name of your resource group.
+
+<pre><span></span><code>az<span class="w"> </span>storage<span class="w"> </span>account<span class="w"> </span>create<span class="w"> </span>--resource-group<span class="w"> </span><span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--name<span class="w"> </span>hopsworksstorage<span class="nv">$RANDOM</span>
+</code></pre>
+
+## Step 3: Create an ACR Container Registry[#](#step-3-create-an-acr-container-registry "Permanent link")
+
+The Hopsworks clusters deployed by [managed.hopsworks.ai](https://managed.hopsworks.ai) store their docker images in a container registry in your Azure account. To create this storage account run the following command, replacing _$RESOURCE\_GROUP_ with the name of your resource group.
+
+<pre><span></span><code>az<span class="w"> </span>acr<span class="w"> </span>create<span class="w"> </span>--resource-group<span class="w"> </span><span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--name<span class="w"> </span>hopsworksecr<span class="w"> </span>--sku<span class="w"> </span>Premium
+</code></pre>
+
+To prevent the registry from filling up with unnecessary images and artifacts you can enable a retention policy. A retention policy will automatically remove untagged manifests after a specified number of days. To enable a retention policy, run the following command, replacing _$RESOURCE\_GROUP_ with the name of your resource group.
+
+<pre><span></span><code>az<span class="w"> </span>acr<span class="w"> </span>config<span class="w"> </span>retention<span class="w"> </span>update<span class="w"> </span>--resource-group<span class="w"> </span><span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--registry<span class="w"> </span>hopsworksecr<span class="w"> </span>--status<span class="w"> </span>Enabled<span class="w"> </span>--days<span class="w"> </span><span class="m">7</span><span class="w"> </span>--type<span class="w"> </span>UntaggedManifests
+</code></pre>
+
+## Step 4: Create a managed identity[#](#step-4-create-a-managed-identity "Permanent link")
+
+To allow the hopsworks cluster instances to access the storage account and the container registry, [managed.hopsworks.ai](https://managed.hopsworks.ai) assigns a managed identity to the cluster nodes. To enable this you need to:
+
+*   Create a managed identity
+*   Create a role with appropriate permission and assign it to the managed identity
+
+### Step 4.1: Create a managed identity[#](#step-41-create-a-managed-identity "Permanent link")
+
+You create a managed identity by running the following command, replacing _$RESOURCE\_GROUP_ with the name of your resource group.
+
+<pre><span></span><code><span class="nv">identityId</span><span class="o">=</span><span class="k">$(</span>az<span class="w"> </span>identity<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>hopsworks-instance<span class="w"> </span>--resource-group<span class="w"> </span><span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--query<span class="w"> </span>principalId<span class="w"> </span>-o<span class="w"> </span>tsv<span class="k">)</span>
+</code></pre>
+
+### Step 4.2: Create a role for the managed identity[#](#step-42-create-a-role-for-the-managed-identity "Permanent link")
+
+To create a new role for the managed identity, first, create a file called _instance-role.json_ with the following content. Replace _SUBSCRIPTION\_ID_ by your subscription id and _RESOURCE\_GROUP_ by your resource group
+
+<pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hopsworks-instance"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"IsCustom"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"Description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow the hopsworks instance to access the storage and the docker repository"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"Actions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">"Microsoft.Storage/storageAccounts/blobServices/containers/write"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.Storage/storageAccounts/blobServices/containers/read"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.Storage/storageAccounts/blobServices/write"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.Storage/storageAccounts/blobServices/read"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.Storage/storageAccounts/listKeys/action"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.ContainerRegistry/registries/artifacts/delete"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.ContainerRegistry/registries/pull/read"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.ContainerRegistry/registries/push/write"</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"NotActions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"DataActions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">"Microsoft.Storage/storageAccounts/blobServices/containers/blobs/delete"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.Storage/storageAccounts/blobServices/containers/blobs/read"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.Storage/storageAccounts/blobServices/containers/blobs/move/action"</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">"Microsoft.Storage/storageAccounts/blobServices/containers/blobs/write"</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"AssignableScopes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">"/subscriptions/SUBSCRIPTION_ID/resourceGroups/RESOURCE_GROUP"</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+
+Then run the following command, to create the new role.
+
+<pre><span></span><code>az<span class="w"> </span>role<span class="w"> </span>definition<span class="w"> </span>create<span class="w"> </span>--role-definition<span class="w"> </span>instance-role.json
+</code></pre>
+
+Finally assign the role to the managed identity by running the following command, replacing _$RESOURCE\_GROUP_ with the name of your resource group.
+
+<pre><span></span><code>az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>create<span class="w"> </span>--scope<span class="w"> </span>/subscriptions/<span class="nv">$SUBSCRIPTION_ID</span>/resourceGroups/<span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--role<span class="w"> </span>hopsworks-instance<span class="w"> </span>--assignee<span class="w"> </span><span class="nv">$identityId</span>
+</code></pre>
+
+Note
+
+It takes several minutes between the time you create the managed identity and the time a role can be assigned to it. So if we get an error message starting by the following wait and retry: _Cannot find user or service principal in graph database_
+
+## Step 5: Add an ssh key to your resource group[#](#step-5-add-an-ssh-key-to-your-resource-group "Permanent link")
+
+When deploying clusters, [managed.hopsworks.ai](https://managed.hopsworks.ai) installs an ssh key on the cluster's instances so that you can access them if necessary. For this purpose, you need to add an ssh key to your resource group.
+
+To create an ssh key in your resource group run the following command, replacing _$RESOURCE\_GROUP_ with the name of your resource group.
+
+<pre><span></span><code>az<span class="w"> </span>sshkey<span class="w"> </span>create<span class="w"> </span>--resource-group<span class="w"> </span><span class="nv">$RESOURCE_GROUP</span><span class="w"> </span>--name<span class="w"> </span>hopsworksKey<span class="w"> </span>
+</code></pre>
+
+Note
+
+the command returns the path to the private and public keys associated with this ssh key. You can also create a key from an existing public key as indicated in the [Azure documentation](https://learn.microsoft.com/en-us/cli/azure/sshkey?view=azure-cli-latest#az-sshkey-create)
+
+## Step 6: Deploy a Hopsworks cluster[#](#step-6-deploy-a-hopsworks-cluster "Permanent link")
+
+In [managed.hopsworks.ai](https://managed.hopsworks.ai), select _Create cluster_:
+
+![Create a Hopsworks cluster](../../../assets/images/setup_installation/managed/common/create-instance.png)
+
+Create a Hopsworks cluster
+
+Select the _Resource Group_ (1) in which you created your _storage account_ and _managed identity_ (see above).
+
+Note
+
+If the _Resource Group_ does not appear in the drop-down, make sure that the custom role you created in step [1.1](#step-11-connect-your-azure-account) has the _Microsoft.Resources/subscriptions/resourceGroups/read_ permission and is assigned to the _hopsworks.ai_ user.
+
+Name your cluster (2). Your cluster will be deployed in the _Location_ of your _Resource Group_ (3).
+
+Select the _Instance type_ (4) and _Local storage_ (5) size for the cluster _Head node_.
+
+Check if you want to _Use customer-managed encryption key_ (6)
+
+Select the _storage account_ (7) you created above in _Azure Storage account name_. The name of the container in which the data will be stored is displayed in _Azure Container name_ (8), you can modify it if needed.
+
+Note
+
+You can choose to use a container already existing in your _storage account_ by using the name of this container, but you need to first make sure that this container is empty.
+
+Enter the _Azure container registry name_ (9) of the ACR registry created in [Step 3.1](#step-3-create-an-acr-container-registry)
+
+Press _Next_:
+
+![General configuration](../../../assets/images/setup_installation/managed/azure/create-instance-general.png)
+
+General configuration
+
+Select the number of workers you want to start the cluster with (2). Select the _Instance type_ (3) and _Local storage_ size (4) for the _worker nodes_.
+
+Note
+
+It is possible to [add or remove workers](../../common/adding_removing_workers/) or to [enable autoscaling](../../common/autoscaling/) once the cluster is running.
+
+Press _Next_:
+
+![Create a Hopsworks cluster, static workers configuration](../../../assets/images/setup_installation/managed/common/create-instance-workers-static.png)
+
+Create a Hopsworks cluster, static workers configuration
+
+Select the _SSH key_ that you want to use to access cluster instances:
+
+![Choose SSH key](../../../assets/images/setup_installation/managed/azure/connect-azure-12.png)
+
+Choose SSH key
+
+Select the _User assigned managed identity_ that you created above:
+
+![Choose the User assigned managed identity](../../../assets/images/setup_installation/managed/azure/connect-azure-identity.png)
+
+Choose the User assigned managed identity
+
+To backup the Azure blob storage data when taking a cluster backup we need to set a retention policy for the blob storage. You can deactivate the retention policy by setting this value to 0 but this will block you from taking any backup of your cluster. Choose the retention period in days and click on _Review and submit_.
+
+![Choose the backup retention policy](../../../assets/images/setup_installation/managed/azure/connect-azure-backup.png)
+
+Choose the backup retention policy
+
+Review all information and select _Create_:
+
+![Review cluster information](../../../assets/images/setup_installation/managed/azure/connect-azure-17.png)
+
+Review cluster information
+
+Note
+
+We skipped cluster creation steps that are not mandatory. You can find more details about these steps [here](../cluster_creation/)
+
+The cluster will start. This will take a few minutes:
+
+![Booting Hopsworks cluster](../../../assets/images/setup_installation/managed/common/booting.png)
+
+Booting Hopsworks cluster
+
+As soon as the cluster has started, you will be able to log in to your new Hopsworks cluster. You will also be able to stop, restart or terminate the cluster.
+
+![Running Hopsworks cluster](../../../assets/images/setup_installation/managed/common/running.png)
+
+Running Hopsworks cluster
+
+## Step 7: Next steps[#](#step-7-next-steps "Permanent link")
+
+Check out our other guides for how to get started with Hopsworks and the Feature Store:
+
+*   Make Hopsworks services [accessible from outside services](../../common/services/)
+*   Get started with the [Hopsworks Feature Store](https://colab.research.google.com/github/logicalclocks/hopsworks-tutorials/blob/master/quickstart.ipynb)
+*   Follow one of our [tutorials](../../../tutorials/)
+*   Follow one of our [Guide](../../../user_guides/)
+*   Code examples and notebooks: [hops-examples](https://github.com/logicalclocks/hops-examples)
