@@ -67,11 +67,11 @@
               {
                   "group": "Hopsworks Platform",
                   "pages": [
-                      "Concepts/hopsworks-platform",
-                      "/Concepts/hopsworks-platform/standalone-feature-store",
-                      "/Concepts/hopsworks-platform/model-management",
-                      "/Concepts/hopsworks-platform/vector-db",
-                      "/Concepts/hopsworks-platform/governance",
+                      "concepts/hopsworks-platform",
+                      "concepts/hopsworks-platform/standalone-feature-store",
+                      "/concepts/hopsworks-platform/model-management",
+                      "/concepts/hopsworks-platform/vector-db",
+                      "/concepts/hopsworks-platform/governance",
                       "/Concepts/hopsworks-platform/data-science-platform"
                   ]
               },
